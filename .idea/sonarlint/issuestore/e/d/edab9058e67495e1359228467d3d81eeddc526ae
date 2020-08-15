@@ -1,0 +1,58 @@
+
+J
+java:S1128$"/Remove this unused import 'org.json.JSONArray'.(¬¸Ê’üÿÿÿÿ
+U
+java:S1874º"7Remove this use of "GoogleApiClient"; it is deprecated.(ú®Óª8ÙîÅ‘¶.
+M
+java:S1874º"/Remove this use of "Builder"; it is deprecated.(ú®Óª8ÙîÅ‘¶.
+l
+java:S1192y"JDefine a constant instead of duplicating this literal "connected" 4 times.(İ¬Àçøÿÿÿÿ8ÙîÅ‘¶.
+d
+java:S2184Ë"FCast one of the operands of this multiplication operation to a "long".(åŞÖé8ÙîÅ‘¶.
+U
+java:S1128"8Remove this unused import 'com.android.volley.Response'.(ˆïƒ 8š»Ì‘¶.
+E
+java:S1604ƒ"(Make this anonymous inner class a lambda(’¿´;8ÙîÅ‘¶.
+7
+java:S11701"!Make this final field static too.(®äùÆ
+T
+java:S1874ƒ"7Remove this use of "GoogleApiClient"; it is deprecated.(’¿´;8ÙîÅ‘¶.
+Q
+java:S1874Ó"3Remove this use of "SettingsApi"; it is deprecated.(ğ½û8ÙîÅ‘¶.
+D	java:S131í""Add a default case to this switch.(×ö³–úÿÿÿÿ8ÙîÅ‘¶.
+u	java:S1161"`Rename this field "SPLASH_DISPLAY_LENGTH" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®äùÆ
+Q	java:S1100"<This class has 9 parents which is greater than 5 authorized.(†ÕÉ¶
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+Q
+java:S1874t"/Remove this use of "Builder"; it is deprecated.(¡ƒöŒùÿÿÿÿ8ÙîÅ‘¶.
+?	java:S131ğ""Add a default case to this switch.(•öÀø8ÙîÅ‘¶.
+i
+java:S1301ğ"KReplace this "switch" statement by "if" statements to increase readability.(•öÀø8ÙîÅ‘¶.
+X
+java:S1128";Remove this unused import 'com.android.volley.VolleyError'.(­°Ñ”8š»Ì‘¶.
+F
+java:S1604“"(Make this anonymous inner class a lambda(„ÑñŒ8ÙîÅ‘¶.
+T
+java:S1874v"7Remove this use of "GoogleApiClient"; it is deprecated.(à»³¢8ÙîÅ‘¶.
+Y
+java:S1874t"7Remove this use of "GoogleApiClient"; it is deprecated.(¡ƒöŒùÿÿÿÿ8ÙîÅ‘¶.
+l
+java:S1192"JDefine a constant instead of duplicating this literal "suspended" 4 times.(ù¡éÊıÿÿÿÿ8ÙîÅ‘¶.
+M
+java:S18742"7Remove this use of "GoogleApiClient"; it is deprecated.(©üß¦
+U
+java:S1874º"7Remove this use of "GoogleApiClient"; it is deprecated.(ú®Óª8ÙîÅ‘¶.
+Š
+java:S3252Ø"gUse static access with "com.google.android.gms.common.api.CommonStatusCodes" for "RESOLUTION_REQUIRED".(®â§èøÿÿÿÿ8ÙîÅ‘¶.
+[
+java:S11243"EReorder the modifiers to comply with the Java Language Specification.(¨öáº
+T
+java:S1144r"7Remove this unused private "openDialogFunction" method.(ğÚÁÊ8ÙîÅ‘¶.
+n
+java:S1301í"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ8ÙîÅ‘¶.
+j
+java:S1128"MRemove this unused import 'com.google.android.gms.common.api.ResultCallback'.(°ß¢Ã8İ†Ä‘¶.
+^	java:S125ß"<This block of commented-out lines of code should be removed.(‰ÂÁÑÿÿÿÿÿ8ÙîÅ‘¶.
+\
+java:S2184Ì"FCast one of the operands of this multiplication operation to a "long".(ËºÖ6
+r	java:S1165"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ØÒéß

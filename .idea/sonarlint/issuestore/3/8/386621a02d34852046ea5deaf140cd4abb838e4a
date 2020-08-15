@@ -1,0 +1,95 @@
+
+>
+java:S1659¸""Declare "time" on a separate line.(õ· ¼øÿÿÿÿ
+U
+java:S1117¥"?Rename "preferences" which hides the field declared at line 41.(îóÖ
+m	java:S116+"XRename this field "recyler_popup" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üÂÀä
+w	java:S1163"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+<
+java:S1170("!Make this final field static too.(‡ä¢ ûÿÿÿÿ
+l
+java:S1104¸"PMake pMrp a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+R	java:S125"<This block of commented-out lines of code should be removed.(¡ÕÄ¹
+g	java:S1161"RRename this field "al_data" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ª×ï
+R	java:S125Á"<This block of commented-out lines of code should be removed.(†¸—Å
+R	java:S125±"<This block of commented-out lines of code should be removed.(õÿÏ
+m	java:S116º"RRename this field "btn_Add" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Íä¿©ıÿÿÿÿ
+>
+java:S1659-"(Declare "product_id" on a separate line.(¿ğ¼
+W	java:S125Ê"<This block of commented-out lines of code should be removed.(ŒÚÜúÿÿÿÿ
+m
+java:S1104¸"QMake pQuan a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+l
+java:S1104¸"PMake time a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+R	java:S125Œ"<This block of commented-out lines of code should be removed.(…éÕñ
+m
+java:S1104¸"QMake minus a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+|
+java:S1104¸"`Make currency_indicator_2 a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+l
+java:S1104¸"PMake plus a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+z	java:S116¸"_Rename this field "currency_indicator_2" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(õ· ¼øÿÿÿÿ
+Y	java:S125‰"<This block of commented-out lines of code should be removed.(‹ãºÑ8ä×²¸.
+j	java:S116-"URename this field "product_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿ğ¼
+t
+java:S1104¸"XMake pdiscountOff a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+n
+java:S1104¸"RMake pPrice a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+W	java:S125Ö"<This block of commented-out lines of code should be removed.(ÌßÌûÿÿÿÿ
+>
+java:S1659¸""Declare "plus" on a separate line.(õ· ¼øÿÿÿÿ
+?
+java:S1659¸"#Declare "minus" on a separate line.(õ· ¼øÿÿÿÿ
+o
+java:S1104¸"SMake txtQuan a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+W	java:S125¹"<This block of commented-out lines of code should be removed.(¡¹šéùÿÿÿÿ
+g
+java:S1192û"KDefine a constant instead of duplicating this literal "varient_id" 3 times.(Äß¯æøÿÿÿÿ
+j
+java:S1128"HRemove this unused import 'com.tecmanic.gogrocer.Activity.DealActivity'.(ÆªÂùùÿÿÿÿ8Ëã¤§¸.
+C
+java:S1659¸"'Declare "pDescrptn" on a separate line.(õ· ¼øÿÿÿÿ
+@
+java:S1659¸"$Declare "pPrice" on a separate line.(õ· ¼øÿÿÿÿ
+x	java:S116¸"]Rename this field "currency_indicator" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(õ· ¼øÿÿÿÿ
+D
+java:S1659º"(Declare "ll_addQuan" on a separate line.(Íä¿©ıÿÿÿÿ
+E
+java:S37401"/Provide the parametrized type for this generic.(ª×ï
+b	java:S101'"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(éìÉŞ
+j	java:S116-"URename this field "varient_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿ğ¼
+Q	java:S125ú"<This block of commented-out lines of code should be removed.(ò¼2
+N
+java:S1659¸"2Declare "currency_indicator_2" on a separate line.(õ· ¼øÿÿÿÿ
+?
+java:S1659¸"#Declare "pQuan" on a separate line.(õ· ¼øÿÿÿÿ
+A
+java:S1659¾"%Declare "catName" on a separate line.(å¼ ÷ıÿÿÿÿ
+p
+java:S1104¸"TMake prodNAme a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+N
+java:S10680",Remove this unused "cartList" private field.(×å½ëùÿÿÿÿ8È–ĞŞ·.
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»ûÛš
+A
+java:S1659¸"%Declare "txtQuan" on a separate line.(õ· ¼øÿÿÿÿ
+W	java:S125Ù"<This block of commented-out lines of code should be removed.(¡¹šéùÿÿÿÿ
+R	java:S125˜"<This block of commented-out lines of code should be removed.(ÅµªÄ
+F
+java:S1659¸"*Declare "pdiscountOff" on a separate line.(õ· ¼øÿÿÿÿ
+L
+java:S1659¸"0Declare "currency_indicator" on a separate line.(õ· ¼øÿÿÿÿ
+p	java:S116º"URename this field "ll_addQuan" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Íä¿©ıÿÿÿÿ
+W	java:S125Ü"<This block of commented-out lines of code should be removed.(®Šû’üÿÿÿÿ
+q
+java:S3923"[Remove this conditional structure or edit its code blocks so that they're not all the same.(øæâq
+R	java:S125ê"<This block of commented-out lines of code should be removed.(ÖÅÔ
+A
+java:S10681"+Remove this unused "al_data" private field.(ª×ï
+z
+java:S1104¸"^Make currency_indicator a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+>
+java:S1659¸""Declare "pMrp" on a separate line.(õ· ¼øÿÿÿÿ
+q
+java:S1104¸"UMake pDescrptn a static final constant or non-public and provide accessors if needed.(õ· ¼øÿÿÿÿ
+I
+java:S10682"3Remove this unused "varientProducts" private field.(ƒ×òÒ

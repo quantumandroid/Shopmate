@@ -1,0 +1,59 @@
+
+b
+java:S1192¡"KDefine a constant instead of duplicating this literal "varient_id" 3 times.(“½ÆÆ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»ûÛš
+>
+java:S1604a"(Make this anonymous inner class a lambda(ÎŽ×½
+k
+java:S1104É"TMake prodNAme a static final constant or non-public and provide accessors if needed.(©²ß¨
+l
+java:S1104É"UMake pDescrptn a static final constant or non-public and provide accessors if needed.(©²ß¨
+h
+java:S1104É"QMake pQuan a static final constant or non-public and provide accessors if needed.(©²ß¨
+i
+java:S1104É"RMake pPrice a static final constant or non-public and provide accessors if needed.(©²ß¨
+o
+java:S1104É"XMake pdiscountOff a static final constant or non-public and provide accessors if needed.(©²ß¨
+g
+java:S1104É"PMake pMrp a static final constant or non-public and provide accessors if needed.(©²ß¨
+h
+java:S1104É"QMake minus a static final constant or non-public and provide accessors if needed.(©²ß¨
+g
+java:S1104É"PMake plus a static final constant or non-public and provide accessors if needed.(©²ß¨
+j
+java:S1104É"SMake txtQuan a static final constant or non-public and provide accessors if needed.(©²ß¨
+u
+java:S1104É"^Make currency_indicator a static final constant or non-public and provide accessors if needed.(©²ß¨
+w
+java:S1104É"`Make currency_indicator_2 a static final constant or non-public and provide accessors if needed.(©²ß¨
+w	java:S116&"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+q
+java:S3923²"[Remove this conditional structure or edit its code blocks so that they're not all the same.(øæâq
+U
+java:S1117¿"?Rename "preferences" which hides the field declared at line 34.(îóÖ
+>
+java:S1659É"'Declare "pDescrptn" on a separate line.(©²ß¨
+:
+java:S1659É"#Declare "pQuan" on a separate line.(©²ß¨
+;
+java:S1659É"$Declare "pPrice" on a separate line.(©²ß¨
+A
+java:S1659É"*Declare "pdiscountOff" on a separate line.(©²ß¨
+9
+java:S1659É""Declare "pMrp" on a separate line.(©²ß¨
+:
+java:S1659É"#Declare "minus" on a separate line.(©²ß¨
+9
+java:S1659É""Declare "plus" on a separate line.(©²ß¨
+<
+java:S1659É"%Declare "txtQuan" on a separate line.(©²ß¨
+G
+java:S1659É"0Declare "currency_indicator" on a separate line.(©²ß¨
+I
+java:S1659É"2Declare "currency_indicator_2" on a separate line.(©²ß¨
+D
+java:S1659Ë"(Declare "ll_addQuan" on a separate line.(Íä¿©ýÿÿÿÿ
+s	java:S116É"]Rename this field "currency_indicator" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©²ß¨
+u	java:S116É"_Rename this field "currency_indicator_2" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©²ß¨
+m	java:S116Ë"RRename this field "btn_Add" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Íä¿©ýÿÿÿÿ
+p	java:S116Ë"URename this field "ll_addQuan" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Íä¿©ýÿÿÿÿ

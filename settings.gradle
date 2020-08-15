@@ -1,0 +1,2 @@
+rootProject.name='Shopmate'
+include ':app'

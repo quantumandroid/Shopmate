@@ -1,0 +1,41 @@
+
+g	java:S116>"RRename this field "no_data" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ‘±à
+D
+java:S1604Å"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+l	java:S117”"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥á¼Úûÿÿÿÿ
+s	java:S116;"YRename this field "rv_top_selling" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(çÚ ´ùÿÿÿÿ
+Q
+java:S1874Q"6Remove this use of "ProgressDialog"; it is deprecated.(¬¶­Ýúÿÿÿÿ
+l	java:S117’"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸õ´Äþÿÿÿÿ
+]
+java:S1854˜"ARemove this useless assignment to local variable "varient_image".(Ù¼ÛÀúÿÿÿÿ
+W	java:S125¯"<This block of commented-out lines of code should be removed.(Ù«¥„úÿÿÿÿ
+M
+java:S1874R"2Remove this use of "setMessage"; it is deprecated.(ñËÄÝÿÿÿÿÿ
+W	java:S125¢"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+
+java:S4165D"kRemove this useless assignment; "pagerNotifier" already holds the assigned value along all execution paths.(½ûì³
+W
+java:S1874~"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+l	java:S117‘"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼Ê ýÿÿÿÿÿ
+N
+java:S1481˜"2Remove this unused "varient_image" local variable.(Ù¼ÛÀúÿÿÿÿ
+W	java:S125Ÿ"<This block of commented-out lines of code should be removed.(Ç…ÿúÿÿÿÿ
+w	java:S116?"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+¤
+java:S1186è"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö èþÿÿÿÿ8êó‰Š¶.
+@
+java:S1659:"%Declare "catName" on a separate line.(å¼ ÷ýÿÿÿÿ
+L
+java:S18748"6Remove this use of "ProgressDialog"; it is deprecated.(ðÝýº
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÎÒ•¸
+D
+java:S1604ƒ"(Make this anonymous inner class a lambda(Éößùøÿÿÿÿ
+l	java:S117˜"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù¼ÛÀúÿÿÿÿ
+W
+java:S1874~"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+Q	java:S125_"<This block of commented-out lines of code should be removed.(é™µä
+l	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(óè¼ðûÿÿÿÿ
+g	java:S1015"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ˆÊ¹Šúÿÿÿÿ
+N
+java:S1874~"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ

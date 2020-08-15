@@ -1,0 +1,37 @@
+
+k	java:S117z"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼Ê ýÿÿÿÿÿ
+C
+java:S1604k"(Make this anonymous inner class a lambda(ž¥Ã½ÿÿÿÿÿ
+M
+java:S1874B"2Remove this use of "setMessage"; it is deprecated.(ñËÄÝÿÿÿÿÿ
+k	java:S117|"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(óè¼ðûÿÿÿÿ
+k	java:S117{"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸õ´Äþÿÿÿÿ
+V	java:S125S"<This block of commented-out lines of code should be removed.(é›¬Ûÿÿÿÿÿ
+w	java:S1166"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÎÒ•¸
+R	java:S125–"<This block of commented-out lines of code should be removed.(êÇïâ
+g	java:S117€"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û§’Ü
+O
+java:S1874À"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+L
+java:S1874/"6Remove this use of "ProgressDialog"; it is deprecated.(ðÝýº
+g	java:S1165"RRename this field "no_data" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ‘±à
+—
+java:S11868"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(æ°£æ
+@
+java:S16592"%Declare "catName" on a separate line.(å¼ ÷ýÿÿÿÿ
+h	java:S100g"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Úª×þüÿÿÿÿ
+X
+java:S1874À"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+V	java:S125o"<This block of commented-out lines of code should be removed.(ö´Š§ÿÿÿÿÿ
+Z
+java:S1128"ERemove this unused import 'com.tecmanic.gogrocer.util.PagerNotifier'.(ìÆ®s
+W	java:S125š"<This block of commented-out lines of code should be removed.(ö´Š§ÿÿÿÿÿ
+g	java:S101-"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(ÒÅêÀøÿÿÿÿ
+X
+java:S1874À"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+k	java:S1160"VRename this field "DealAdapter" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡‰ä
+D
+java:S1604£"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+Q
+java:S1874@"6Remove this use of "ProgressDialog"; it is deprecated.(ò„ŠËùÿÿÿÿ

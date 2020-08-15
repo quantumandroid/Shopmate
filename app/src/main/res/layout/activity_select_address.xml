@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="3"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Activity.SelectAddress">
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/orange"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_left_arrow"
+                android:backgroundTint="@color/white"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center|left"
+            android:text="Select Address"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/addAdreess"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_add"
+                android:backgroundTint="@color/orange"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center|left"
+            android:text="Add a new address"
+            android:textColor="@color/orange"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/v1"
+        android:layout_below="@id/addAdreess"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGrey"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleraddressList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"/>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+        <LinearLayout
+
+            android:id="@+id/Btn_DeliverHere"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="vertical"
+            android:background="@color/orange"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center"
+                    android:text="DELIVER HERE"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

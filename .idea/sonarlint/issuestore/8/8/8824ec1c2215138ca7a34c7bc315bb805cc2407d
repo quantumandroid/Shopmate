@@ -1,0 +1,51 @@
+
+w
+java:S1450A"ZRemove the "total_price" field and declare it as a local variable in the relevant methods.(„îç8Û©»«¹.
+G
+java:S16598"%Declare "catName" on a separate line.(å¼ ÷ıÿÿÿÿ8®’¢Û¶.
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+S
+java:S18746"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº8®’¢Û¶.
+K
+java:S1604À"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ8Èßå§¸.
+w	java:S116@"VRename this field "total_count" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(É¹‡÷ıÿÿÿÿ8ÑÕË§¸.
+n	java:S1015"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(·ıŒŞùÿÿÿÿ8®’¢Û¶.
+z	java:S1169"YRename this field "rv_top_selling" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(çÚ ´ùÿÿÿÿ8®’¢Û¶.
+_
+java:S1874€"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8®’¢Û¶.
+v	java:S116B"ZRename this field "continue_tocart" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹„ˆã8ÑÕË§¸.
+¤
+java:S1186ß"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö èşÿÿÿÿ8Èßå§¸.
+^	java:S125ğ"<This block of commented-out lines of code should be removed.(–“Åıÿÿÿÿ8Èßå§¸.
+Y	java:S125£"<This block of commented-out lines of code should be removed.(„Ùı¾8ÌÇº«¹.
+|
+java:S1450;"ZRemove the "action_name" field and declare it as a local variable in the relevant methods.(÷öŠîúÿÿÿÿ8®’¢Û¶.
+y
+java:S1450="WRemove the "back_btn" field and declare it as a local variable in the relevant methods.(ÉŒÓúøÿÿÿÿ8®’¢Û¶.
+w
+java:S1450>"URemove the "dbcart" field and declare it as a local variable in the relevant methods.(Ç’şşÿÿÿÿ8Û©»«¹.
+p	java:S116;"VRename this field "action_name" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷öŠîúÿÿÿÿ
+_
+java:S1874€"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8®’¢Û¶.
+Y	java:S125¥"<This block of commented-out lines of code should be removed.(Ğÿà­8ÌÇº«¹.
+|
+java:S1450?"_Remove the "bottom_lay_total" field and declare it as a local variable in the relevant methods.(ìîÀ™8Û©»«¹.
+T
+java:S1874P"2Remove this use of "setMessage"; it is deprecated.(ñËÄİÿÿÿÿÿ8®’¢Û¶.
+{
+java:S1450B"^Remove the "continue_tocart" field and declare it as a local variable in the relevant methods.(¹„ˆã8ùÏ§¸.
+]	java:S1105"<This class has 9 parents which is greater than 5 authorized.(·ıŒŞùÿÿÿÿ8®’¢Û¶.
+w	java:S116<"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+Y	java:S125–"<This block of commented-out lines of code should be removed.(¤¢ñú8ÌÇº«¹.
+t	java:S116="SRename this field "back_btn" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÉŒÓúøÿÿÿÿ8®’¢Û¶.
+w	java:S116?"[Rename this field "bottom_lay_total" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìîÀ™8ÑÕË§¸.
+V
+java:S1874€"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8®’¢Û¶.
+S
+java:S1874N"6Remove this use of "ProgressDialog"; it is deprecated.(õŒî×8®’¢Û¶.
+|
+java:S1450@"ZRemove the "total_count" field and declare it as a local variable in the relevant methods.(É¹‡÷ıÿÿÿÿ8Û©»«¹.
+r	java:S116A"VRename this field "total_price" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„îç8ÑÕË§¸.
+J
+java:S1604s"(Make this anonymous inner class a lambda(Ù­è€üÿÿÿÿ8“ıÓ§¸.
+^	java:S125“"<This block of commented-out lines of code should be removed.(ƒûÉúÿÿÿÿ8ÌÇº«¹.

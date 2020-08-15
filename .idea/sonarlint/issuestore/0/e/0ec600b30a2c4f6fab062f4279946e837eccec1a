@@ -1,0 +1,50 @@
+
+W	java:S125@"<This block of commented-out lines of code should be removed.(©Ğê8­ÜƒË¹.
+T
+java:S1874]"2Remove this use of "setMessage"; it is deprecated.(ñËÄİÿÿÿÿÿ8­ÜƒË¹.
+M
+java:S1066¦"/Merge this if statement with the enclosing one.(Á¢Ë8ØÂ’Ë¹.
+Ÿ
+java:S1186³"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¶ç€‹8ØÂ’Ë¹.
+c
+java:S1192N"FDefine a constant instead of duplicating this literal "Login" 3 times.(–ŠøÙ8­ÜƒË¹.
+X	java:S125I"<This block of commented-out lines of code should be removed.(î‘©õ8­ÜƒË¹.
+_
+java:S1874”"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8ØÂ’Ë¹.
+u	java:S1169"TRename this field "flag_view" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó”Ä¥úÿÿÿÿ8ßìôÊ¹.
+L
+java:S1068<"/Remove this unused "countryFlag" private field.(öã‹»8­ÜƒË¹.
+E
+java:S1604w"(Make this anonymous inner class a lambda(Ø‘àş8­ÜƒË¹.
+L
+java:S18747"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
+f	java:S1163"QRename this field "SignIn" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡¡îˆ
+M
+java:S1066¿"/Merge this if statement with the enclosing one.(„÷µÀ8ØÂ’Ë¹.
+w
+java:S1450<"ZRemove the "countryFlag" field and declare it as a local variable in the relevant methods.(öã‹»8­ÜƒË¹.
+s	java:S117­"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìÊÀ–ûÿÿÿÿ8ØÂ’Ë¹.
+A
+java:S16594"&Declare "btnignUp" on a separate line.(§«ô¦øÿÿÿÿ
+Q
+java:S1874\"6Remove this use of "ProgressDialog"; it is deprecated.(—Èôÿÿÿÿÿ
+s	java:S117®"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò’ÀÔıÿÿÿÿ8ØÂ’Ë¹.
+_
+java:S1874”"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8ØÂ’Ë¹.
+?
+java:S16595"$Declare "etPass" on a separate line.(½Òíûÿÿÿÿ
+9
+java:S16596"#Declare "token" on a separate line.(€Ñ®
+V	java:S1101"<This class has 9 parents which is greater than 5 authorized.(·¡ïõøÿÿÿÿ
+n	java:S117°"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íË¤ì8¨Ë¹.
+p
+java:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¾Ëê€8ØÂ’Ë¹.
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+V
+java:S1874”"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ8ØÂ’Ë¹.
+D
+java:S1604"(Make this anonymous inner class a lambda(ç˜ìm8­ÜƒË¹.
+m	java:S117¯"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†Å t8ØÂ’Ë¹.
+|
+java:S1450="ZRemove the "countryCode" field and declare it as a local variable in the relevant methods.(Ÿ†üÆøÿÿÿÿ8‡”„Ë¹.
+u	java:S116:"TRename this field "country_c" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£½Àãıÿÿÿÿ8‘Ã‡Ë¹.

@@ -1,0 +1,65 @@
+
+@
+java:S16593"*Declare "delieverHere" on a separate line.(›„¶¶
+O
+java:S1874ƒ"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+>
+java:S16593"(Declare "addAddress" on a separate line.(›„¶¶
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+Y	java:S125—"<This block of commented-out lines of code should be removed.(äù‚¥8Š—îÕ¹.
+L
+java:S18745"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ‘æ¡úÿÿÿÿ8Š—îÕ¹.
+m	java:S117u"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß »€8Š—îÕ¹.
+Y	java:S125ª"<This block of commented-out lines of code should be removed.(€ñ½8óõ½¢¹.
+M
+java:S1874F"2Remove this use of "setMessage"; it is deprecated.(ñËÄİÿÿÿÿÿ
+W	java:S125¸"<This block of commented-out lines of code should be removed.(©…†Ğùÿÿÿÿ
+Q	java:S1100"<This class has 9 parents which is greater than 5 authorized.(äö¢İ
+Q
+java:S1874E"6Remove this use of "ProgressDialog"; it is deprecated.(¿Ú•ğúÿÿÿÿ
+K
+java:S1144€"-Remove this unused private "isOnline" method.(â˜‹Æ8¦¹şÔ¹.
+r	java:S1162"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ØÒéß
+A
+java:S1659‰"%Declare "address" on a separate line.(àùüËøÿÿÿÿ
+?
+java:S1659‰"#Declare "phone" on a separate line.(àùüËøÿÿÿÿ
+C
+java:S1604\"(Make this anonymous inner class a lambda(Úğ€Èúÿÿÿÿ
+f	java:S117W"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÔëÀ”
+9
+java:S16598"#Declare "addId" on a separate line.(çÅİ£
+D
+java:S3398Æ"(Move this method into "DeliveryAdapter".(´ƒîüÿÿÿÿ
+R	java:S125¬"<This block of commented-out lines of code should be removed.(áµ©„
+r	java:S117w"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†µÊ»ûÿÿÿÿ8Š—îÕ¹.
+7
+java:S16598"!Declare "dId" on a separate line.(çÅİ£
+X
+java:S1874ƒ"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+m
+java:S1104‰"QMake phone a static final constant or non-public and provide accessors if needed.(àùüËøÿÿÿÿ
+r	java:S117v"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôé×—úÿÿÿÿ8Š—îÕ¹.
+X
+java:S1874ƒ"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+r	java:S117x"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(·‰ßŒùÿÿÿÿ8Š—îÕ¹.
+o
+java:S1104‰"SMake address a static final constant or non-public and provide accessors if needed.(àùüËøÿÿÿÿ
+l	java:S1169"RRename this field "user_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù¡úÆúÿÿÿÿ
+@
+java:S1659Œ"$Declare "layout" on a separate line.(´ÃÓûúÿÿÿÿ
+N
+java:S1481v",Remove this unused "user_id" local variable.(ôé×—úÿÿÿÿ8Š—îÕ¹.
+m	java:S117{"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(°ô¨8Š—îÕ¹.
+¤
+java:S1186ö"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö èşÿÿÿÿ8ºş§¹.
+k	java:S117T"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(øı–Ìøÿÿÿÿ
+¤
+java:S1186·"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö èşÿÿÿÿ8šºÔ¹.
+l
+java:S1104‰"PMake name a static final constant or non-public and provide accessors if needed.(àùüËøÿÿÿÿ
+r	java:S116Š"WRename this field "edit_address" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(àÈüªûÿÿÿÿ
+^	java:S125Í"<This block of commented-out lines of code should be removed.(Áş¯ñıÿÿÿÿ8çÑ´Ô¹.
+U
+java:S1128"8Remove this unused import 'com.android.volley.Response'.(ˆïƒ 8Ÿ¹îÕ¹.

@@ -1,0 +1,67 @@
+
+j
+java:S1104H"TMake tv_total a static final constant or non-public and provide accessors if needed.(Ÿ€î³
+b
+java:S1128%"GRemove this unused import 'com.tecmanic.gogrocer.Adapters.CartAdapter'.(‹úÑôúÿÿÿÿ
+r
+java:S3923†"[Remove this conditional structure or edit its code blocks so that they're not all the same.(šþšµ
+V	java:S125u"<This block of commented-out lines of code should be removed.(¼éüÅûÿÿÿÿ
+i
+java:S3008H"SRename this field "tv_total" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ÿ€î³
+D
+java:S1444H".Make this "public static tv_total" field final(Ÿ€î³
+_
+java:S1128 "IRemove this unused import 'com.android.volley.toolbox.JsonObjectRequest'.(Ã¦¿¾
+X
+java:S1874Ç"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+G
+java:S1068I",Remove this unused "cartList" private field.(×å½ëùÿÿÿÿ
+W	java:S125Ê"<This block of commented-out lines of code should be removed.(ÅëÒ¾øÿÿÿÿ
+g
+java:S1128."LRemove this unused import 'com.tecmanic.gogrocer.util.ConnectivityReceiver'.(±Å–†øÿÿÿÿ
+X
+java:S1874Ç"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+W	java:S125Ò"<This block of commented-out lines of code should be removed.(ñ¥ùšøÿÿÿÿ
+V
+java:S1128"@Remove this unused import 'com.android.volley.AuthFailureError'.(¤ˆñ¢
+W	java:S125Ü"<This block of commented-out lines of code should be removed.(Âª‰¿þÿÿÿÿ
+S
+java:S1128"8Remove this unused import 'android.app.FragmentManager'.(í£“žûÿÿÿÿ
+k	java:S116D"VRename this field "ll_Checkout" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µÏöÉ
+W	java:S125ê"<This block of commented-out lines of code should be removed.(ûöÊîýÿÿÿÿ
+W	java:S125Ú"<This block of commented-out lines of code should be removed.(‘¸Î©þÿÿÿÿ
+p	java:S116B"VRename this field "btn_ShopNOw" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÌÊêªúÿÿÿÿ
+W	java:S125ß"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+J
+java:S11284"/Remove this unused import 'org.json.JSONArray'.(¬¸Ê’üÿÿÿÿ
+c
+java:S1128"HRemove this unused import 'com.android.volley.toolbox.JsonArrayRequest'.(šéŽíøÿÿÿÿ
+W	java:S125´"<This block of commented-out lines of code should be removed.(þ÷¨®ùÿÿÿÿ
+R	java:S125Ö"<This block of commented-out lines of code should be removed.(½š÷Ö
+W	java:S125Í"<This block of commented-out lines of code should be removed.(¿—Îþÿÿÿÿ
+f
+java:S1128"KRemove this unused import 'androidx.recyclerview.widget.GridLayoutManager'.(î¼çÿüÿÿÿÿ
+Q	java:S125å"<This block of commented-out lines of code should be removed.(ë­£7
+`
+java:S1128+"JRemove this unused import 'com.tecmanic.gogrocer.ModelClass.timing_model'.(Ó»ŒÈ
+Y	java:S125¨"<This block of commented-out lines of code should be removed.(Èâ¶¿8ª÷¬ß¶.
+`
+java:S1128("JRemove this unused import 'com.tecmanic.gogrocer.Adapters.Timing_Adapter'.(ÖÄò
+D
+java:S1604¸"(Make this anonymous inner class a lambda(ƒ¡ÂÊþÿÿÿÿ
+E
+java:S1128;"*Remove this unused import 'java.util.Map'.(¼è½Òþÿÿÿÿ
+O
+java:S1874Ç"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+A
+java:S1659F"&Declare "viewCart" on a separate line.(ÙÉÈ…ýÿÿÿÿ
+Q
+java:S2696Y"6Make the enclosing method "static" or remove this set.(¬÷ˆþÿÿÿÿ
+Q	java:S125á"<This block of commented-out lines of code should be removed.(ö¾™
+R	java:S125Ï"<This block of commented-out lines of code should be removed.(Å¯ßá
+m
+java:S3776R"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ËÄ•åûÿÿÿÿ
+R	java:S125²"<This block of commented-out lines of code should be removed.(ãð«ó
+Z
+java:S11282"DRemove this unused import 'com.tecmanic.gogrocer.util.ViewNotifier'.(ØóÀ¯
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÎÒ•¸

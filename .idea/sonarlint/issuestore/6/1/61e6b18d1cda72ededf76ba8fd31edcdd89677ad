@@ -1,0 +1,49 @@
+
+D	java:S108ş")Either remove or fill this block of code.(„Ñı×ûÿÿÿÿ
+i
+java:S1871µ"MThis branch's code block is the same as the block for the branch on line 435.(ğ ùîùÿÿÿÿ
+p	java:S116A"VRename this field "back_button" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’°óÓıÿÿÿÿ
+v
+java:S1450O"`Remove the "sessionManagement" field and declare it as a local variable in the relevant methods.(Ôõ´é
+M
+java:S1874d"2Remove this use of "setMessage"; it is deprecated.(Œûêğûÿÿÿÿ
+D
+java:S1604æ"(Make this anonymous inner class a lambda(¥¸Ë€ıÿÿÿÿ
+l	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ë¹ú‘üÿÿÿÿ
+W	java:S125å"<This block of commented-out lines of code should be removed.(ÿÙÖøÿÿÿÿ
+D
+java:S1185á"(Remove this method to simply inherit it.(™Î«şÿÿÿÿ
+g	java:S101="MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(Ó«ñ›úÿÿÿÿ
+=	java:S131ò""Add a default case to this switch.(×ö³–úÿÿÿÿ
+g	java:S117Ÿ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(–¡ûÈ
+Q
+java:S1874c"6Remove this use of "ProgressDialog"; it is deprecated.(¿Ú•ğúÿÿÿÿ
+u
+java:S2293Û"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+D
+java:S1185Ö"(Remove this method to simply inherit it.(ø´´øÿÿÿÿ
+g
+java:S1301ò"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ
+d
+java:S1192"HDefine a constant instead of duplicating this literal "pending" 3 times.(Å»­×ıÿÿÿÿ
+I
+java:S1199ô"-Extract this nested code block into a method.(·ÿ½äûÿÿÿÿ
+V	java:S110="<This class has 9 parents which is greater than 5 authorized.(Ó«ñ›úÿÿÿÿ
+V
+java:S1117\";Rename "toolbar" which hides the field declared at line 63.(ô¢º›şÿÿÿÿ
+W	java:S125Ü"<This block of commented-out lines of code should be removed.(©Ëûßıÿÿÿÿ
+W	java:S125½"<This block of commented-out lines of code should be removed.(–“Åıÿÿÿÿ
+n
+java:S1450I"XRemove the "tabLayout" field and declare it as a local variable in the relevant methods.(¤×ä
+L
+java:S1874E"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
+m	java:S116J"SRename this field "swipe_to" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(äúÿÿúÿÿÿÿ
+u
+java:S2293ô"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+l	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…Èâ˜ıÿÿÿÿ
+f
+java:S1192y"KDefine a constant instead of duplicating this literal "Past Order" 3 times.(Ò”Ÿùÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+g	java:S117¤"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÃÀã•
+l	java:S117Ù"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Øªİªşÿÿÿÿ
+l	java:S116P"RRename this field "user_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(“Ì‰¿øÿÿÿÿ

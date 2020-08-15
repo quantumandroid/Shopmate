@@ -1,0 +1,9 @@
+
+V	java:S125"<This block of commented-out lines of code should be removed.(åéäåùÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(Â§ŸÆıÿÿÿÿ
+n
+java:S2637'"XThis method's return value is marked "androidx.annotation.NonNull" but null is returned.(¥¹ï
+Q	java:S1250"<This block of commented-out lines of code should be removed.(œÁ“æ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»ûÛš
+Q
+java:S1874"<Remove this use of "FragmentPagerAdapter"; it is deprecated.(‘í›\

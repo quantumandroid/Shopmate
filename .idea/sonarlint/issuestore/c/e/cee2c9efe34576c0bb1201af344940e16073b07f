@@ -1,0 +1,62 @@
+
+X	java:S125?"<This block of commented-out lines of code should be removed.(…‹›È8º­”©¹.
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+J
+java:S3740C"/Provide the parametrized type for this generic.(½ûãˆÿÿÿÿÿ
+9
+java:S1659B"#Declare "image" on a separate line.(†ÜŠÓ
+n	java:S117ˆ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Æ™œ8Â¢İª¹.
+l	java:S116E"WRename this field "bottom_sheet" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Øì®ë
+{
+java:S1450J"^Remove the "continue_tocart" field and declare it as a local variable in the relevant methods.(¹„ˆã8ö©¢ß¶.
+^	java:S125Ü"<This block of commented-out lines of code should be removed.(‡ÕÓúÿÿÿÿ8Â¢İª¹.
+v	java:S116J"ZRename this field "continue_tocart" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹„ˆã8¬ô¡ß¶.
+w	java:S116G"[Rename this field "bottom_lay_total" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ìîÀ™8»¶Ÿß¶.
+f	java:S116B"QRename this field "cat_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(†ÜŠÓ
+9
+java:S1659B"#Declare "title" on a separate line.(†ÜŠÓ
+n
+java:S1450F"SRemove the "back" field and declare it as a local variable in the relevant methods.(Û²Ãèıÿÿÿÿ
+q
+java:S1450E"[Remove the "bottom_sheet" field and declare it as a local variable in the relevant methods.(Øì®ë
+~	java:S116K"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ8Ëšüİ¶.
+w	java:S116H"VRename this field "total_count" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(É¹‡÷ıÿÿÿÿ8¡˜¡ß¶.
+^	java:S125"<This block of commented-out lines of code should be removed.(­¾èÿÿÿÿÿ8Â¢İª¹.
+Y	java:S125Ï"<This block of commented-out lines of code should be removed.(Ö®€º8Â¢İª¹.
+^	java:S125¨"<This block of commented-out lines of code should be removed.(ˆşøÿÿÿÿ8Â¢İª¹.
+Y	java:S125ˆ"<This block of commented-out lines of code should be removed.(«ºÓú8Â¢İª¹.
+¤
+java:S1186Ï"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ö èşÿÿÿÿ8Â¢İª¹.
+f	java:S117~"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ñ„ÇÕ
+K
+java:S1604¸"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ8Â¢İª¹.
+V	java:S110;"<This class has 9 parents which is greater than 5 authorized.(ÈâÆÿÿÿÿÿ
+F
+java:S1604”"(Make this anonymous inner class a lambda(Òî¦İ8Â¢İª¹.
+n	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾ßùœ8Â¢İª¹.
+`
+java:S1874`">Remove this use of "setBottomSheetCallback"; it is deprecated.(³˜Æùÿÿÿÿ8º­”©¹.
+u	java:S116="[Rename this field "recycler_product" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿§Û„ûÿÿÿÿ
+r	java:S116I"VRename this field "total_price" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„îç8èÇ¡ß¶.
+|
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ8Â¢İª¹.
+K	java:S108½")Either remove or fill this block of code.(™²¨©ûÿÿÿÿ8Â¢İª¹.
+r
+java:S11289"PRemove this unused import 'com.tecmanic.gogrocer.Config.BaseURL.ProductVarient'.(ü®¨–úÿÿÿÿ8ºÍ•«¹.
+^	java:S125´"<This block of commented-out lines of code should be removed.(Ş¥‚…üÿÿÿÿ8ºÍ•«¹.
+^	java:S125·"<This block of commented-out lines of code should be removed.(ºˆØ‹øÿÿÿÿ8ºÍ•«¹.
+Y	java:S125¹"<This block of commented-out lines of code should be removed.(›†™Õ8ºÍ•«¹.
+Y	java:S125¾"<This block of commented-out lines of code should be removed.(””÷8ºÍ•«¹.
+Y	java:S125Ä"<This block of commented-out lines of code should be removed.(¤¢ñú8ºÍ•«¹.
+Y	java:S125Ò"<This block of commented-out lines of code should be removed.(¨ğÆî8ºÍ•«¹.
+^	java:S125Ş"<This block of commented-out lines of code should be removed.(‰‡Œ†ùÿÿÿÿ8ºÍ•«¹.
+Y	java:S125à"<This block of commented-out lines of code should be removed.(®ê§¯8ºÍ•«¹.
+^	java:S125ã"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ºÍ•«¹.
+^	java:S125è"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ºÍ•«¹.
+Y	java:S125ê"<This block of commented-out lines of code should be removed.(¡Õ±š8ºÍ•«¹.
+^	java:S125î"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ºÍ•«¹.
+^	java:S125ó"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ºÍ•«¹.
+^	java:S125ö"<This block of commented-out lines of code should be removed.(ûöÊîıÿÿÿÿ8ºÍ•«¹.
+^	java:S125ø"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8ºÍ•«¹.
+^	java:S125û"<This block of commented-out lines of code should be removed.(±ÕÙÙüÿÿÿÿ8ºÍ•«¹.
+Y	java:S125ƒ"<This block of commented-out lines of code should be removed.(ìÖ¶ù8ºÍ•«¹.

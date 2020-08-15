@@ -1,0 +1,336 @@
+
+J
+java:S1874Ç"3Remove this use of "getActivity"; it is deprecated.(¬öëê
+g	java:S117Æ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(²ÿ—
+C
+java:S1659@"-Declare "checkBox_coupon" on a separate line.(Úèş
+`
+java:S1874e"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ßìê¯
+J
+java:S1874Â"3Remove this use of "getActivity"; it is deprecated.(ÚéÓğ
+O
+java:S1874ä"3Remove this use of "getActivity"; it is deprecated.(Ğ†¤˜úÿÿÿÿ
+t	java:S116M"_Rename this field "Relative_used_coupon" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(”ÔƒÀ
+K
+java:S1874½"4Remove this use of "getResources"; it is deprecated.(ïâ¹º
+O	java:S106Ï"9Replace this use of System.out or System.err by a logger.(ÿÉë£
+O
+java:S1874"3Remove this use of "getActivity"; it is deprecated.(ş•ÏÜÿÿÿÿÿ
+i	java:S116A"TRename this field "et_Coupon" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(şá–´
+P
+java:S1874¹"4Remove this use of "getArguments"; it is deprecated.(·­„™ÿÿÿÿÿ
+Q
+java:S1874š"5Remove this use of "startActivity"; it is deprecated.(øşóÅşÿÿÿÿ
+m	java:S116?"SRename this field "rb_paytm" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂøÚÈûÿÿÿÿ
+G
+java:S1874»"0Remove this use of "getColor"; it is deprecated.(şêæğ
+J
+java:S1874á"3Remove this use of "getActivity"; it is deprecated.(¶Ï¼„
+J
+java:S1874¥"3Remove this use of "getActivity"; it is deprecated.(î±å
+O
+java:S1874„"3Remove this use of "getActivity"; it is deprecated.(‹â­üÿÿÿÿ
+k	java:S116?"QRename this field "rb_Cod" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂøÚÈûÿÿÿÿ
+K
+java:S1874×"4Remove this use of "getResources"; it is deprecated.(Ñ”ÈÇ
+`
+java:S1874Z"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(•ğ¢í
+O
+java:S1874è"3Remove this use of "getActivity"; it is deprecated.(ê³¥ğøÿÿÿÿ
+O
+java:S1874ÿ"3Remove this use of "getActivity"; it is deprecated.(‹â­üÿÿÿÿ
+g	java:S117û"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(“––
+P
+java:S1874­"4Remove this use of "getResources"; it is deprecated.(”ı»¥ùÿÿÿÿ
+G
+java:S1874İ"0Remove this use of "getColor"; it is deprecated.(ªƒŞ•
+r	java:S116?"XRename this field "rb_Netbanking" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂøÚÈûÿÿÿÿ
+C
+java:S1481İ",Remove this unused "msg_arb" local variable.(è²¹•
+F
+java:S1068W"+Remove this unused "rewards" private field.(üÁÒ¿üÿÿÿÿ
+O
+java:S1874ï"3Remove this use of "getActivity"; it is deprecated.(¹ÁóÕúÿÿÿÿ
+I
+java:S1874Ù"3Remove this use of "getActivity"; it is deprecated.(µÎÏh
+`
+java:S1874k"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(«ÃÀ÷
+g	java:S116P"RRename this field "db_cart" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ù
+J
+java:S1874Ê"3Remove this use of "getActivity"; it is deprecated.(½â˜ï
+A
+java:S1659?"&Declare "rb_paytm" on a separate line.(ÂøÚÈûÿÿÿÿ
+<
+java:S1172^"&Remove these unused method parameters.(×Ï½
+N
+java:S1874{"3Remove this use of "getActivity"; it is deprecated.(ı°££úÿÿÿÿ
+i	java:S100ù"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä¤ª€ıÿÿÿÿ
+J
+java:S1874ì"3Remove this use of "getActivity"; it is deprecated.(›ØÁÓ
+g	java:S117¦"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(½Ìğ
+K
+java:S1874‡"4Remove this use of "getResources"; it is deprecated.(¤Ë‡Õ
+g	java:S117¥"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ëŒ´Ï
+H
+java:S1659M"2Declare "Relative_used_coupon" on a separate line.(”ÔƒÀ
+O
+java:S1874˜"3Remove this use of "getActivity"; it is deprecated.(«÷‘Ñûÿÿÿÿ
+D
+java:S1604Ô"(Make this anonymous inner class a lambda(Úïœæşÿÿÿÿ
+J
+java:S1874î"3Remove this use of "getActivity"; it is deprecated.(ù»òğ
+7
+java:S1659J"!Declare "lng" on a separate line.(ßé¾Ÿ
+G
+java:S1874½"0Remove this use of "getColor"; it is deprecated.(ïâ¹º
+D
+java:S1604ì"(Make this anonymous inner class a lambda(£Ó¬ˆüÿÿÿÿ
+G
+java:S1874¹"0Remove this use of "getColor"; it is deprecated.(Ñ”ÈÇ
+K
+java:S1874»"4Remove this use of "getResources"; it is deprecated.(şêæğ
+P
+java:S1874²"4Remove this use of "getResources"; it is deprecated.(ŞÏ†íøÿÿÿÿ
+d	java:S100í"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(²×ü»
+N
+java:S1874o"3Remove this use of "getActivity"; it is deprecated.(—¦å½ÿÿÿÿÿ
+K
+java:S1874Ù"4Remove this use of "getResources"; it is deprecated.(şêæğ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÎÒ•¸
+?
+java:S1659?"$Declare "rb_Cod" on a separate line.(ÂøÚÈûÿÿÿÿ
+G
+java:S1874°"0Remove this use of "getColor"; it is deprecated.(Ä—è¢
+_
+java:S1192º"HDefine a constant instead of duplicating this literal "getdate" 4 times.(”¸Š§
+o	java:S116@"ZRename this field "checkBox_coupon" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Úèş
+n	java:S116R"YRename this field "getlocation_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ŸÉŠ”
+o	java:S116@"ZRename this field "checkBox_Wallet" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Úèş
+—
+java:S1186Z"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(•ğ¢í
+B
+java:S1481…"+Remove this unused "status" local variable.(ß…Ø­
+A
+java:S5411Û"*Use the primitive boolean expression here.(šÀ›÷
+s	java:S116>"YRename this field "payble_ammount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ†¢¤şÿÿÿÿ
+F
+java:S1659>"+Declare "order_ammount" on a separate line.(İ†¢¤şÿÿÿÿ
+>
+java:S1185e"(Remove this method to simply inherit it.(ßìê¯
+R	java:S125™"<This block of commented-out lines of code should be removed.(®›µ£
+J
+java:S1659L"/Declare "Coupon_and_wallet" on a separate line.(¡ôÓ¬ıÿÿÿÿ
+b
+java:S1192½"KDefine a constant instead of duplicating this literal "getstoreid" 4 times.(ªøÅï
+K
+java:S1874f"0Remove this use of "onCreate"; it is deprecated.(î±¨Ôøÿÿÿÿ
+K
+java:S1874ç"4Remove this use of "getResources"; it is deprecated.(¡Ù“ƒ
+u
+java:S2293™"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+d
+java:S1192Ù"MDefine a constant instead of duplicating this literal "total_amount" 3 times.(ÚÚ†œ
+L
+java:S1659>"1Declare "used_wallet_ammount" on a separate line.(İ†¢¤şÿÿÿÿ
+D
+java:S1604ì"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+w	java:S116E"]Rename this field "Used_Wallet_amount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹¤ÕÉúÿÿÿÿ
+G
+java:S1874×"0Remove this use of "getColor"; it is deprecated.(Ñ”ÈÇ
+K
+java:S1874ı"4Remove this use of "getResources"; it is deprecated.(¤Ë‡Õ
+d	java:S100–"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ôš¨
+O
+java:S1874—"3Remove this use of "getActivity"; it is deprecated.(°®œ»øÿÿÿÿ
+O
+java:S1874å"3Remove this use of "getActivity"; it is deprecated.(¬¹’æüÿÿÿÿ
+K
+java:S1874¹"4Remove this use of "getResources"; it is deprecated.(Ñ”ÈÇ
+m	java:S116?"SRename this field "rb_Store" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂøÚÈûÿÿÿÿ
+J
+java:S1874Ä"3Remove this use of "getActivity"; it is deprecated.(øâ¢
+r	java:S116G"]Rename this field "order_total_amount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡¡¼
+L
+java:S1874²"0Remove this use of "getColor"; it is deprecated.(ŞÏ†íøÿÿÿÿ
+u
+java:S2293Õ"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+x	java:S116>"^Rename this field "used_wallet_ammount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ†¢¤şÿÿÿÿ
+V	java:S125r"<This block of commented-out lines of code should be removed.(®À¹œşÿÿÿÿ
+S
+java:S1854`"8Remove this useless assignment to local variable "args".(´‰Ó²şÿÿÿÿ
+O
+java:S1874à"3Remove this use of "getActivity"; it is deprecated.(«•¾„ûÿÿÿÿ
+F
+java:S1659?"+Declare "rb_Netbanking" on a separate line.(ÂøÚÈûÿÿÿÿ
+R	java:S125Ş"<This block of commented-out lines of code should be removed.(Ôíù
+g	java:S117İ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(è²¹•
+b	java:S101<"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(àÚüå
+D
+java:S1604‹"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+L
+java:S1874­"0Remove this use of "getColor"; it is deprecated.(”ı»¥ùÿÿÿÿ
+O
+java:S1874æ"3Remove this use of "getActivity"; it is deprecated.(´ÖšÔûÿÿÿÿ
+J
+java:S1874¨"3Remove this use of "getActivity"; it is deprecated.(³õä«
+v	java:S116I"aRename this field "Prefrence_TotalAmmount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Áƒˆ
+G
+java:S1874¿"0Remove this use of "getColor"; it is deprecated.(ªƒŞ•
+O
+java:S1874Ã"3Remove this use of "getActivity"; it is deprecated.(œ¾ÑÃüÿÿÿÿ
+w	java:S116X"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+K
+java:S1874°"4Remove this use of "getResources"; it is deprecated.(Ä—è¢
+l	java:S116?"RRename this field "rb_card" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂøÚÈûÿÿÿÿ
+F
+java:S1874<"0Remove this use of "Fragment"; it is deprecated.(àÚüå
+L
+java:S1874â"5Remove this use of "startActivity"; it is deprecated.(©Éò·
+Q
+java:S1854…":Remove this useless assignment to local variable "status".(ß…Ø­
+?
+java:S1604¬"(Make this anonymous inner class a lambda(õœ”î
+P
+java:S1874â"4Remove this use of "getResources"; it is deprecated.(—»ê¿ıÿÿÿÿ
+J
+java:S1874¼"3Remove this use of "getActivity"; it is deprecated.(íêÅ‹
+g	java:S117Å"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»úí¤
+J
+java:S1874›"3Remove this use of "getActivity"; it is deprecated.(™¬õ
+G
+java:S1874Ù"0Remove this use of "getColor"; it is deprecated.(şêæğ
+v	java:S116>"\Rename this field "my_wallet_ammount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ†¢¤şÿÿÿÿ
+K
+java:S1874´"4Remove this use of "getResources"; it is deprecated.(÷·­
+?
+java:S1604„"(Make this anonymous inner class a lambda(ÁòäÂ
+v	java:S116L"\Rename this field "Promo_code_layout" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ôÓ¬ıÿÿÿÿ
+v	java:S116L"\Rename this field "Coupon_and_wallet" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ôÓ¬ıÿÿÿÿ
+R	java:S125ñ"<This block of commented-out lines of code should be removed.(ç—­
+_
+java:S1192»"HDefine a constant instead of duplicating this literal "gettime" 4 times.(‘şß“
+O
+java:S1874š"3Remove this use of "getActivity"; it is deprecated.(øşóÅşÿÿÿÿ
+W	java:S125˜"<This block of commented-out lines of code should be removed.(Ş™ËĞúÿÿÿÿ
+m
+java:S1192Å"QDefine a constant instead of duplicating this literal "getpaymentmethod" 3 times.(üëŸûÿÿÿÿ
+u
+java:S2293û"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+G
+java:S1874´"0Remove this use of "getColor"; it is deprecated.(÷·­
+O
+java:S1874ß"3Remove this use of "getActivity"; it is deprecated.(‰´àüÿÿÿÿ
+q	java:S116M"\Rename this field "Apply_Coupon_Code" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(”ÔƒÀ
+L
+java:S1874é"5Remove this use of "startActivity"; it is deprecated.(©Éò·
+K
+java:S1874Å"4Remove this use of "getResources"; it is deprecated.(Åèİ‡
+t	java:S116M"_Rename this field "Relative_used_wallet" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(”ÔƒÀ
+J
+java:S1874©"3Remove this use of "getActivity"; it is deprecated.(ûıàš
+J
+java:S1874™"3Remove this use of "getActivity"; it is deprecated.(ù»òğ
+r	java:S116>"XRename this field "order_ammount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ†¢¤şÿÿÿÿ
+R	java:S125¯"<This block of commented-out lines of code should be removed.(¹¥İÅ
+u
+java:S2293Ç"YReplace the type specification in this constructor call with the diamond operator ("<>").(ô›Óíüÿÿÿÿ
+J
+java:S1874¦"3Remove this use of "getActivity"; it is deprecated.(¨‡Õ
+g	java:S117£"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µŸØ¹
+q
+java:S1450W"VRemove the "rewards" field and declare it as a local variable in the relevant methods.(üÁÒ¿üÿÿÿÿ
+K
+java:S1874»"4Remove this use of "getArguments"; it is deprecated.(‘şß“
+?
+java:S1604Æ"(Make this anonymous inner class a lambda(ú§¥æ
+J
+java:S1874ß"3Remove this use of "getActivity"; it is deprecated.(ù»òğ
+K
+java:S1874Â"4Remove this use of "getResources"; it is deprecated.(¤Ë‡Õ
+e
+java:S1192¼"NDefine a constant instead of duplicating this literal "getlocationid" 4 times.(òÌµ
+K
+java:S1874½"4Remove this use of "getArguments"; it is deprecated.(ªøÅï
+J
+java:S1659>"/Declare "my_wallet_ammount" on a separate line.(İ†¢¤şÿÿÿÿ
+J
+java:S1874ƒ"3Remove this use of "getActivity"; it is deprecated.(»¢àÑ
+]
+java:S1192¸"FDefine a constant instead of duplicating this literal "total" 9 times.(ä§Áì
+D
+java:S1604"(Make this anonymous inner class a lambda(±æÿÚıÿÿÿÿ
+L
+java:S1659>"1Declare "used_coupon_ammount" on a separate line.(İ†¢¤şÿÿÿÿ
+i
+java:S3776–"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(Ôš¨
+I
+java:S1874ñ"3Remove this use of "getActivity"; it is deprecated.(ïâ
+D
+java:S1604ô"(Make this anonymous inner class a lambda(±æÿÚıÿÿÿÿ
+V	java:S125u"<This block of commented-out lines of code should be removed.(«óöıÿÿÿÿ
+V	java:S125m"<This block of commented-out lines of code should be removed.(¨ûó­ÿÿÿÿÿ
+D
+java:S1604ÿ"(Make this anonymous inner class a lambda(¯ÿÓıùÿÿÿÿ
+O
+java:S1874Ö"3Remove this use of "getActivity"; it is deprecated.(¬¹’æüÿÿÿÿ
+p	java:S116S"VRename this field "getstore_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÒúÚ†şÿÿÿÿ
+K
+java:S1874¿"4Remove this use of "getResources"; it is deprecated.(ªƒŞ•
+G
+java:S1874Û"0Remove this use of "getColor"; it is deprecated.(ïâ¹º
+J
+java:S1874ã"3Remove this use of "getActivity"; it is deprecated.(›è€ç
+D
+java:S1481`")Remove this unused "args" local variable.(´‰Ó²şÿÿÿÿ
+x	java:S116>"^Rename this field "used_coupon_ammount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ†¢¤şÿÿÿÿ
+I
+java:S1874š"3Remove this use of "getActivity"; it is deprecated.(ïâ
+@
+java:S1659?"%Declare "rb_card" on a separate line.(ÂøÚÈûÿÿÿÿ
+G
+java:S1144í"0Remove this unused private "Coupon_code" method.(²×ü»
+O	java:S106“"9Replace this use of System.out or System.err by a logger.(ÿÉë£
+h
+java:S3776k"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(«ÃÀ÷
+K
+java:S1874º"4Remove this use of "getArguments"; it is deprecated.(”¸Š§
+e
+java:S1192Ú"IDefine a constant instead of duplicating this literal "responce" 3 times.(Çùğœÿÿÿÿÿ
+D
+java:S1604Ë"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+K
+java:S1874¼"4Remove this use of "getArguments"; it is deprecated.(òÌµ
+i
+java:S3776«"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(…ìÓ‘
+l	java:S117ù"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä¤ª€ıÿÿÿÿ
+J
+java:S1874ò"3Remove this use of "getActivity"; it is deprecated.(™¬õ
+U
+java:S1155£">Use isEmpty() to check whether the collection is empty or not.(É†¦È
+H
+java:S1659M"2Declare "Relative_used_wallet" on a separate line.(”ÔƒÀ
+K
+java:S1874Û"4Remove this use of "getResources"; it is deprecated.(ïâ¹º
+g	java:S117ú"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(²ÿ—
+D
+java:S1604"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+K
+java:S1874İ"4Remove this use of "getResources"; it is deprecated.(ªƒŞ•
+O
+java:S1874ş"3Remove this use of "getActivity"; it is deprecated.(µ§Ï…ÿÿÿÿÿ
+D
+java:S1604•"(Make this anonymous inner class a lambda(• »ÿÿÿÿÿ
+N
+java:S2589¶"7Remove this expression which always evaluates to "true"(Üı¹Ë
+R
+java:S1854İ";Remove this useless assignment to local variable "msg_arb".(è²¹•
+K
+java:S1874¸"4Remove this use of "getArguments"; it is deprecated.(ä§Áì
+j	java:S116V"URename this field "getuser_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(š£÷¾
+I
+java:S1874°"3Remove this use of "getActivity"; it is deprecated.(À‚
+q	java:S116F"WRename this field "total_amount" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­–ìÂüÿÿÿÿ
+G
+java:S5411š"*Use the primitive boolean expression here.(ïâ8’éÕÏ¹.
+G
+java:S5411ñ"*Use the primitive boolean expression here.(ïâ8’éÕÏ¹.

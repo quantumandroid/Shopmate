@@ -1,0 +1,31 @@
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‘âìÜüÿÿÿÿ
+w	java:S116+"]Rename this field "session_management" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«éØíüÿÿÿÿ
+f	java:S117R"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û§’Ü
+@
+java:S1659*"%Declare "catName" on a separate line.(å¼ ÷ıÿÿÿÿ
+M
+java:S18744"2Remove this use of "setMessage"; it is deprecated.(ñËÄİÿÿÿÿÿ
+V	java:S110%"<This class has 9 parents which is greater than 5 authorized.(åÖµµûÿÿÿÿ
+h	java:S100="NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Úª×şüÿÿÿÿ
+L
+java:S18742"6Remove this use of "ProgressDialog"; it is deprecated.(÷€ø¾
+O
+java:S1874‰"3Remove this use of "isConnected"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+X
+java:S1874‰"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+k	java:S117M"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸õ´Äşÿÿÿÿ
+C
+java:S1604o"(Make this anonymous inner class a lambda(´¸©”üÿÿÿÿ
+k	java:S117N"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(óè¼ğûÿÿÿÿ
+p	java:S116'"VRename this field "DealAdapter" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¬ùÿÿÿÿ
+L
+java:S1874&"6Remove this use of "ProgressDialog"; it is deprecated.(ğİıº
+X
+java:S1874‰"<Remove this use of "getActiveNetworkInfo"; it is deprecated.(ˆÛ¡Çøÿÿÿÿ
+r	java:S117L"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼Ê ıÿÿÿÿÿ8ÓîÙ«¹.
+C
+java:S1604>"(Make this anonymous inner class a lambda(¥Ã½ÿÿÿÿÿ
+Q	java:S125V"<This block of commented-out lines of code should be removed.(«Öù
+g	java:S101%"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(åÖµµûÿÿÿÿ
+X	java:S125^"<This block of commented-out lines of code should be removed.(¦Ğ¢‰8ğôÚ«¹.
