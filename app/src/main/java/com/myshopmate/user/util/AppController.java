@@ -18,6 +18,7 @@ import java.util.Locale;
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
+    public static final String TAG2 = AppController.class.getSimpleName();
 
     private RequestQueue mRequestQueue;
 
