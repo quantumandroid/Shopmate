@@ -20,17 +20,17 @@
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@drawable/splashicon"></ImageView>
+            android:background="@drawable/splashicon" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Go Grocer"
+            android:text="My Shopmate"
             android:textSize="20sp"
             android:textColor="#000"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold" />
     </LinearLayout>
 
 </RelativeLayout>

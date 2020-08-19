@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoGrocer</string>
+    <string name="app_name">Shopmate</string>
     <!--    <string name="app_name">Heritage Food</string>-->
     <string name="currency" translatable="false">\u20B9</string>
     <string name="emptyCart">NO items in the cart</string>

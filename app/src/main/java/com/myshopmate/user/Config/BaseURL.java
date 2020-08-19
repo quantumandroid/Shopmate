@@ -75,8 +75,8 @@ public class BaseURL {
 //    public static String BANN_IMG_URL = "https://gogrocer.tecmanic.com/";
 //    public static String BANNER_IMG_URL = "https://thecodecafe.in/gogrocer-ver2.0/";
 
-    public static String BASE_URL = "https://gogrocer.tecmanic.com/api/";
-    public static String IMG_URL = "https://gogrocer.tecmanic.com/";
+    public static String BASE_URL = "https://www.myshopmate.in/admin/api/";
+    public static String IMG_URL = "https://www.myshopmate.in/admin/";
     public static String BANN_IMG_URL = IMG_URL;
     public static String BANNER_IMG_URL = IMG_URL;
 
