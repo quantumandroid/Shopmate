@@ -93,7 +93,6 @@ public class ProductDetails extends AppCompatActivity {
         mrp12 = getIntent().getStringExtra("mrp");
         unit12 = getIntent().getStringExtra("unit");
         qty = getIntent().getStringExtra("qty");
-        //updateQty(qty);
         varientimage = getIntent().getStringExtra("image");
         varient_id = getIntent().getStringExtra("sVariant_id");
         stock = getIntent().getStringExtra("stock");
@@ -161,6 +160,7 @@ public class ProductDetails extends AppCompatActivity {
         Varient_product(product_id);
 
         int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id));
+        updateQty(qtyd);
         if (qtyd > 0) {
             btn_Add.setVisibility(View.GONE);
             ll_addQuan.setVisibility(View.VISIBLE);
@@ -234,10 +234,9 @@ public class ProductDetails extends AppCompatActivity {
 
     }
 
-    private void updateQty(String qty) {
-        if (qty != null && !qty.isEmpty()){
-            minteger = minteger + Integer.parseInt(qty);
-        }
+    private void updateQty(int qtyd) {
+        minteger = minteger + qtyd;
+
     }
 
 //    private void varientUrl(String varientId) {

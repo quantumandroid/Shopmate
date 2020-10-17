@@ -8,6 +8,7 @@
 
     <item
         android:id="@+id/navigation_dashboard"
+        android:visible="false"
         android:icon="@drawable/ic_different_squares"
         android:title="Categories" />
 
