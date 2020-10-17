@@ -160,7 +160,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             }
         });
 
-
+//////////////////////////////////////////////////////////////////////////////
         calendarview2.setLayoutManager(new LinearLayoutManager(OrderSummary.this, RecyclerView.HORIZONTAL, false));
         calendarview2.setHasFixedSize(true);
         calendarview2.setAdapter(new MyCalnderAdapter(OrderSummary.this, calendarModelList, new CalendarClick() {
@@ -174,6 +174,8 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }));
 
         todaydatee = calendarModelList.get(0).getYear() + "-" + calendarModelList.get(0).getMonthValue() + "-" + calendarModelList.get(0).getDate();
+        //////////////////////////////////////////////////////////////////////////////
+
         currency_indicator.setText(session_management.getCurrency());
         currency_indicator_2.setText(session_management.getCurrency());
         ruppy.setText(session_management.getCurrency());
@@ -223,12 +225,13 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                         Snackbar.make(v, "Please order less than" + " " + maxValue, Snackbar.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     } else {
-                        if (timeslot != null && !timeslot.equalsIgnoreCase("")) {
+                        continueUrl(todaydatee, timeslot, map);
+                       /* if (timeslot != null && !timeslot.equalsIgnoreCase("")) {
                             continueUrl(todaydatee, timeslot, map);
                         } else {
                             progressDialog.dismiss();
                             Snackbar.make(v, "Please select time slot for placed order!", Snackbar.LENGTH_LONG).show();
-                        }
+                        }*/
 
                     }
                 } else {
@@ -308,6 +311,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
+
                     makeGetAddressRequests(todaydatee);
                 }
 //                progressDialog.dismiss();
@@ -456,9 +460,11 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> param = new HashMap<>();
-                param.put("time_slot", timeslot);
+//                param.put("time_slot", timeslot);
+                param.put("time_slot", "22:00 - 23:00");
                 param.put("user_id", user_id);
-                param.put("delivery_date", todaydatee);
+//                param.put("delivery_date", todaydatee);
+               param.put("delivery_date", "2020-10-18");
                 param.put("order_array", array.toString());
                 param.put("store_id", session_management.getStoreId());
 //                Log.e(TAG, "getParams: "+param.toString() );
