@@ -138,6 +138,9 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
         } else {
             if (mList.getPayment_status().equalsIgnoreCase("success") || mList.getPayment_status().equalsIgnoreCase("failed") || mList.getPayment_status().equalsIgnoreCase("COD")) {
                 holder.tv_status.setText("Payment:-" + " " + mList.getPayment_status());
+                if (mList.getPayment_status().equalsIgnoreCase("COD")){
+                    holder.tv_status.setText("POD");
+                }
             }
         }
 
@@ -176,6 +179,9 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
         holder.tv_delevered_date.setText(mList.getDelivery_date());
         holder.tv_cancel_date.setText(mList.getDelivery_date());
         holder.tv_methid1.setText(mList.getPayment_method());
+        if(mList.getPayment_method().equalsIgnoreCase("COD")){
+            holder.tv_methid1.setText("Pay on Delivery");
+        }
         holder.tv_date.setText(mList.getDelivery_date());
         holder.tv_tracking_date.setText(mList.getDelivery_date());
 

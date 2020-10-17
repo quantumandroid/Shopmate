@@ -250,7 +250,7 @@ public class HomeeeFragment extends Fragment implements View.OnClickListener {
         scrollView.setSmoothScrollingEnabled(true);
         if (isOnline()) {
             makeGetSliderRequest();
-            second_banner();
+            //second_banner();
             makeGetCategoryRequest();
             topSelling();
         }

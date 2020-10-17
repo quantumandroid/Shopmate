@@ -218,7 +218,8 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="28dp"
@@ -250,7 +251,8 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="30dp"

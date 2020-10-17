@@ -33,7 +33,7 @@
     <string name="map_api_key">AIzaSyBvTaVufSFg8S4Buq1d0KzYZMDW_qd0L7Q</string>
 
     <string name="home_second">Home Second</string>
-    <string name="status_stop">Powered By <font color="#f7941e">GoGrocer</font></string>
+    <string name="status_stop">Powered By <font color="#f7941e">MyShopmate</font></string>
     <string name="nav_terms" translatable="false">Terms &amp; Privacy</string>
     <string name="cart" translatable="false">Cart</string>
     <string-array name="selectAction">

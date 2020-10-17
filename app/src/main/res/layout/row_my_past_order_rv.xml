@@ -204,7 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Cash on Delivery"
+                        android:text="Pay on Delivery"
                         android:textColor="@color/green"
                         android:textSize="12sp" />
 

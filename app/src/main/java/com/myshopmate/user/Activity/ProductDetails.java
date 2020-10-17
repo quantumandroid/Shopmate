@@ -2,6 +2,7 @@ package com.myshopmate.user.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
@@ -59,6 +60,11 @@ public class ProductDetails extends AppCompatActivity {
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
     private Session_management session_management;
 
+    private LinearLayout bottom_lay_total;
+    private TextView total_count;
+    private TextView total_price;
+    private TextView continue_tocart;
+
     private RecyclerView recyclerUnit;
     private String stock = "0";
     private Adapter_popup selectCityAdapter;
@@ -87,6 +93,7 @@ public class ProductDetails extends AppCompatActivity {
         mrp12 = getIntent().getStringExtra("mrp");
         unit12 = getIntent().getStringExtra("unit");
         qty = getIntent().getStringExtra("qty");
+        //updateQty(qty);
         varientimage = getIntent().getStringExtra("image");
         varient_id = getIntent().getStringExtra("sVariant_id");
         stock = getIntent().getStringExtra("stock");
@@ -109,6 +116,11 @@ public class ProductDetails extends AppCompatActivity {
         txt_unit = findViewById(R.id.txt_unit);
         txt_qty = findViewById(R.id.txt_qty);
         recyclerUnit = findViewById(R.id.recyclerUnit);
+
+        bottom_lay_total = findViewById(R.id.bottom_lay_total);
+        total_price = findViewById(R.id.total_price);
+        total_count = findViewById(R.id.total_count);
+        continue_tocart = findViewById(R.id.continue_tocart);
 
         recyclerUnit.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerUnit.setHasFixedSize(true);
@@ -155,8 +167,8 @@ public class ProductDetails extends AppCompatActivity {
             txtQuan.setText("" + qtyd);
             double priced = Double.parseDouble(price12);
             double mrpd = Double.parseDouble(mrp12);
-            ProdPrice.setText("" + (priced * qtyd));
-            prodMrp.setText("" + (mrpd * qtyd));
+            //ProdPrice.setText("" + (priced * qtyd));
+            //prodMrp.setText("" + (mrpd * qtyd));
         } else {
             btn_Add.setVisibility(View.VISIBLE);
             ll_addQuan.setVisibility(View.GONE);
@@ -197,6 +209,34 @@ public class ProductDetails extends AppCompatActivity {
             txt_qty.setText(qty);
 //            varientUrl(varientId);
             Picasso.with(this).load(BaseURL.IMG_URL + varientimage).into(pImage);
+        }
+
+        /////////////////////////////////
+        continue_tocart.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("open", true);
+            setResult(24, intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                finishAndRemoveTask();
+            } else {
+                finish();
+            }
+        });
+        if (dbcart.getCartCount() > 0) {
+            bottom_lay_total.setVisibility(View.VISIBLE);
+            total_price.setText(session_management.getCurrency() + " " + dbcart.getTotalAmount());
+            total_count.setText("Total Items (" + dbcart.getCartCount() + ")");
+        } else {
+            bottom_lay_total.setVisibility(View.GONE);
+        }
+
+        /////////////////////////////////
+
+    }
+
+    private void updateQty(String qty) {
+        if (qty != null && !qty.isEmpty()){
+            minteger = minteger + Integer.parseInt(qty);
         }
     }
 
@@ -341,8 +381,8 @@ public class ProductDetails extends AppCompatActivity {
                 ProdPrice.setText(session_management.getCurrency() + "" + price);
                 prodMrp.setText(session_management.getCurrency() + "" + mrp);
             } else {
-                ProdPrice.setText(session_management.getCurrency() + "" + price * items);
-                prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
+               // ProdPrice.setText(session_management.getCurrency() + "" + price * items);
+               // prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
             }
 
 
@@ -354,6 +394,10 @@ public class ProductDetails extends AppCompatActivity {
 
             Log.d("qwer", e.toString());
         }
+        //////////////////////////////////////////////////////
+        checkCart();
+        //////////////////////////////////////////////////////
+
     }
 
     private void Varient_product(String pId) {
@@ -449,6 +493,18 @@ public class ProductDetails extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.getCache().clear();
         requestQueue.add(stringRequest);
+    }
+
+    private void checkCart(){
+
+        if (dbcart.getCartCount() > 0) {
+            bottom_lay_total.setVisibility(View.VISIBLE);
+            total_price.setText(session_management.getCurrency() + " " + dbcart.getTotalAmount());
+            total_count.setText("Total Items (" + dbcart.getCartCount() + ")");
+        } else {
+            bottom_lay_total.setVisibility(View.GONE);
+        }
+
     }
 
 }

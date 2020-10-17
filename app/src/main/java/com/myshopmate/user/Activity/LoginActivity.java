@@ -74,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
+                        String s = task.getException().getMessage();
+                        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+
                         token = "";
                         Log.i("Login", "getInstanceId failed", task.getException());
                         return;
@@ -81,6 +84,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     // Get new Instance ID token
                     token = task.getResult().getToken();
+                    if (token == null){
+                        Toast.makeText(this, "Token : null", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(this, "Token : " + token, Toast.LENGTH_LONG).show();
+                    }
+
                 });
         sessionManagement = new Session_management(LoginActivity.this);
         new Thread(this::checkUserNotify).start();
@@ -159,7 +168,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUrl() {
 
+
         if (token != null && !token.equalsIgnoreCase("")) {
+
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Login, response -> {
                 Log.d("Login", response);
 
@@ -199,7 +210,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
+                    progressDialog.dismiss();
                 }
                 progressDialog.dismiss();
             }, error -> progressDialog.dismiss()) {
@@ -220,16 +233,23 @@ public class LoginActivity extends AppCompatActivity {
             requestQueue.getCache().clear();
             requestQueue.add(stringRequest);
         } else {
+
             FirebaseInstanceId.getInstance().getInstanceId()
                     .addOnCompleteListener(task -> {
                         if (!task.isSuccessful()) {
                             token = "";
                             Log.i("Login", "getInstanceId failed", task.getException());
+                            Toast.makeText(this, "getInstanceId failed ", Toast.LENGTH_LONG).show();
+                            if (progressDialog!=null && progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+
                             return;
                         }
 
                         // Get new Instance ID token
                         token = task.getResult().getToken();
+
                         loginUrl();
                     });
         }

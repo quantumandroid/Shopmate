@@ -54,7 +54,7 @@ public class CategoryPage extends AppCompatActivity {
     //    List<CategoryGrid> model = new ArrayList<>();
     List<NewCategoryShowList> newModelList = new ArrayList<>();
     List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
-    String cat_id, image, title;
+    String cat_id, image, title,store_id;
     BottomSheetBehavior behavior;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
     private LinearLayout bottom_sheet;
@@ -81,6 +81,7 @@ public class CategoryPage extends AppCompatActivity {
         back = findViewById(R.id.back);
         behavior = BottomSheetBehavior.from(bottom_sheet);
         cat_id = getIntent().getStringExtra("cat_id");
+        store_id = getIntent().getStringExtra("store_id");
         image = getIntent().getStringExtra("image");
         title = getIntent().getStringExtra("title");
         dbcart = new DatabaseHandler(CategoryPage.this);
@@ -88,6 +89,7 @@ public class CategoryPage extends AppCompatActivity {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 // React to state change
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -163,7 +165,7 @@ public class CategoryPage extends AppCompatActivity {
             bottom_lay_total.setVisibility(View.GONE);
         }
 
-        product(cat_id);
+        product(store_id);
 
 
     }
@@ -252,12 +254,13 @@ public class CategoryPage extends AppCompatActivity {
 //        requestQueue.add(stringRequest);
 //    }
 
-    private void product(String cat_id) {
+    private void product(String store_id) {
         newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
 
         Map<String, String> params = new HashMap<String, String>();
+        params.put("store_id", store_id);
         params.put("cat_id", cat_id);
         params.put("lat", session_management.getLatPref());
         params.put("lng", session_management.getLangPref());
@@ -331,5 +334,17 @@ public class CategoryPage extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
 
+        if (dbcart.getCartCount() > 0) {
+            bottom_lay_total.setVisibility(View.VISIBLE);
+            total_price.setText(session_management.getCurrency() + " " + dbcart.getTotalAmount());
+            total_count.setText("Total Items (" + dbcart.getCartCount() + ")");
+        } else {
+            bottom_lay_total.setVisibility(View.GONE);
+        }
+    }
 }

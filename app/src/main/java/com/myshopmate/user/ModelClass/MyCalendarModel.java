@@ -79,7 +79,9 @@ public class MyCalendarModel {
     }
 
     public String getMonthValue() {
-        if (monthValue.length()==1){
+        int imv = Integer.parseInt(monthValue)+1;
+        String smv = String.valueOf(imv);
+        if (smv.length()==1){
             return "0"+String.valueOf(Integer.parseInt(monthValue)+1);
         }
         return String.valueOf(Integer.parseInt(monthValue)+1);

@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.Session_management;
+import com.volley.config.Config;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.myshopmate.user.Config.BaseURL.MY_BASE_URL;
 import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
 
 public class Splash extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        Config.SIMPLE_REQUEST_URL = MY_BASE_URL;
         setFinishOnTouchOutside(true);
         session_management = new Session_management(Splash.this);
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

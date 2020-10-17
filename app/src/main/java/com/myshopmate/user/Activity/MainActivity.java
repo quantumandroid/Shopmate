@@ -65,6 +65,7 @@ import com.myshopmate.user.Fragments.CartFragment;
 import com.myshopmate.user.Fragments.CategoryFragment;
 import com.myshopmate.user.Fragments.Contact_Us_fragment;
 import com.myshopmate.user.Fragments.Edit_profile_fragment;
+import com.myshopmate.user.Fragments.HomeFragment;
 import com.myshopmate.user.Fragments.HomeeeFragment;
 import com.myshopmate.user.Fragments.NotificationFragment;
 import com.myshopmate.user.Fragments.Reward_fragment;
@@ -228,7 +229,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 location.setLongitude(longitude);
                 getAddress();
                 navigation.setSelectedItemId(R.id.navigation_home);
-                loadFragment(new HomeeeFragment(fragmentClickListner));
+                //loadFragment(new HomeeeFragment(fragmentClickListner));
+                loadFragment(new HomeFragment(fragmentClickListner));
             }
         };
 
@@ -411,7 +413,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // checkConnection();
 
-        loadFragment(new HomeeeFragment(fragmentClickListner));
+        //loadFragment(new HomeeeFragment(fragmentClickListner));
+        loadFragment(new HomeFragment(fragmentClickListner));
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -443,7 +446,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
+                               // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
+                                HomeFragment fm = new HomeFragment(fragmentClickListner);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
                                         .addToBackStack(null).commit();
@@ -814,7 +818,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    loadFragment(new HomeeeFragment(fragmentClickListner));
+                   // loadFragment(new HomeeeFragment(fragmentClickListner));
+                    loadFragment(new HomeFragment(fragmentClickListner));
 
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
@@ -1046,14 +1051,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 location = locations;
                                 getAddress();
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
-                                    loadFragment(new HomeeeFragment(fragmentClickListner));
+                                    //loadFragment(new HomeeeFragment(fragmentClickListner));
+                                    loadFragment(new HomeFragment(fragmentClickListner));
                                 }
                             }
                         } else {
                             enterInFirst = true;
                             if (addres.getText().toString().equalsIgnoreCase("")) {
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
-                                    loadFragment(new HomeeeFragment(fragmentClickListner));
+                                    //loadFragment(new HomeeeFragment(fragmentClickListner));
+                                    loadFragment(new HomeFragment(fragmentClickListner));
                                 }
                                 getAddress();
                             }
@@ -1062,7 +1069,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enterInFirst = true;
                         location = locations;
                         if (navigation.getSelectedItemId() == R.id.navigation_home) {
-                            loadFragment(new HomeeeFragment(fragmentClickListner));
+                            //loadFragment(new HomeeeFragment(fragmentClickListner));
+                            loadFragment(new HomeFragment(fragmentClickListner));
                         }
                         getAddress();
                     }
@@ -1241,7 +1249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            location = locationA;
             getAddress();
             if (navigation.getSelectedItemId() == R.id.navigation_home) {
-                loadFragment(new HomeeeFragment(fragmentClickListner));
+                //loadFragment(new HomeeeFragment(fragmentClickListner));
+                loadFragment(new HomeFragment(fragmentClickListner));
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -163,7 +163,6 @@
             </LinearLayout>
 
 
-
             <LinearLayout
                 android:id="@+id/banner_layount"
                 android:layout_width="match_parent"
@@ -173,7 +172,7 @@
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <com.daimajia.slider.library.SliderLayout
                     android:id="@+id/relative_banner"

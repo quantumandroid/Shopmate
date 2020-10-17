@@ -139,6 +139,9 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
         } else {
             if (mList.getPayment_status().equalsIgnoreCase("success") || mList.getPayment_status().equalsIgnoreCase("failed") || mList.getPayment_status().equalsIgnoreCase("COD")) {
                 holder.tv_status.setText("Payment" + " " + mList.getPayment_status());
+                if (mList.getPayment_status().equalsIgnoreCase("COD")){
+                    holder.tv_status.setText("POD");
+                }
             }
         }
 
@@ -199,7 +202,7 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
         if (mList.getPayment_method().equals("Store Pick Up")) {
             holder.tv_methid1.setText(mList.getPayment_method());
         } else if (mList.getPayment_method().equalsIgnoreCase("COD")) {
-            holder.tv_methid1.setText("Cash On Delivery");
+            holder.tv_methid1.setText("Pay On Delivery");
         } else if (mList.getPayment_method().equalsIgnoreCase("Cards")) {
             holder.tv_methid1.setText("PrePaid");
         } else if (mList.getPayment_method().equalsIgnoreCase("net_banking")) {

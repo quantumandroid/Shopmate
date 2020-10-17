@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "160239690969",
-    "firebase_url": "https://shopmate-a8ab9.firebaseio.com",
-    "project_id": "shopmate-a8ab9",
-    "storage_bucket": "shopmate-a8ab9.appspot.com"
+    "project_number": "564890787609",
+    "firebase_url": "https://shopmateuser-6bba6.firebaseio.com",
+    "project_id": "shopmateuser-6bba6",
+    "storage_bucket": "shopmateuser-6bba6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:160239690969:android:19374a9128dc247bf74ac8",
+        "mobilesdk_app_id": "1:564890787609:android:00d75d722f090f92c1af88",
         "android_client_info": {
           "package_name": "com.myshopmate.user"
         }
       },
       "oauth_client": [
         {
-          "client_id": "160239690969-dhlpe07snt96215ilqa1nl8qsaf89idn.apps.googleusercontent.com",
+          "client_id": "564890787609-ei557qhkb8f31t08h5i7kvc6rb8hg0ee.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAa7xsZVGlIujPUH9IKoZWbFtL-DrAh3Eg"
+          "current_key": "AIzaSyD0Xbh7aeYADdAWXnvRriZyE-XR2AKkpk0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "160239690969-dhlpe07snt96215ilqa1nl8qsaf89idn.apps.googleusercontent.com",
+              "client_id": "564890787609-ei557qhkb8f31t08h5i7kvc6rb8hg0ee.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
