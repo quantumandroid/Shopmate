@@ -338,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
 
                     <!--
@@ -361,7 +361,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="10dp"
                         android:overScrollMode="never"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
 
                     <View

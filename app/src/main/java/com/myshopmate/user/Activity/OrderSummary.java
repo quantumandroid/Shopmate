@@ -28,7 +28,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 import com.myshopmate.user.Adapters.ImageAdapterData;
-import com.myshopmate.user.Adapters.MyCalnderAdapter;
 import com.myshopmate.user.Adapters.Timing_Adapter;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.CartModel;
@@ -38,7 +37,6 @@ import com.myshopmate.user.ModelClass.MyCalendarModel;
 import com.myshopmate.user.ModelClass.timing_model;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
-import com.myshopmate.user.util.CalendarClick;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.ForClicktimings;
@@ -165,7 +163,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         });
 
 //////////////////////////////////////////////////////////////////////////////
-        calendarview2.setLayoutManager(new LinearLayoutManager(OrderSummary.this, RecyclerView.HORIZONTAL, false));
+       /* calendarview2.setLayoutManager(new LinearLayoutManager(OrderSummary.this, RecyclerView.HORIZONTAL, false));
         calendarview2.setHasFixedSize(true);
         calendarview2.setAdapter(new MyCalnderAdapter(OrderSummary.this, calendarModelList, new CalendarClick() {
             @Override
@@ -178,7 +176,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }));
 
         todaydatee = calendarModelList.get(0).getYear() + "-" + calendarModelList.get(0).getMonthValue() + "-" + calendarModelList.get(0).getDate();
-        //////////////////////////////////////////////////////////////////////////////
+*/        //////////////////////////////////////////////////////////////////////////////
 
         currency_indicator.setText(session_management.getCurrency());
         currency_indicator_2.setText(session_management.getCurrency());
@@ -316,7 +314,8 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                     e.printStackTrace();
                 } finally {
 
-                    makeGetAddressRequests(todaydatee);
+                    updateData();
+//                    makeGetAddressRequests(todaydatee);
                 }
 //                progressDialog.dismiss();
             }
@@ -324,7 +323,8 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             @Override
             public void onErrorResponse(VolleyError error) {
 //                progressDialog.dismiss();
-                makeGetAddressRequests(todaydatee);
+                updateData();
+               // makeGetAddressRequests(todaydatee);
             }
         }) {
             @Override
@@ -536,6 +536,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
        }
         hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));
+        timeslot = hashMap.get("time");
 
 
         return hashMap;
@@ -597,7 +598,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                             bAdapter1.notifyDataSetChanged();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         timeslot = "";
                         bAdapter1 = new Timing_Adapter(OrderSummary.this, dateDayModelClasses1, OrderSummary.this);
                         recyclerTimeSlot.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
