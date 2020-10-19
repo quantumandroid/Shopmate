@@ -1044,8 +1044,8 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         params.put("cart_id", cart_id);
         params.put("payment_method", payment_method);
         params.put("wallet", wallet_status);
-//        params.put("lat",lat);
-//        params.put("lng",lng);
+       // params.put("lat",lat);
+        //params.put("lng",lng);
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
                 BaseURL.ADD_ORDER_URL, params, new Response.Listener<JSONObject>() {
