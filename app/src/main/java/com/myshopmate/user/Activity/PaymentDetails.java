@@ -325,7 +325,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
 
 
         getRefresrh();
-        rewardliness();
+        //rewardliness();
 
         final String email = sessionManagement.getUserDetails().get(BaseURL.KEY_EMAIL);
         final String mobile = sessionManagement.getUserDetails().get(BaseURL.KEY_MOBILE);
@@ -333,7 +333,17 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.show();
+
+                if (rb_Cod.isChecked()) {
+                    progressDialog.show();
+                    wallet_status = "no";
+                    payment_method = "COD";
+                    makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
+                } else {
+                    Toast.makeText(PaymentDetails.this, "Please select payment method.", Toast.LENGTH_SHORT).show();
+                }
+
+              /*
                 if (rb_Cod.isChecked() && checkBox_Wallet.isChecked()) {
                     wallet_status = "yes";
                     payment_method = "COD";
@@ -390,7 +400,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
                             makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
                         }
                     }
-                }
+                }*/
 
 //                if (rb_Cod.isChecked()||checkBox_Wallet.isChecked()||checkBox_coupon.isChecked()){
 //                    makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
@@ -759,7 +769,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
 
 
 //        checked();
-
+        rb_Cod.setChecked(true);
     }
 
     private void startPaypal(String name, String total_amount, String email, String mobile) {

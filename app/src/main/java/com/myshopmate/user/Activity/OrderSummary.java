@@ -464,21 +464,12 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> param = new HashMap<>();
-//                param.put("time_slot", timeslot);
                 HashMap<String, String> map = getDelTime();
                 param.put("time_slot", map.get("time"));
-               // param.put("time_slot", "22:00 - 23:00");
                 param.put("user_id", user_id);
-//                param.put("delivery_date", todaydatee);
-            //   param.put("delivery_date", "2020-10-18");
-               param.put("delivery_date", map.get("date"));
+                param.put("delivery_date", map.get("date"));
                 param.put("order_array", array.toString());
                 param.put("store_id", session_management.getStoreId());
-//                Log.e(TAG, "getParams: "+param.toString() );
-//                Log.d("hj",session_management.userId());
-//                Log.d("timeslot",timeslot);
-//                Log.d("todaydate",todaydate);
-//                Log.d("order_array",array.toString());
                 return param;
             }
         };
