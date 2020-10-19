@@ -66,7 +66,6 @@ import com.myshopmate.user.Fragments.CategoryFragment;
 import com.myshopmate.user.Fragments.Contact_Us_fragment;
 import com.myshopmate.user.Fragments.Edit_profile_fragment;
 import com.myshopmate.user.Fragments.HomeFragment;
-import com.myshopmate.user.Fragments.HomeeeFragment;
 import com.myshopmate.user.Fragments.NotificationFragment;
 import com.myshopmate.user.Fragments.Reward_fragment;
 import com.myshopmate.user.Fragments.SearchFragment;
@@ -976,7 +975,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nav_menu.findItem(R.id.nav_my_profile).setVisible(true);
             //   nav_menu.findItem(R.id.login).setVisible(true);
             nav_menu.findItem(R.id.sign).setVisible(false);
-            nav_menu.findItem(R.id.nav_powerd).setVisible(true);
+//            nav_menu.findItem(R.id.nav_powerd).setVisible(true);
 
             username.setText("Welcome! " +
                     "" + sessionManagement.getUserDetails().get(BaseURL.KEY_NAME));

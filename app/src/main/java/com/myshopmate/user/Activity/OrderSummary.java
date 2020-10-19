@@ -48,9 +48,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.myshopmate.user.Config.BaseURL.CalenderUrl;
@@ -461,10 +465,13 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> param = new HashMap<>();
 //                param.put("time_slot", timeslot);
-                param.put("time_slot", "22:00 - 23:00");
+                HashMap<String, String> map = getDelTime();
+                param.put("time_slot", map.get("time"));
+               // param.put("time_slot", "22:00 - 23:00");
                 param.put("user_id", user_id);
 //                param.put("delivery_date", todaydatee);
-               param.put("delivery_date", "2020-10-18");
+            //   param.put("delivery_date", "2020-10-18");
+               param.put("delivery_date", map.get("date"));
                 param.put("order_array", array.toString());
                 param.put("store_id", session_management.getStoreId());
 //                Log.e(TAG, "getParams: "+param.toString() );
@@ -511,6 +518,27 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         });
         requestQueue.add(stringRequest);
 
+    }
+
+    private HashMap<String, String> getDelTime() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        final Calendar calendar = Calendar.getInstance();
+
+       int hr = calendar.get(Calendar.HOUR_OF_DAY);
+       if (hr < 18){
+           hr+=1;
+           hashMap.put("time", "" + hr + ":00 - 20:00");
+
+       }else {
+           calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+           hashMap.put("time", "09:00 - 20:00");
+
+       }
+        hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));
+
+
+        return hashMap;
     }
 
     private void updateData() {
@@ -727,5 +755,10 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             showAdreesUrl();
         }
 
+    }
+
+    public static String getCurrentTime(Date date, String format) {
+
+        return new SimpleDateFormat(format, Locale.US).format(date);
     }
 }

@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,20 +53,22 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Config.SIMPLE_REQUEST_URL = MY_BASE_URL;
         setFinishOnTouchOutside(true);
         session_management = new Session_management(Splash.this);
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(this)) {
-            Toast.makeText(getApplicationContext(),"Gps already enabled",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
             redirectionScreen();
-        }else {
-            if(!hasGPSDevice(this)){
-                Toast.makeText(getApplicationContext(),"Gps not Supported",Toast.LENGTH_SHORT).show();
+        } else {
+            if (!hasGPSDevice(this)) {
+                Toast.makeText(getApplicationContext(), "Gps not Supported", Toast.LENGTH_SHORT).show();
                 finish();
             }
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(this)) {
-                Toast.makeText(getApplicationContext(),"Gps not enabled",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
                 enableLoc();
             }
         }
@@ -74,29 +77,29 @@ public class Splash extends AppCompatActivity {
 
     private void fetchBlockStatus() {
 
-        if (!session_management.userId().equalsIgnoreCase("")){
+        if (!session_management.userId().equalsIgnoreCase("")) {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, USERBLOCKAPI, response -> {
-                Log.d("adresssHoww",response);
+                Log.d("adresssHoww", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("message");
-                    if (status.equals("2")){
+                    if (status.equals("2")) {
                         session_management.setUserBlockStatus("2");
                     } else {
                         session_management.setUserBlockStatus("1");
-                        Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(Splash.this,""+msg,Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(Splash.this, "" + msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }, error -> {
-            }){
+            }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String,String> param = new HashMap<>();
-                    param.put("user_id",session_management.userId());
+                    HashMap<String, String> param = new HashMap<>();
+                    param.put("user_id", session_management.userId());
                     return param;
                 }
             };
@@ -108,20 +111,20 @@ public class Splash extends AppCompatActivity {
     }
 
 
-    private void openDialogFunction(){
+    private void openDialogFunction() {
 
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(Bundle bundle) {
-                        Log.e("connected","connected");
+                        Log.e("connected", "connected");
 
                     }
 
                     @Override
                     public void onConnectionSuspended(int i) {
-                        Log.e("suspended","suspended");
+                        Log.e("suspended", "suspended");
                         googleApiClient.connect();
                     }
                 })
@@ -129,7 +132,7 @@ public class Splash extends AppCompatActivity {
                     @Override
                     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-                        Log.e("Location error","Location error " + connectionResult.getErrorCode());
+                        Log.e("Location error", "Location error " + connectionResult.getErrorCode());
                     }
                 }).build();
 
@@ -137,26 +140,22 @@ public class Splash extends AppCompatActivity {
     }
 
 
-
-
-
-    private void redirectionScreen(){
-        new Handler().postDelayed(new Runnable(){
+    private void redirectionScreen() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                if(session_management.isLoggedIn()){
-                    Intent intent1 =new Intent(Splash.this,MainActivity.class);
+                if (session_management.isLoggedIn()) {
+                    Intent intent1 = new Intent(Splash.this, MainActivity.class);
                     startActivity(intent1);
                     finish();
-                }
-                else {
-                    if (session_management.isSkip()){
-                        Intent intent1 =new Intent(Splash.this,MainActivity.class);
+                } else {
+                    if (session_management.isSkip()) {
+                        Intent intent1 = new Intent(Splash.this, MainActivity.class);
                         startActivity(intent1);
                         finish();
-                    }else {
-                        Intent intent1 =new Intent(Splash.this,LoginActivity.class);
+                    } else {
+                        Intent intent1 = new Intent(Splash.this, LoginActivity.class);
                         startActivity(intent1);
                         finish();
                     }
@@ -177,22 +176,23 @@ public class Splash extends AppCompatActivity {
             return false;
         return providers.contains(LocationManager.GPS_PROVIDER);
     }
+
     private void enableLoc() {
 
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getApplicationContext()).addApi(LocationServices.API).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(Bundle bundle) {
-                            Log.e("connected","connected");
-                        }
+                @Override
+                public void onConnected(Bundle bundle) {
+                    Log.e("connected", "connected");
+                }
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-                            Log.e("suspended","suspended");
-                            googleApiClient.connect();
-                        }
-                    })
-                    .addOnConnectionFailedListener(connectionResult -> Log.e("Location error","Location error " + connectionResult.getErrorCode())).build();
+                @Override
+                public void onConnectionSuspended(int i) {
+                    Log.e("suspended", "suspended");
+                    googleApiClient.connect();
+                }
+            })
+                    .addOnConnectionFailedListener(connectionResult -> Log.e("Location error", "Location error " + connectionResult.getErrorCode())).build();
             googleApiClient.connect();
 
             LocationRequest locationRequest = LocationRequest.create();
@@ -205,10 +205,10 @@ public class Splash extends AppCompatActivity {
             builder.setAlwaysShow(true);
 
             PendingResult<LocationSettingsResult> result =
-                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient,builder.build());
+                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
             result.setResultCallback(result1 -> {
 
-                Log.e("result","result");
+                Log.e("result", "result");
                 final Status status = result1.getStatus();
                 if (status.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                     Log.e("RESOLUTION_REQUIRED", "");
@@ -236,7 +236,7 @@ public class Splash extends AppCompatActivity {
             case REQUEST_LOCATION:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                      redirectionScreen();
+                        redirectionScreen();
 
                         break;
                     case Activity.RESULT_CANCELED:

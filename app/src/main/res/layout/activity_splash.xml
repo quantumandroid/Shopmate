@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="center"
-    android:gravity="center"
     android:layout_weight="3"
-    android:background="#ffffff"
+    android:background="#DCDFF0"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".Activity.Splash">
 
 
@@ -21,15 +21,16 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:background="@drawable/splashicon" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:fontFamily="casual"
             android:gravity="center"
-            android:text="My Shopmate"
-            android:textSize="20sp"
             android:textColor="#000"
+            android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>
 
