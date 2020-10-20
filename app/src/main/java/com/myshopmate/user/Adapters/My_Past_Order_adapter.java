@@ -206,6 +206,7 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
         uTime += " - " + Utils.formatDateTimeString(uTimeSplit[1],"HH:mm","hh:mm a");
         holder.tv_time.setText(uTime);
 
+
         holder.tv_price.setText(session_management.getCurrency() + "" + mList.getPrice());
         if (mList.getRemaining_amount() != null && !mList.getRemaining_amount().equalsIgnoreCase("")) {
             holder.tv_pay_ableamount.setText(session_management.getCurrency() + "" + mList.getRemaining_amount());
