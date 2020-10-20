@@ -977,8 +977,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nav_menu.findItem(R.id.sign).setVisible(false);
 //            nav_menu.findItem(R.id.nav_powerd).setVisible(true);
 
-            username.setText("Welcome! " +
-                    "" + sessionManagement.getUserDetails().get(BaseURL.KEY_NAME));
+            username.setText(sessionManagement.getUserDetails().get(BaseURL.KEY_NAME));
 
 //            nav_menu.findItem(R.id.signup).setVisible(false);
 

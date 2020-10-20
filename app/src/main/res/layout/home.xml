@@ -274,7 +274,8 @@
             android:layout_margin="4dp"
             android:tint="@color/white"
             app:fabSize="mini"
-            app:srcCompat="@drawable/call_answer" />
+            app:srcCompat="@drawable/call_answer"
+            tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabThree"
@@ -292,7 +293,8 @@
             android:layout_margin="4dp"
             android:tint="@android:color/white"
             app:fabSize="mini"
-            app:srcCompat="@drawable/reviews" />
+            app:srcCompat="@drawable/reviews"
+            tools:visibility="gone" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabOne"

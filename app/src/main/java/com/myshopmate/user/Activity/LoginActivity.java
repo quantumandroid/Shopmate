@@ -84,11 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     // Get new Instance ID token
                     token = task.getResult().getToken();
-                    if (token == null){
-                        Toast.makeText(this, "Token : null", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(this, "Token : " + token, Toast.LENGTH_LONG).show();
-                    }
+
 
                 });
         sessionManagement = new Session_management(LoginActivity.this);

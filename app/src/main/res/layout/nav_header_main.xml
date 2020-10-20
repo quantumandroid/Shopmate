@@ -61,15 +61,17 @@
                     android:id="@+id/tv_header_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:drawableTint="@color/white"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/opensans_semibold"
                     android:gravity="center|left"
+                    android:singleLine="true"
                     android:text="Hey User"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="#fff"
-                    android:textSize="17sp"
-                    android:drawableTint="@color/white"
-                    android:fontFamily="@font/opensans_semibold"/>
+                    android:textSize="17sp" />
 <!--                android:drawableRight="@drawable/ic_right_arrow"-->
 
             </LinearLayout>

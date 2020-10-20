@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -935,7 +934,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     openMenu();
                 }
                 break;
-            case R.id.fabTwo:
+           /* case R.id.fabTwo:
                 Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
@@ -947,21 +946,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
                 }
-                break;
+                break;*/
             case R.id.fabThree:
-                String smsNumber = "919889887711";
+                String smsNumber = "917350119381";
                 openWhatsApp(smsNumber);
                 break;
 
 
-            case R.id.fabfour:
+            /*case R.id.fabfour:
 
                 if (isPermissionGranted()) {
                     call_action();
                 }
 
                 Log.i(TAG, "onClick: fab four");
-                break;
+                break;*/
         }
     }
 
@@ -1037,7 +1036,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void call_action() {
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + "919889887711"));
+        callIntent.setData(Uri.parse("tel:" + "917350119381"));
         startActivity(callIntent);
 
     }
