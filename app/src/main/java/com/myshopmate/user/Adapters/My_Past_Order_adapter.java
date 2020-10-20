@@ -20,12 +20,11 @@ import com.myshopmate.user.R;
 import com.myshopmate.user.util.ForReorderListner;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.TodayOrderClickListner;
+import com.myshopmate.user.util.Utils;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_adapter.MyViewHolder> {
 
@@ -174,18 +173,25 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
             }
         });
 
-        holder.tv_pending_date.setText(mList.getDelivery_date());
-        holder.tv_confirm_date.setText(mList.getDelivery_date());
-        holder.tv_delevered_date.setText(mList.getDelivery_date());
-        holder.tv_cancel_date.setText(mList.getDelivery_date());
+        String uDate = mList.getDelivery_date();
+        uDate = Utils.formatDateTimeString(uDate,"yyyy-MM-dd","dd MMM, yyyy");
+        holder.tv_pending_date.setText(uDate);
+        holder.tv_confirm_date.setText(uDate);
+        holder.tv_delevered_date.setText(uDate);
+        holder.tv_cancel_date.setText(uDate);
         holder.tv_methid1.setText(mList.getPayment_method());
         if(mList.getPayment_method().equalsIgnoreCase("COD")){
             holder.tv_methid1.setText("Pay on Delivery");
         }
-        holder.tv_date.setText(mList.getDelivery_date());
-        holder.tv_tracking_date.setText(mList.getDelivery_date());
+        if(mList.getData() != null && mList.getData().size() > 0) {
+            holder.tv_date.setText(Utils.formatDateTimeString(mList.getData().get(0).getOrder_date(),"yyyy-MM-dd","dd MMM, yyyy"));
+        } else {
+            holder.tv_date.setText(Utils.formatDateTimeString(uDate,"yyyy-MM-dd","dd MMM, yyyy"));
+        }
+        //holder.tv_date.setText(mList.getDelivery_date());
+        holder.tv_tracking_date.setText(uDate);
 
-        preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
+        /*preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
         String language = preferences.getString("language", "");
         if (language.contains("spanish")) {
             String timefrom = mList.getTime_slot();
@@ -194,7 +200,11 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
             holder.tv_time.setText(timefrom);
         } else {
             holder.tv_time.setText(mList.getTime_slot());
-        }
+        }*/
+        String[] uTimeSplit = mList.getTime_slot().split(" - ");
+        String uTime = Utils.formatDateTimeString(uTimeSplit[0],"HH:mm","hh:mm a");
+        uTime += " - " + Utils.formatDateTimeString(uTimeSplit[1],"HH:mm","hh:mm a");
+        holder.tv_time.setText(uTime);
 
         holder.tv_price.setText(session_management.getCurrency() + "" + mList.getPrice());
         if (mList.getRemaining_amount() != null && !mList.getRemaining_amount().equalsIgnoreCase("")) {
@@ -204,10 +214,10 @@ public class My_Past_Order_adapter extends RecyclerView.Adapter<My_Past_Order_ad
             holder.tv_pay_ableamount.setText(session_management.getCurrency() + "" + mList.getPrice());
         }
         holder.tv_item.setText(context.getResources().getString(R.string.tv_cart_item) + mList.getData().size());
-        holder.tv_pending_date.setText(mList.getDelivery_date());
-        holder.tv_confirm_date.setText(mList.getDelivery_date());
-        holder.tv_delevered_date.setText(mList.getDelivery_date());
-        holder.tv_cancel_date.setText(mList.getDelivery_date());
+        holder.tv_pending_date.setText(uDate);
+        holder.tv_confirm_date.setText(uDate);
+        holder.tv_delevered_date.setText(uDate);
+        holder.tv_cancel_date.setText(uDate);
 
         holder.order_details.setOnClickListener(view -> {
             todayOrderClickListner.onClickForOrderDetails(position, "past");

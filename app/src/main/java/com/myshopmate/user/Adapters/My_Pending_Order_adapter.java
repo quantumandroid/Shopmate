@@ -23,12 +23,11 @@ import com.myshopmate.user.util.CallToDeliveryBoy;
 import com.myshopmate.user.util.MyPendingReorderClick;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.TodayOrderClickListner;
+import com.myshopmate.user.util.Utils;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Order_adapter.MyViewHolder> {
 
@@ -194,10 +193,20 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
         });
 
 
-        holder.tv_pending_date.setText(mList.getDelivery_date());
-        holder.tv_confirm_date.setText(mList.getDelivery_date());
-        holder.tv_delevered_date.setText(mList.getDelivery_date());
-        holder.tv_cancel_date.setText(mList.getDelivery_date());
+        String uDate = mList.getDelivery_date();
+        uDate = Utils.formatDateTimeString(uDate,"yyyy-MM-dd","dd MMM, yyyy");
+
+        holder.tv_pending_date.setText(uDate);
+        holder.tv_confirm_date.setText(uDate);
+        holder.tv_delevered_date.setText(uDate);
+        holder.tv_cancel_date.setText(uDate);
+
+
+        if(mList.getData() != null && mList.getData().size() > 0) {
+            holder.tv_date.setText(Utils.formatDateTimeString(mList.getData().get(0).getOrder_date(),"yyyy-MM-dd","dd MMM, yyyy"));
+        } else {
+            holder.tv_date.setText(uDate);
+        }
 
         if (mList.getPayment_method().equals("Store Pick Up")) {
             holder.tv_methid1.setText(mList.getPayment_method());
@@ -240,11 +249,12 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
 //            holder.linearLayout.setVisibility(View.GONE);
 //        }
 
+        String[] uTimeSplit = mList.getTime_slot().split(" - ");
+        String uTime = Utils.formatDateTimeString(uTimeSplit[0],"HH:mm","hh:mm a");
+        uTime += " - " + Utils.formatDateTimeString(uTimeSplit[1],"HH:mm","hh:mm a");
+        holder.tv_time.setText(uTime);
 
-        holder.tv_date.setText(mList.getDelivery_date());
-        holder.tv_tracking_date.setText(mList.getDelivery_date());
-
-        preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
+        /*preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
         String language = preferences.getString("language", "");
 
         if (language.contains("spanish")) {
@@ -260,7 +270,7 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
             holder.tv_time.setText(time);
         } else {
             holder.tv_time.setText(mList.getTime_slot());
-        }
+        }*/
 
         holder.tv_price.setText(session_management.getCurrency() + "" + mList.getPrice());
         if (mList.getRemaining_amount() != null && !mList.getRemaining_amount().equalsIgnoreCase("")) {

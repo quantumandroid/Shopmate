@@ -643,7 +643,19 @@ public class Utils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, displaymetrics);
     }
 
+    public static String formatDateTimeString(String dateTimeStr, String dateTimeFormat, String convertTo) {
+        String formattedDate = "";
+        SimpleDateFormat format = new SimpleDateFormat(dateTimeFormat, Locale.US);
+        try {
+            Date date = format.parse(dateTimeStr);
+            if (date != null) {
+                formattedDate = new SimpleDateFormat(convertTo, Locale.US).format(date);
+            }
+        } catch (ParseException ignored) {
 
+        }
+        return formattedDate;
+    }
 }
 
 

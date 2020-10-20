@@ -351,7 +351,7 @@ public class My_Order_activity extends AppCompatActivity {
                 PendingOrderUrl, params, response -> {
             Log.d("TAG", response.toString());
 
-            if (response != null && response.length() > 0) {
+            if (response.length() > 0) {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<NewPendingOrderModel>>() {
                 }.getType();
