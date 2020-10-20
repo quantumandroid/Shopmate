@@ -1,11 +1,15 @@
 package com.myshopmate.user.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +34,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.gson.Gson;
+import com.myshopmate.user.Config.ConfigData;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.Session_management;
 import com.volley.config.Config;
@@ -48,6 +56,7 @@ public class Splash extends AppCompatActivity {
     final static int REQUEST_LOCATION = 199;
     SharedPreferences sharedPreferences;
     Session_management session_management;
+    public static ConfigData configData = new ConfigData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +81,61 @@ public class Splash extends AppCompatActivity {
                 enableLoc();
             }
         }
+        getConfigData();
         fetchBlockStatus();
+    }
+
+    private void getConfigData() {
+        RequestQueue queue;
+        String URL = "https://www.myshopmate.in/user_app_config_data.json";
+
+        queue = Volley.newRequestQueue(this);
+        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Gson gson = new Gson();
+
+                 configData = gson.fromJson(response, ConfigData.class);
+                 if (configData.getApp_update().equals("1")){
+                     AlertDialog.Builder builder = new AlertDialog.Builder(Splash.this);
+                     builder.setTitle("App Update!!!");
+                     builder.setMessage("Update app now ?");
+                     builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+                             Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                             goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                                     Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                                     Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                             try {
+                                 startActivity(goToMarket);
+                             } catch (ActivityNotFoundException e) {
+                                 startActivity(new Intent(Intent.ACTION_VIEW,
+                                         Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                             }finally {
+                                 finishAffinity();
+                             }
+
+                         }
+                     });
+                     builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+                             finishAffinity();
+                         }
+                     });
+
+                 }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error",error.toString());
+            }
+        });
+        queue.add(request);
     }
 
     private void fetchBlockStatus() {

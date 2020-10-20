@@ -518,12 +518,12 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
        int hr = calendar.get(Calendar.HOUR_OF_DAY);
        if (hr < 18){
            hr+=1;
-           hashMap.put("time", "" + hr + ":00 - 20:00");
+           hashMap.put("time", "" + hr + ":00 - "+ Splash.configData.getEnd_time());
 
        }else {
            calendar.add(Calendar.DAY_OF_MONTH, 1);
 
-           hashMap.put("time", "09:00 - 20:00");
+           hashMap.put("time", Splash.configData.getStart_time() + " - " + Splash.configData.getEnd_time());
 
        }
         hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));

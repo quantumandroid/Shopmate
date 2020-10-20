@@ -62,6 +62,7 @@ import com.google.gson.reflect.TypeToken;
 import com.myshopmate.user.Activity.AddressLocationActivity;
 import com.myshopmate.user.Activity.CategoryPage;
 import com.myshopmate.user.Activity.DealActivity;
+import com.myshopmate.user.Activity.Splash;
 import com.myshopmate.user.Activity.ViewAll_TopDeals;
 import com.myshopmate.user.Adapters.BannerAdapter;
 import com.myshopmate.user.Adapters.DealsAdapter;
@@ -948,7 +949,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 break;*/
             case R.id.fabThree:
-                String smsNumber = "917350119381";
+                String smsNumber = Splash.configData.getPhone_number();
                 openWhatsApp(smsNumber);
                 break;
 
@@ -1036,7 +1037,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void call_action() {
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + "917350119381"));
+        callIntent.setData(Uri.parse("tel:" + Splash.configData.getPhone_number()));
         startActivity(callIntent);
 
     }
