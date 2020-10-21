@@ -770,6 +770,8 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
 
 //        checked();
         rb_Cod.setChecked(true);
+        llcod.setBackgroundResource(R.drawable.gradientbg);
+        tcod.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void startPaypal(String name, String total_amount, String email, String mobile) {

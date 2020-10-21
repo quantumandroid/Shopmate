@@ -66,6 +66,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_image_slider"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="150dp" />
 
             <com.google.android.material.tabs.TabLayout

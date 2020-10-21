@@ -52,7 +52,6 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -80,7 +79,6 @@ import com.myshopmate.user.ModelClass.NewCartModel;
 import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
-import com.myshopmate.user.util.CustomSlider;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DistanceCalculator;
 import com.myshopmate.user.util.FragmentClickListner;
@@ -101,9 +99,7 @@ import java.util.Map;
 import static android.content.Context.MODE_PRIVATE;
 import static com.android.volley.VolleyLog.TAG;
 import static com.myshopmate.user.Config.BaseURL.ADDRESS;
-import static com.myshopmate.user.Config.BaseURL.BANNER;
 import static com.myshopmate.user.Config.BaseURL.BANNER_IMG_URL;
-import static com.myshopmate.user.Config.BaseURL.BANN_IMG_URL;
 import static com.myshopmate.user.Config.BaseURL.CITY;
 import static com.myshopmate.user.Config.BaseURL.HomeDeal;
 import static com.myshopmate.user.Config.BaseURL.HomeRecent;
@@ -267,7 +263,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollView = view.findViewById(R.id.scroll_view);
         scrollView.setSmoothScrollingEnabled(true);
         if (isOnline()) {
-            makeGetSliderRequest();
+            //makeGetSliderRequest();
             //second_banner();
             //makeGetCategoryRequest();
             //topSelling();
@@ -853,11 +849,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         fabOne.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
         fabOne.setVisibility(View.VISIBLE);
         fabTwo.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
-        fabTwo.setVisibility(View.VISIBLE);
+//        fabTwo.setVisibility(View.VISIBLE);
         fabThree.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
         fabThree.setVisibility(View.VISIBLE);
         fabfour.animate().translationY(0f).alpha(1f).setInterpolator(interpolator).setDuration(300).start();
-        fabfour.setVisibility(View.VISIBLE);
+//        fabfour.setVisibility(View.VISIBLE);
     }
 
     private void closeMenu() {
@@ -914,9 +910,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     closeMenu();
                 } else {
                     fabOne.setVisibility(View.VISIBLE);
-                    fabTwo.setVisibility(View.VISIBLE);
+//                    fabTwo.setVisibility(View.VISIBLE);
                     fabThree.setVisibility(View.VISIBLE);
-                    fabfour.setVisibility(View.VISIBLE);
+//                    fabfour.setVisibility(View.VISIBLE);
                     openMenu();
                 }
                 break;
@@ -1048,7 +1044,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    private void makeGetSliderRequest() {
+   /* private void makeGetSliderRequest() {
         imageString.clear();
         String tag_json_obj = "json_category_req";
         Map<String, String> params = new HashMap<String, String>();
@@ -1123,7 +1119,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     }
-
+*/
     private void second_banner() {
         imageString1.clear();
         String tag_json_obj = "json_category_req";

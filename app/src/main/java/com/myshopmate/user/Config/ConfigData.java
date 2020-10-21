@@ -5,6 +5,7 @@ public class ConfigData {
     private String start_time = "09:00";
     private String end_time = "20:00";
     private String app_update = "0";
+    private int app_version = 1;
 
     public String getPhone_number() {
         return phone_number;
@@ -46,5 +47,13 @@ public class ConfigData {
                 ", end_time='" + end_time + '\'' +
                 ", app_update='" + app_update + '\'' +
                 '}';
+    }
+
+    public int getApp_version() {
+        return app_version;
+    }
+
+    public void setApp_version(int app_version) {
+        this.app_version = app_version;
     }
 }

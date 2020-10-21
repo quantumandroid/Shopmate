@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,12 +52,13 @@ import static com.myshopmate.user.Config.BaseURL.MY_BASE_URL;
 import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
 
 public class Splash extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private final int SPLASH_DISPLAY_LENGTH = 500;
     private GoogleApiClient googleApiClient;
     final static int REQUEST_LOCATION = 199;
     SharedPreferences sharedPreferences;
     Session_management session_management;
     public static ConfigData configData = new ConfigData();
+    private LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,8 @@ public class Splash extends AppCompatActivity {
         Config.SIMPLE_REQUEST_URL = MY_BASE_URL;
         setFinishOnTouchOutside(true);
         session_management = new Session_management(Splash.this);
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(this)) {
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+       /* if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(this)) {
             //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
             redirectionScreen();
         } else {
@@ -80,9 +82,9 @@ public class Splash extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
                 enableLoc();
             }
-        }
+        }*/
         getConfigData();
-        fetchBlockStatus();
+
     }
 
     private void getConfigData() {
@@ -96,37 +98,37 @@ public class Splash extends AppCompatActivity {
                 Gson gson = new Gson();
 
                  configData = gson.fromJson(response, ConfigData.class);
-                 if (configData.getApp_update().equals("1")){
-                     AlertDialog.Builder builder = new AlertDialog.Builder(Splash.this);
-                     builder.setTitle("App Update!!!");
-                     builder.setMessage("Update app now ?");
-                     builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
-                         @Override
-                         public void onClick(DialogInterface dialog, int which) {
-                             Uri uri = Uri.parse("market://details?id=" + getPackageName());
-                             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                             goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                                     Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
-                                     Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                             try {
-                                 startActivity(goToMarket);
-                             } catch (ActivityNotFoundException e) {
-                                 startActivity(new Intent(Intent.ACTION_VIEW,
-                                         Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-                             }finally {
-                                 finishAffinity();
-                             }
+                 String version = null;
+                try {
+                     version = String.valueOf(getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                //if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                    if (version != null && Integer.parseInt(version) < configData.getApp_version()) {
+                        if ((configData.getApp_version() - Integer.parseInt(version)) > 1 || configData.getApp_update().equals("1")){
+                            showUpdateDialog("Please update the app to proceed further.",true);
+                        } else {
+                            showUpdateDialog("New update of this app is available.",false);
+                        }
+                    } else {
+                        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                            //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
+                            redirectionScreen();
+                        } else {
+                            if (!hasGPSDevice(Splash.this)) {
+                                Toast.makeText(getApplicationContext(), "Gps not Supported", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                                Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
+                                enableLoc();
+                            }
+                        }
+                        fetchBlockStatus();
+                    }
+                //}
 
-                         }
-                     });
-                     builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
-                         @Override
-                         public void onClick(DialogInterface dialog, int which) {
-                             finishAffinity();
-                         }
-                     });
-
-                 }
 
             }
         }, new Response.ErrorListener() {
@@ -136,6 +138,58 @@ public class Splash extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
+
+    private void showUpdateDialog(String msg, boolean isMandatory) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Splash.this);
+        builder.setTitle("App Update!");
+        builder.setMessage(msg); //"Update app now ?"
+        builder.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+                }finally {
+                    finishAffinity();
+                }
+
+            }
+        });
+        builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (isMandatory) {
+                    finishAffinity();
+                    return;
+                }
+                dialog.dismiss();
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                    //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
+                    redirectionScreen();
+                } else {
+                    if (!hasGPSDevice(Splash.this)) {
+                        Toast.makeText(getApplicationContext(), "Gps not Supported", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                        Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
+                        enableLoc();
+                    }
+                }
+                fetchBlockStatus();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void fetchBlockStatus() {
