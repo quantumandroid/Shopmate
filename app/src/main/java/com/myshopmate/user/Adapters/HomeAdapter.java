@@ -9,16 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.R;
-import com.squareup.picasso.Picasso;
+import com.myshopmate.user.util.Utils;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -39,6 +38,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         public ImageView image;
         LinearLayout linearLayout ;
         CardView cardview1;
+        TextView tvTime;
+        TextView tv_home_status;
 
         public MyViewHolder(View view) {
             super(view);
@@ -47,6 +48,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
             image = (ImageView) view.findViewById(R.id.iv_home_icon);
             linearLayout =  view.findViewById(R.id.ll1);
             cardview1 =  view.findViewById(R.id.cardview1);
+            tvTime = view.findViewById(R.id.tv_home_time);
+            tv_home_status = view.findViewById(R.id.tv_home_status);
         }
     }
 
@@ -89,9 +92,39 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         language=preferences.getString("language","");
             holder.title.setText(store.getStore_name());
             holder.category.setText(store.getCategory());
+            holder.tvTime.setText(getTimeStr(store.getOpening_time(),store.getClosing_time()));
+
+            if (isStoreOpen(store.getOpening_time(), store.getClosing_time())){
+                holder.tv_home_status.setText("open");
+                holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.green_orl));
+                holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_green));
+            }else {
+                holder.tv_home_status.setText("closed");
+                holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.quantum_error_light));
+                holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_red));
+            }
 
 
 
+    }
+
+    private boolean isStoreOpen(String opening_time, String closing_time) {
+        final Calendar calendar = Calendar.getInstance();
+
+        int currentHr = calendar.get(Calendar.HOUR_OF_DAY);
+
+       String ot = Utils.formatDateTimeString(opening_time,"hh:mm","HH");
+       String ct = Utils.formatDateTimeString(closing_time,"hh:mm","HH");
+
+        return Integer.parseInt(ot) <= currentHr && currentHr < Integer.parseInt(ct);
+
+    }
+
+    private String getTimeStr(String opening_time, String closing_time) {
+        String timeStr = "";
+        timeStr = Utils.formatDateTimeString(opening_time,"hh:mm","hh:mm a");
+        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"hh:mm","hh:mm a");
+        return timeStr;
     }
 
     @Override

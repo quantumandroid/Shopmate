@@ -429,7 +429,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     adapter1.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    showAlert(e.getMessage());
+                   // showAlert(e.getMessage());
                 }
 
 
