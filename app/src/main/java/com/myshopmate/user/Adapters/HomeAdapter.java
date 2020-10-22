@@ -11,12 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.R;
+import com.myshopmate.user.util.DistanceCalculator;
+import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.Utils;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -33,13 +37,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     private Context context;
     String language;
     SharedPreferences preferences;
+    private Session_management session_management;
+    DistanceCalculator distanceCalculator;
+    DecimalFormat decimalFormat;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title,category;
         public ImageView image;
         LinearLayout linearLayout ;
         CardView cardview1;
         TextView tvTime;
-        TextView tv_home_status;
+        TextView tv_home_status, tv_home_distance;
 
         public MyViewHolder(View view) {
             super(view);
@@ -50,11 +58,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
             cardview1 =  view.findViewById(R.id.cardview1);
             tvTime = view.findViewById(R.id.tv_home_time);
             tv_home_status = view.findViewById(R.id.tv_home_status);
+            tv_home_distance = view.findViewById(R.id.tv_home_distance);
         }
     }
 
-    public HomeAdapter(List<Store> modelList) {
+    public HomeAdapter(List<Store> modelList, FragmentActivity activity) {
         this.modelList = modelList;
+        session_management = new Session_management(activity);
+         distanceCalculator = new DistanceCalculator();
+        decimalFormat = new DecimalFormat("0.00");
     }
 
     @Override
@@ -104,8 +116,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
                 holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_red));
             }
 
+            holder.tv_home_distance.setText("around "+getDistance(store.getLat(),store.getLng())+" km");
 
+    }
 
+    private String getDistance(String lat, String lng) {
+
+        double lat1 = Double.parseDouble(lat);
+        double lng1 = Double.parseDouble(lng);
+        double lat2 = Double.parseDouble(session_management.getLatPref());
+        double lng2 = Double.parseDouble(session_management.getLangPref());
+
+        double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
+        distance *= 2;
+
+        return decimalFormat.format(distance);
     }
 
     private boolean isStoreOpen(String opening_time, String closing_time) {
@@ -113,8 +138,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         int currentHr = calendar.get(Calendar.HOUR_OF_DAY);
 
-       String ot = Utils.formatDateTimeString(opening_time,"hh:mm","HH");
-       String ct = Utils.formatDateTimeString(closing_time,"hh:mm","HH");
+       String ot = Utils.formatDateTimeString(opening_time,"HH:mm","HH");
+       String ct = Utils.formatDateTimeString(closing_time,"HH:mm","HH");
 
         return Integer.parseInt(ot) <= currentHr && currentHr < Integer.parseInt(ct);
 
@@ -122,8 +147,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     private String getTimeStr(String opening_time, String closing_time) {
         String timeStr = "";
-        timeStr = Utils.formatDateTimeString(opening_time,"hh:mm","hh:mm a");
-        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"hh:mm","hh:mm a");
+        timeStr = Utils.formatDateTimeString(opening_time,"HH:mm","hh:mm a");
+        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"HH:mm","hh:mm a");
         return timeStr;
     }
 

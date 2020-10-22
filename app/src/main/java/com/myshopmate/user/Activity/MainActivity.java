@@ -566,10 +566,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         List<Address> addresses = null;
         geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
         DecimalFormat dFormat = new DecimalFormat("#.######");
-        double latitude = Double.parseDouble(dFormat.format(location.getLatitude()));
-        double longitude = Double.parseDouble(dFormat.format(location.getLongitude()));
+
 
         try {
+            double latitude = Double.parseDouble(dFormat.format(location.getLatitude()));
+            double longitude = Double.parseDouble(dFormat.format(location.getLongitude()));
             addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             Address returnedAddress = addresses.get(0);
             StringBuilder strReturnedAddress = new StringBuilder("Address:\n");

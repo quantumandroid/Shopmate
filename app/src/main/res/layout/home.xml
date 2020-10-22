@@ -4,70 +4,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_home_background">
+    android:background="@color/white">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ll3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="0dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_loupe"
+                android:backgroundTint="@color/lightGrey" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="What are you looking for (eg.mango, onion)"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toBottomOf="@+id/ll3">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#f4f4f4"
+            android:background="@color/white"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/ll3"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/ic_loupe"
-                        android:backgroundTint="@color/lightGrey" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_regular"
-                        android:gravity="center_vertical"
-                        android:maxLines="1"
-                        android:text="What are you looking for (eg.mango, onion)"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_image_slider"
                 android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="150dp" />
+                android:layout_height="150dp"
+                android:visibility="gone" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tablayout"
@@ -75,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:tabIndicatorColor="@color/green"
                 app:tabMode="scrollable"
                 app:tabRippleColor="@color/color_1"
@@ -84,8 +88,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:id="@+id/change_loc_lay"
                     android:layout_width="match_parent"
@@ -194,7 +199,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="#f2f0f4"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/firebase"
@@ -254,6 +260,8 @@
 
 
         </LinearLayout>
+
+
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
@@ -312,7 +320,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:tint="@android:color/white"
-            app:fabSize="normal"
+            app:fabSize="mini"
             app:srcCompat="@drawable/ic_add_black_24dp"
             tools:ignore="VectorDrawableCompat" />
 

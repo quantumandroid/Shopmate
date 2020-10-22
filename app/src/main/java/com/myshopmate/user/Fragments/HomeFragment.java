@@ -424,7 +424,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 try {
 
                     store_modelList = getStores(response.getString());
-                    adapter1 = new HomeAdapter(store_modelList);
+                    adapter1 = new HomeAdapter(store_modelList,getActivity());
                     rv_items.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
                 } catch (Exception e) {
