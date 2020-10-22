@@ -11,8 +11,9 @@ public class SubProductList {
     String description;
     String varient_image;
     String stock;
+    String store_id;
 
-    public SubProductList(String varient_id, String product_id, String quantity, String unit, String mrp, String price, String description, String varient_image,String stock) {
+    public SubProductList(String varient_id, String product_id, String quantity, String unit, String mrp, String price, String description, String varient_image,String stock, String store_id) {
         this.varient_id = varient_id;
         this.product_id = product_id;
         this.quantity = quantity;
@@ -22,6 +23,15 @@ public class SubProductList {
         this.description = description;
         this.varient_image = varient_image;
         this.stock = stock;
+        this.store_id = store_id;
+    }
+
+    public String getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(String store_id) {
+        this.store_id = store_id;
     }
 
     public String getVarient_id() {

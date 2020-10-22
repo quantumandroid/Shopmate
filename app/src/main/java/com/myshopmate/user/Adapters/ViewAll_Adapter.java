@@ -116,6 +116,7 @@ public class ViewAll_Adapter extends RecyclerView.Adapter<ViewAll_Adapter.MyView
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetails.class);
             intent.putExtra("sId", cartList.get(position).getProduct_id());
+            intent.putExtra("store_id", cartList.get(position).getStore_id());
             intent.putExtra("sVariant_id", cartList.get(position).getVarient_id());
             intent.putExtra("sName", cartList.get(position).getProduct_name());
             intent.putExtra("descrip", cartList.get(position).getDescription());

@@ -94,6 +94,7 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ProductDetails.class);
                 intent.putExtra("sId", cartList.get(position).getpId());
+                intent.putExtra("store_id", cartList.get(position).getStore_id());
                 intent.putExtra("sVariant_id", cartList.get(position).getVarient_id());
                 intent.putExtra("sName", cartList.get(position).getpNAme());
                 intent.putExtra("descrip", cartList.get(position).getpDes());

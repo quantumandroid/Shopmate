@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -646,13 +647,12 @@ public class Utils {
     public static String formatDateTimeString(String dateTimeStr, String dateTimeFormat, String convertTo) {
         String formattedDate = "";
         SimpleDateFormat format = new SimpleDateFormat(dateTimeFormat, Locale.US);
-        try {
-            Date date = format.parse(dateTimeStr);
+        try { Date date = format.parse(dateTimeStr);
             if (date != null) {
                 formattedDate = new SimpleDateFormat(convertTo, Locale.US).format(date);
             }
         } catch (ParseException ignored) {
-
+            Log.d("DateTime","Error");
         }
         return formattedDate;
     }

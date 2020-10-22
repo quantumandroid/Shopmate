@@ -111,6 +111,7 @@ public class SearchFragment extends Fragment {
                 intent.putExtra("sId", seaarchId);
                 intent.putExtra("sName", seaarchName);
                 intent.putExtra("sVariant_id", searchlist.get(position).getSubprodList().getVarient_id());
+                intent.putExtra("store_id", searchlist.get(position).getSubprodList().getStore_id());
                 intent.putExtra("descrip", searchlist.get(position).getSubprodList().getDescription());
                 intent.putExtra("price", searchlist.get(position).getSubprodList().getPrice());
                 intent.putExtra("mrp", searchlist.get(position).getSubprodList().getMrp());
@@ -165,8 +166,9 @@ public class SearchFragment extends Fragment {
                                 String description = jsonObject12.getString("description");
                                 String stock = jsonObject12.getString("stock");
                                 String varient_image = jsonObject12.getString("varient_image");
+                                String store_id = jsonObject12.getString("store_id");
 
-                                SearchProductModel ss = new SearchProductModel(product_id, product_name, new SubProductList(varient_id, product_id, quantity, unit, mrp, price, description, varient_image, stock));
+                                SearchProductModel ss = new SearchProductModel(product_id, product_name, new SubProductList(varient_id, product_id, quantity, unit, mrp, price, description, varient_image, stock, store_id));
                                 searchlist.add(ss);
                             }
 

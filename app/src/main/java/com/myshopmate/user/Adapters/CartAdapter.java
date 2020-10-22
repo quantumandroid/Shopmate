@@ -128,6 +128,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ProductDetails.class);
             intent.putExtra("sId", topSelling.get(position).getProduct_id());
+            intent.putExtra("store_id", topSelling.get(position).getStore_id());
             intent.putExtra("sVariant_id", topSelling.get(position).getVarient_id());
             intent.putExtra("sName", topSelling.get(position).getProduct_name());
             intent.putExtra("descrip", topSelling.get(position).getDescription());

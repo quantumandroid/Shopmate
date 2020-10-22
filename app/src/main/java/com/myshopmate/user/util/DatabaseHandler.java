@@ -18,6 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String CART_TABLE = "cart";
     //    public static final String COLUMN_ID = "product_id";
     public static final String VARIENT_ID = "varient_id";
+    public static final String STORE_ID = "store_id";
     public static final String COLUMN_QTY = "qty";
     public static final String COLUMN_IMAGE = "product_image";
     public static final String COLUMN_NAME = "product_name";
@@ -51,7 +52,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + COLUMN_INCREAMENT + " DOUBLE NOT NULL, "
                 + COLUMN_STOCK + " DOUBLE NOT NULL, "
                 + COLUMN_TITLE + " TEXT NOT NULL, "
-                + COLUMN_DESCRIPTION + " TEXT NOT NULL "
+                + COLUMN_DESCRIPTION + " TEXT NOT NULL, "
+                + STORE_ID + " TEXT NOT NULL "
                 + ")";
 
         db.execSQL(exe);
@@ -66,7 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             ContentValues values = new ContentValues();
             values.put(VARIENT_ID, map.get(VARIENT_ID));
-
+            values.put(STORE_ID, map.get(STORE_ID));
             values.put(COLUMN_QTY, Qty);
             values.put(COLUMN_IMAGE, map.get(COLUMN_IMAGE));
             values.put(COLUMN_INCREAMENT, map.get(COLUMN_INCREAMENT));
@@ -183,6 +185,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             map.put(COLUMN_STOCK, cursor.getString(cursor.getColumnIndex(COLUMN_STOCK)));
             map.put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
             map.put(COLUMN_DESCRIPTION, cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)));
+            map.put(STORE_ID, cursor.getString(cursor.getColumnIndex(STORE_ID)));
             list.add(map);
             cursor.moveToNext();
         }

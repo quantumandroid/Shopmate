@@ -202,6 +202,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 
                 Intent intent = new Intent(context, ProductDetails.class);
                 intent.putExtra("sId", cc.getProduct_id());
+                intent.putExtra("store_id", cc.getStore_id());
                 intent.putExtra("sName", cc.getProduct_name());
                 intent.putExtra("descrip", cc.getDescription());
                 intent.putExtra("price", cc.getPrice());
@@ -333,6 +334,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         HashMap<String, String> map = new HashMap<>();
 //            map.put("varient_id",cartList.get(position).getpId());
         map.put("varient_id", CategoryGridList.get(pos).getVarient_id());
+        map.put("store_id", CategoryGridList.get(pos).getStore_id());
         map.put("product_name", CategoryGridList.get(pos).getProduct_name());
         map.put("category_id", CategoryGridList.get(pos).getProduct_id());
         map.put("title", CategoryGridList.get(pos).getProduct_name());

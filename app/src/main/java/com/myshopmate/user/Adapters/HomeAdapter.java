@@ -19,6 +19,7 @@ import com.myshopmate.user.R;
 import com.myshopmate.user.util.DistanceCalculator;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -94,12 +95,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         final int red = (baseRed + rnd.nextInt(256)) / 2;
         final int green = (baseGreen + rnd.nextInt(256)) / 2;
         final int blue = (baseBlue + rnd.nextInt(256)) / 2;
-        int clr1 = Color.rgb(red, green, blue);                                 //pastel colors
+       // int clr1 = Color.rgb(red, green, blue);                                 //pastel colors
       //  holder.linearLayout.setBackgroundColor(clr1);
 
-       /* Picasso.with(context)
-                .load(BaseURL.IMG_URL + mList.getImage())
-                .into(holder.image);*/
+        if (store.getStore_image_url() != null && !store.getStore_image_url().isEmpty()) {
+            Picasso.with(context)
+                    .load(store.getStore_image_url())
+                    .into(holder.image);
+        }
         preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
         language=preferences.getString("language","");
             holder.title.setText(store.getStore_name());
@@ -138,17 +141,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         int currentHr = calendar.get(Calendar.HOUR_OF_DAY);
 
-       String ot = Utils.formatDateTimeString(opening_time,"HH:mm","HH");
-       String ct = Utils.formatDateTimeString(closing_time,"HH:mm","HH");
+       String ot = Utils.formatDateTimeString(opening_time,"hh:mm","HH");
+       String ct = Utils.formatDateTimeString(closing_time,"hh:mm","HH");
 
-        return Integer.parseInt(ot) <= currentHr && currentHr < Integer.parseInt(ct);
+        try {
+            return Integer.parseInt(ot) <= currentHr && currentHr < Integer.parseInt(ct);
+        } catch (NumberFormatException e) {
+            return false;
+        }
 
     }
 
     private String getTimeStr(String opening_time, String closing_time) {
         String timeStr = "";
-        timeStr = Utils.formatDateTimeString(opening_time,"HH:mm","hh:mm a");
-        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"HH:mm","hh:mm a");
+        timeStr = Utils.formatDateTimeString(opening_time,"hh:mm","hh:mm a");
+        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"hh:mm","hh:mm a");
         return timeStr;
     }
 

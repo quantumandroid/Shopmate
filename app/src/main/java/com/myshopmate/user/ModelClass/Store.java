@@ -18,6 +18,7 @@ public class Store {
     private String category = "";
     private String opening_time = "";
     private String closing_time = "";
+    private String store_image_url = "";
 
     public Store() {
     }
@@ -169,5 +170,13 @@ public class Store {
 
     public void setOpening_time(String opening_time) {
         this.opening_time = opening_time;
+    }
+
+    public String getStore_image_url() {
+        return store_image_url;
+    }
+
+    public void setStore_image_url(String store_image_url) {
+        this.store_image_url = store_image_url;
     }
 }

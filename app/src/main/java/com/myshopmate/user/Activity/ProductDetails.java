@@ -54,7 +54,7 @@ public class ProductDetails extends AppCompatActivity {
     TextView txtQuan, minus, plus, txt_unit, txt_qty;
     String varientName, discription12, price12, mrp12, unit12, qty, varientimage;
     ProgressDialog progressDialog;
-    String product_id, varient_id;
+    String product_id, varient_id, store_id;
     private DatabaseHandler dbcart;
     private SharedPreferences preferences;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
@@ -86,6 +86,7 @@ public class ProductDetails extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
         product_id = getIntent().getStringExtra("sId");
+        store_id = getIntent().getStringExtra("store_id");
         varientName = getIntent().getStringExtra("sName");
 
         discription12 = getIntent().getStringExtra("descrip");

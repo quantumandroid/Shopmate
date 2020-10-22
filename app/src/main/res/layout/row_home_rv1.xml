@@ -93,7 +93,6 @@
                     android:drawableStart="@drawable/ic_marker"
                     android:drawablePadding="6dp"
                     android:gravity="center_vertical"
-                    android:text="around 5 km"
                     android:paddingLeft="8dp"
                     android:textColor="@android:color/tertiary_text_dark"
                     android:textSize="@dimen/text_size_X_small" />
@@ -131,7 +130,6 @@
                         android:paddingEnd="12dp"
                         android:paddingRight="12dp"
                         android:paddingBottom="2dp"
-                        android:text="open"
                         android:textAllCaps="true"
                         android:textColor="@color/green_orl"
                         android:textSize="9sp" />

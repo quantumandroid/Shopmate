@@ -194,6 +194,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 product_array.put("qty", object1.getString("qty"));
                 product_array.put("varient_id", object1.getString("varient_id"));
                 product_array.put("product_image", object1.getString("product_image"));
+                product_array.put("store_id", object1.getString("store_id"));
 
                 Log.d("sdf", product_array.toString());
                 array.put(product_array);
