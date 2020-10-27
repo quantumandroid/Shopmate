@@ -71,10 +71,10 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
 
         holder.tv_title.setText(map.get("product_name"));
         holder.pDescrptn.setText(map.get("product_description"));
-        int items = (int) Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id")));
+        int items = (int) Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id"),map.get("store_id")));
         int sprice = (int) Double.parseDouble(map.get("price"));
 
-        int qtyd = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id")));
+        int qtyd = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id"),map.get("store_id")));
         if (qtyd > 0) {
             holder.tv_add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -103,7 +103,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 holder.ll_addQuan.setVisibility(View.VISIBLE);
 
                 dbHandler.setCart(map, Integer.valueOf(holder.tv_contetiy.getText().toString()));
-                Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id")));
+                Double items = Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id"),map.get("store_id")));
                 Double price = Double.parseDouble(map.get("price"));
                 Double reward = Double.parseDouble(map.get("rewards"));
                 holder.pPrice.setText("" + price * items);
@@ -114,7 +114,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
         });
 
         holder.txt_close.setOnClickListener(view -> {
-            dbHandler.removeItemFromCart(map.get("varient_id"));
+            dbHandler.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
             list.remove(position);
             notifyDataSetChanged();
             tv_total.setText(session_management.getCurrency() + " " + dbHandler.getTotalAmount());
@@ -125,7 +125,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
             @Override
             public void onClick(View v) {
 
-                int i = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id")));
+                int i = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id"),map.get("store_id")));
                 double price = Double.parseDouble(map.get("price"));
                 if ((i - 1) < 0 || (i - 1) == 0) {
                     holder.tv_add.setVisibility(View.VISIBLE);
@@ -168,7 +168,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                     dbHandler = new DatabaseHandler(v.getContext());
                 }
                 double price = Double.parseDouble(map.get("price"));
-                int i = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id")));
+                int i = Integer.parseInt(dbHandler.getInCartItemQtys(map.get("varient_id"),map.get("store_id")));
 //            cartList.get(position).setpQuan(String.valueOf(i+1));
                 holder.tv_contetiy.setText("" + (i + 1));
                 holder.pPrice.setText("" + (price * (i + 1)));
@@ -188,7 +188,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
             if (i > 0) {
                 dbHandler.setCart(list.get(pos), i);
             } else {
-                dbHandler.removeItemFromCart(list.get(pos).get("varient_id"));
+                dbHandler.removeItemFromCart(list.get(pos).get("varient_id"),list.get(pos).get("store_id"));
                 list.remove(pos);
                 notifyDataSetChanged();
             }
@@ -212,13 +212,13 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
         Log.d("asfd", holder.tv_contetiy.getText().toString());
 
 
-        int items = (int) Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id")));
+        int items = (int) Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id"),map.get("store_id")));
         //  Double price = Double.parseDouble(map.get("price"));
 //        Double reward = Double.parseDouble(dbHandler.getInCartItemQty(map.get("price")));
         if (items == 1) {
             holder.tv_contetiy.setText("" + Integer.valueOf(String.valueOf(items)));
 //            holder.pPrice.setText("" + holder.price);
-            dbHandler.removeItemFromCart(map.get("varient_id"));
+            dbHandler.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
             list.remove(position);
             notifyDataSetChanged();
         } else {

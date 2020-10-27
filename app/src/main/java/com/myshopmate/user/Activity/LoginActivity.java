@@ -211,7 +211,10 @@ public class LoginActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
                 progressDialog.dismiss();
-            }, error -> progressDialog.dismiss()) {
+            }, error -> {
+                progressDialog.dismiss();
+                Toast.makeText(LoginActivity.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
+            }) {
 
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {

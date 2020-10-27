@@ -1218,7 +1218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (!odModel.getQty().equalsIgnoreCase("0")) {
                                 dbcart.setCart(map, Integer.parseInt(odModel.getQty()));
                             } else {
-                                dbcart.removeItemFromCart(map.get("varient_id"));
+                                dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
                             }
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

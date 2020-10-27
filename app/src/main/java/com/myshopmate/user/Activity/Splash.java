@@ -135,6 +135,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("error",error.toString());
+                Toast.makeText(Splash.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(request);
@@ -212,6 +213,7 @@ public class Splash extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }, error -> {
+                Toast.makeText(Splash.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
             }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
@@ -289,7 +291,7 @@ public class Splash extends AppCompatActivity {
         if (mgr == null)
             return false;
         final List<String> providers = mgr.getAllProviders();
-        if (providers == null)
+        if (providers.size() < 1)
             return false;
         return providers.contains(LocationManager.GPS_PROVIDER);
     }

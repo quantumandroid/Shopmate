@@ -65,7 +65,7 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
         holder.pMrp.setText(cc.getpMrp());
         holder.pMrp.setPaintFlags(holder.pMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id()));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id(),cartList.get(position).getStore_id()));
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -114,7 +114,7 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
                 if (dbcart == null) {
                     dbcart = new DatabaseHandler(v.getContext());
                 }
-                int i = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id()));
+                int i = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id(),cartList.get(position).getStore_id()));
                 holder.txtQuan.setText("" + (i + 1));
                 holder.pPrice.setText("" + (price * (i + 1)));
                 holder.pMrp.setText("" + (mrp * (i + 1)));
@@ -125,7 +125,7 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
 
         });
         holder.minus.setOnClickListener(v -> {
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(cartList.get(position).getVarient_id(),cartList.get(position).getStore_id()));
             if ((i - 1) < 0 || (i - 1) == 0) {
                 holder.btn_Add.setVisibility(View.VISIBLE);
                 holder.ll_addQuan.setVisibility(View.GONE);
@@ -172,13 +172,13 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
             map.put("product_description", cartList.get(pos).getpDes());
 
             if (i > 0) {
-                if (dbcart.isInCart(map.get("varient_id"))) {
+                if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                     dbcart.setCart(map, i);
                 } else {
                     dbcart.setCart(map, i);
                 }
             } else {
-                dbcart.removeItemFromCart(map.get("varient_id"));
+                dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
                 cartList.remove(pos);
                 notifyDataSetChanged();
             }

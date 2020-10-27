@@ -138,7 +138,7 @@ public class ProductDetails extends AppCompatActivity {
 
         selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
             if (varient_id.equalsIgnoreCase(varientProducts.get(position).getVarient_id())) {
-                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id));
+                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
                 if (qtyd > 0) {
                     btn_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class ProductDetails extends AppCompatActivity {
 
         Varient_product(product_id);
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
         updateQty(qtyd);
         if (qtyd > 0) {
             btn_Add.setVisibility(View.GONE);
@@ -365,16 +365,16 @@ public class ProductDetails extends AppCompatActivity {
         map.put("stock", "0");
         map.put("product_description", discription12);
         if (!txtQuan.getText().toString().equalsIgnoreCase("0")) {
-            if (dbcart.isInCart(map.get("varient_id"))) {
+            if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                 dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
             } else {
                 dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
             }
         } else {
-            dbcart.removeItemFromCart(map.get("varient_id"));
+            dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
         }
         try {
-            int items = Integer.parseInt(dbcart.getInCartItemQtys(map.get("varient_id")));
+            int items = Integer.parseInt(dbcart.getInCartItemQtys(map.get("varient_id"),map.get("store_id")));
             double price = Double.parseDouble(price12);
             double mrp = Double.parseDouble(mrp12);
             if (items == 0) {

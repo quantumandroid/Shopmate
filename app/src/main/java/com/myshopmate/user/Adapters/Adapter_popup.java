@@ -81,7 +81,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         double price = Double.parseDouble(varientProductList.get(i).getPrice());
         double mrp = Double.parseDouble(varientProductList.get(i).getMrp());
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(selectAreaModel.getVarient_id()));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(selectAreaModel.getVarient_id(),selectAreaModel.getStore_id()));
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -98,7 +98,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
             holder.txtQuan.setText("" + 0);
         }
         holder.plus.setOnClickListener(v -> {
-            int qnty = (int) Double.parseDouble(dbcart.getInCartItemQty(selectAreaModel.getVarient_id()));
+            int qnty = (int) Double.parseDouble(dbcart.getInCartItemQty(selectAreaModel.getVarient_id(),selectAreaModel.getStore_id()));
             if (qnty < Integer.parseInt(selectAreaModel.getStock())) {
                 holder.btn_Add.setVisibility(View.GONE);
                 holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -109,7 +109,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
             }
         });
         holder.minus.setOnClickListener(v -> {
-            int qnty = (int) Double.parseDouble(dbcart.getInCartItemQty(selectAreaModel.getVarient_id()));
+            int qnty = (int) Double.parseDouble(dbcart.getInCartItemQty(selectAreaModel.getVarient_id(),selectAreaModel.getStore_id()));
             //            cartList.get(position).setpQuan(String.valueOf(i-1));
 //            holder.pMrp.setText(""+(mrp*(qnty -1)) );
             if ((qnty - 1) < 0 || (qnty - 1) == 0) {
@@ -168,7 +168,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         map.put("stock", "0");
         map.put("product_description", varientProductList.get(pos).getDescription());
         if (!holder.txtQuan.getText().toString().equalsIgnoreCase("0")) {
-            if (dbcart.isInCart(map.get("varient_id"))) {
+            if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                 dbcart.setCart(map, Integer.valueOf(holder.txtQuan.getText().toString()));
                 //  Toast.makeText(context, "Product quantity is updated in your cart", Toast.LENGTH_SHORT).show();
 
@@ -178,7 +178,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
             }
         } else {
-            dbcart.removeItemFromCart(map.get("varient_id"));
+            dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
         }
         try {
 //            int items = Integer.parseInt(dbcart.getInCartItemQty(map.get("varient_id")));

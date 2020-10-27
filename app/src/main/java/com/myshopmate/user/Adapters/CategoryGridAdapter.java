@@ -173,7 +173,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.outofs.setVisibility(View.VISIBLE);
         }
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id()));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id(),cc.getStore_id()));
         double priced = Double.parseDouble(cc.getPrice());
         double mrpd = Double.parseDouble(cc.getMrp());
         if (qtyd > 0) {
@@ -294,7 +294,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         holder.plus.setOnClickListener(v -> {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id(),cc.getStore_id()));
             if (i<Integer.parseInt(cc.getStock())){
                 holder.txtQuan.setText("" + (i + 1));
                 holder.pPrice.setText("" + (priced * (i + 1)));
@@ -304,7 +304,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         });
         holder.minus.setOnClickListener(v -> {
 //            int i = Integer.parseInt(cc.getQuantity());
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id(),cc.getStore_id()));
 //            CategoryGridList.get(position).setQuantity(String.valueOf(i - 1));
             if ((i - 1) < 0 || (i - 1) == 0) {
                 holder.btn_Add.setVisibility(View.VISIBLE);
@@ -354,13 +354,13 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 //        Log.d("fgh",cartList.get(position).getUnit()+cartList.get(position).getpQuan());
 //        Log.d("fghfgh",cartList.get(position).getpPrice());
         if (i > 0) {
-            if (dbcart.isInCart(map.get("varient_id"))) {
+            if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                 dbcart.setCart(map, i);
             } else {
                 dbcart.setCart(map, i);
             }
         } else {
-            dbcart.removeItemFromCart(map.get("varient_id"));
+            dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
         }
         try {
 //            int items = (int) Double.parseDouble(dbcart.getInCartItemQty(map.get("varient_id")));

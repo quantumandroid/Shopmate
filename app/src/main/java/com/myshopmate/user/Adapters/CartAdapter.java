@@ -98,7 +98,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         }
 
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id()));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id(),topSelling.get(position).getStore_id()));
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -149,7 +149,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
                 if (dbcart == null) {
                     dbcart = new DatabaseHandler(v.getContext());
                 }
-                int i = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id()));
+                int i = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id(),topSelling.get(position).getStore_id()));
                 if (i<Integer.parseInt(cc.getStock())){
                     holder.btn_Add.setVisibility(View.GONE);
                     holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -167,7 +167,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         });
         holder.minus.setOnClickListener(v -> {
             Log.i("Product _id", topSelling.get(position).getVarient_id());
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(topSelling.get(position).getVarient_id(),topSelling.get(position).getStore_id()));
 //            int i = Integer.parseInt(cc.getpQuan());
 //            cartList.get(position).setpQuan(String.valueOf(i-1));
 
@@ -226,13 +226,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             map.put("product_description", topSelling.get(pos).getDescription());
 
             if (i > 0) {
-                if (dbcart.isInCart(map.get("varient_id"))) {
+                if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                     dbcart.setCart(map, i);
                 } else {
                     dbcart.setCart(map, i);
                 }
             } else {
-                dbcart.removeItemFromCart(map.get("varient_id"));
+                dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
             }
 
 

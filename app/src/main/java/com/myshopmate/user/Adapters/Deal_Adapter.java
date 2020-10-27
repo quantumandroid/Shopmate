@@ -94,7 +94,7 @@ public class Deal_Adapter extends RecyclerView.Adapter<Deal_Adapter.MyViewHolder
         holder.pDescrptn.setText(cc.getDescription());
         holder.pQuan.setText("" + cc.getQuantity() + " " + cc.getUnit());
         session_management.setStoreId(cc.getStore_id());
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id()));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id(),dealoftheday.get(position).getStore_id()));
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
@@ -169,7 +169,7 @@ public class Deal_Adapter extends RecyclerView.Adapter<Deal_Adapter.MyViewHolder
         holder.plus.setOnClickListener(v -> {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id(),dealoftheday.get(position).getStore_id()));
 //            cartList.get(position).setpQuan(String.valueOf(i + 1));
             holder.txtQuan.setText("" + (i + 1));
             double priced = Double.parseDouble(cc.getPrice());
@@ -181,7 +181,7 @@ public class Deal_Adapter extends RecyclerView.Adapter<Deal_Adapter.MyViewHolder
 //            notifyItemChanged(position);
         });
         holder.minus.setOnClickListener(v -> {
-            int i = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id()));
+            int i = Integer.parseInt(dbcart.getInCartItemQtys(dealoftheday.get(position).getVarient_id(),dealoftheday.get(position).getStore_id()));
             i = i - 1;
             if (i < 1) {
                 holder.btn_Add.setVisibility(View.VISIBLE);
@@ -264,13 +264,13 @@ public class Deal_Adapter extends RecyclerView.Adapter<Deal_Adapter.MyViewHolder
 //        Log.d("fgh",cartList.get(position).getUnit()+cartList.get(position).getpQuan());
 //        Log.d("fghfgh",cartList.get(position).getpPrice());
         if (i > 0) {
-            if (dbcart.isInCart(map.get("varient_id"))) {
+            if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
                 dbcart.setCart(map, i);
             } else {
                 dbcart.setCart(map, i);
             }
         } else {
-            dbcart.removeItemFromCart(map.get("varient_id"));
+            dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
         }
         try {
 //            int items = (int) Double.parseDouble(dbcart.getInCartItemQty(map.get("varient_id")));

@@ -42,7 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         this.db = db;
 
         String exe = "CREATE TABLE IF NOT EXISTS " + CART_TABLE
-                + "(" + VARIENT_ID + " integer primary key, "
+                + "(" + VARIENT_ID + " INTEGER, "//primary key, "
                 + COLUMN_QTY + " DOUBLE NOT NULL,"
                 + COLUMN_IMAGE + " TEXT NOT NULL, "
                 + COLUMN_NAME + " TEXT NOT NULL, "
@@ -62,8 +62,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public boolean setCart(HashMap<String, String> map, Integer Qty) {
         db = getWritableDatabase();
-        if (isInCart(map.get(VARIENT_ID))) {
-            db.execSQL("update " + CART_TABLE + " set " + COLUMN_QTY + " = '" + Qty + "' where " + VARIENT_ID + "=" + map.get(VARIENT_ID));
+        if (isInCart(map.get(VARIENT_ID),map.get(STORE_ID))) {
+            db.execSQL("update " + CART_TABLE + " set " + COLUMN_QTY + " = '" + Qty + "' where " + VARIENT_ID + "=" + map.get(VARIENT_ID) + " and " + STORE_ID + "=" + map.get(STORE_ID));
+            //db.execSQL("update " + CART_TABLE + " set " + COLUMN_QTY + " = '" + Qty + "' where " + VARIENT_ID + "=" + map.get(VARIENT_ID));
             return false;
         } else {
             ContentValues values = new ContentValues();
@@ -84,9 +85,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public boolean isInCart(String id) {
+    public boolean isInCart(String variantID, String storeID) {
         db = getReadableDatabase();
-        String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + id;
+        //String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + variantID;
+        String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + variantID + " and " + STORE_ID + "=" + storeID;
         Cursor cursor = db.rawQuery(qry, null);
         cursor.moveToFirst();
         return cursor.getCount() > 0;
@@ -102,10 +104,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    public String getInCartItemQty(String id) {
-        if (isInCart(id)) {
+    public String getInCartItemQty(String variantID, String storeID) {
+        if (isInCart(variantID,storeID)) {
             db = getReadableDatabase();
-            String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + id;
+            String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + variantID + " and " + STORE_ID + "=" + storeID;
             Cursor cursor = db.rawQuery(qry, null);
             cursor.moveToFirst();
             return cursor.getString(cursor.getColumnIndex(COLUMN_QTY));
@@ -115,10 +117,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public String getInCartItemQtys(String id) {
-        if (isInCart(id)) {
+    public String getInCartItemQtys(String variantID, String storeID) {
+        if (isInCart(variantID,storeID)) {
             db = getReadableDatabase();
-            String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + id;
+            String qry = "Select *  from " + CART_TABLE + " where " + VARIENT_ID + " = " + variantID + " and " + STORE_ID + "=" + storeID;
             Cursor cursor = db.rawQuery(qry, null);
             cursor.moveToFirst();
             return cursor.getString(cursor.getColumnIndex(COLUMN_QTY));
@@ -228,9 +230,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("delete from " + CART_TABLE);
     }
 
-    public void removeItemFromCart(String id) {
+    public void removeItemFromCart(String variantID, String storeID) {
         db = getReadableDatabase();
-        db.execSQL("delete from " + CART_TABLE + " where " + VARIENT_ID + " = " + id);
+        //db.execSQL("delete from " + CART_TABLE + " where " + VARIENT_ID + " = " + id);
+        db.execSQL("delete from " + CART_TABLE + " where " + VARIENT_ID + " = " + variantID + " and " + STORE_ID + "=" + storeID);
     }
 
     @Override
