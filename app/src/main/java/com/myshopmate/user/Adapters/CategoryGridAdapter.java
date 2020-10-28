@@ -189,9 +189,11 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.pMrp.setText(cc.getMrp());
             holder.txtQuan.setText("x" + 0);
         }
-        Picasso.with(context)
-                .load(IMG_URL + cc.getVarient_image())
-                .into(holder.image);
+        if (cc.getVarient_image() != null && !cc.getVarient_image().isEmpty()) {
+            Picasso.with(context)
+                    .load(IMG_URL + cc.getVarient_image())
+                    .into(holder.image);
+        }
 
 
         holder.pdiscountOff.setText(session_management.getCurrency() + "" + ((int) (mrpd - priced)) + " " + "Off");
@@ -218,9 +220,9 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             }
         });
 
-        Picasso.with(context)
+        /*Picasso.with(context)
                 .load(IMG_URL + cc.getProduct_image())
-                .into(holder.image);
+                .into(holder.image);*/
 
 
         holder.rlQuan.setOnClickListener(new View.OnClickListener() {
