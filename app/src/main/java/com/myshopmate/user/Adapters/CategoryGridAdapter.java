@@ -179,15 +179,15 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
-            holder.txtQuan.setText("" + qtyd);
-            holder.pPrice.setText("" + (priced * qtyd));
-            holder.pMrp.setText("" + (mrpd * qtyd));
+            holder.txtQuan.setText("x" + qtyd);
+           /* holder.pPrice.setText("" + (priced * qtyd));
+            holder.pMrp.setText("" + (mrpd * qtyd));*/
         } else {
             holder.btn_Add.setVisibility(View.VISIBLE);
             holder.ll_addQuan.setVisibility(View.GONE);
             holder.pPrice.setText(cc.getPrice());
             holder.pMrp.setText(cc.getMrp());
-            holder.txtQuan.setText("" + 0);
+            holder.txtQuan.setText("x" + 0);
         }
         Picasso.with(context)
                 .load(IMG_URL + cc.getVarient_image())
@@ -212,6 +212,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
                 intent.putExtra("stock", cc.getStock());
                 intent.putExtra("image", cc.getVarient_image());
                 intent.putExtra("sVariant_id", cc.getVarient_id());
+                intent.putExtra("variants", cc.getVarients());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -296,9 +297,9 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.ll_addQuan.setVisibility(View.VISIBLE);
             int i = Integer.parseInt(dbcart.getInCartItemQtys(cc.getVarient_id(),cc.getStore_id()));
             if (i<Integer.parseInt(cc.getStock())){
-                holder.txtQuan.setText("" + (i + 1));
-                holder.pPrice.setText("" + (priced * (i + 1)));
-                holder.pMrp.setText("" + (mrpd * (i + 1)));
+                holder.txtQuan.setText("x" + (i + 1));
+               /* holder.pPrice.setText("" + (priced * (i + 1)));
+                holder.pMrp.setText("" + (mrpd * (i + 1)));*/
                 updateMultiply(position, i + 1);
             }
         });
@@ -309,13 +310,13 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             if ((i - 1) < 0 || (i - 1) == 0) {
                 holder.btn_Add.setVisibility(View.VISIBLE);
                 holder.ll_addQuan.setVisibility(View.GONE);
-                holder.txtQuan.setText("" + 0);
-                holder.pPrice.setText("" + priced);
-                holder.pMrp.setText("" + mrpd);
+                holder.txtQuan.setText("x" + 0);
+               /* holder.pPrice.setText("" + priced);
+                holder.pMrp.setText("" + mrpd);*/
             } else {
-                holder.txtQuan.setText("" + (i - 1));
-                holder.pPrice.setText("" + (priced * (i - 1)));
-                holder.pMrp.setText("" + (mrpd * (i - 1)));
+                holder.txtQuan.setText("x" + (i - 1));
+              /*  holder.pPrice.setText("" + (priced * (i - 1)));
+                holder.pMrp.setText("" + (mrpd * (i - 1)));*/
             }
             updateMultiply(position, i - 1);
         });
@@ -323,7 +324,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
 //            CategoryGridList.get(position).setQuantity("1");
-            holder.txtQuan.setText("1");
+            holder.txtQuan.setText("x1");
             updateMultiply(position, 1);
         });
 

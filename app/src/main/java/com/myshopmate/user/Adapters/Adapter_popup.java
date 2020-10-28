@@ -15,12 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.ModelClass.NewCategoryVarientList;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.Communicator;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +36,20 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
     private DatabaseHandler dbcart;
     private Session_management session_management;
     private Communicator communicator;
+    private LinearLayout bottom_lay_total;
+    private TextView total_price;
+    private TextView total_count;
 
-    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator) {
+    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator, LinearLayout bottom_lay_total, TextView total_price, TextView total_count) {
         this.varientProductList = varientProductList;
         this.id = id;
         this.dbcart = new DatabaseHandler(context);
         this.context = context;
         this.communicator = communicator;
         session_management = new Session_management(context);
+        this.bottom_lay_total = bottom_lay_total;
+        this.total_price = total_price;
+        this.total_count = total_count;
     }
 
     @NonNull
@@ -86,8 +92,10 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
             holder.btn_Add.setVisibility(View.GONE);
             holder.ll_addQuan.setVisibility(View.VISIBLE);
             holder.txtQuan.setText("" + qtyd);
-            holder.mprice.setText(session_management.getCurrency() + " " + (price * qtyd));
-            holder.mrp.setText(session_management.getCurrency() + " " + (mrp * qtyd));
+           /* holder.mprice.setText(session_management.getCurrency() + " " + (price * qtyd));
+            holder.mrp.setText(session_management.getCurrency() + " " + (mrp * qtyd));*/
+            holder.mprice.setText(session_management.getCurrency() + " " + selectAreaModel.getPrice());
+            holder.mrp.setText(session_management.getCurrency() + " " + selectAreaModel.getMrp());
             holder.mrp.setPaintFlags(holder.mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             holder.btn_Add.setVisibility(View.VISIBLE);
@@ -103,8 +111,8 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
                 holder.btn_Add.setVisibility(View.GONE);
                 holder.ll_addQuan.setVisibility(View.VISIBLE);
                 holder.txtQuan.setText("" + (qnty + 1));
-                holder.mprice.setText("" + (price * (qnty + 1)));
-                holder.mrp.setText("" + (mrp * (qnty + 1)));
+               /* holder.mprice.setText("" + (price * (qnty + 1)));
+                holder.mrp.setText("" + (mrp * (qnty + 1)));*/
                 updateMultiply(i, holder);
             }
         });
@@ -116,12 +124,12 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
                 holder.btn_Add.setVisibility(View.VISIBLE);
                 holder.ll_addQuan.setVisibility(View.GONE);
                 holder.txtQuan.setText("" + 0);
-                holder.mprice.setText("" + price);
-                holder.mrp.setText("" + mrp);
+                /*holder.mprice.setText("" + price);
+                holder.mrp.setText("" + mrp);*/
             } else {
                 holder.txtQuan.setText("" + (qnty - 1));
-                holder.mprice.setText("" + (price * (qnty - 1)));
-                holder.mrp.setText("" + (mrp * (qnty - 1)));
+            /*    holder.mprice.setText("" + (price * (qnty - 1)));
+                holder.mrp.setText("" + (mrp * (qnty - 1)));*/
             }
             updateMultiply(i, holder);
         });
@@ -152,6 +160,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
     private void updateMultiply(int pos, holder holder) {
         HashMap<String, String> map = new HashMap<>();
         map.put("varient_id", varientProductList.get(pos).getVarient_id());
+        map.put("store_id", varientProductList.get(pos).getStore_id());
         map.put("product_name", id);
         map.put("title", id);
         map.put("price", varientProductList.get(pos).getPrice());
@@ -200,6 +209,22 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         } catch (IndexOutOfBoundsException e) {
             Log.d("qwer", e.toString());
         }
+
+        try {
+            if (bottom_lay_total != null && total_price != null && total_count != null) {
+                if (dbcart.getCartCount() > 0) {
+                    bottom_lay_total.setVisibility(View.VISIBLE);
+                    total_price.setText(session_management.getCurrency() + " " + dbcart.getTotalAmount());
+                    total_count.setText("Total Items (" + dbcart.getCartCount() + ")");
+                } else {
+                    bottom_lay_total.setVisibility(View.GONE);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
     public class holder extends RecyclerView.ViewHolder {

@@ -27,13 +27,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.Adapters.Adapter_popup;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.NewCategoryVarientList;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +55,7 @@ public class ProductDetails extends AppCompatActivity {
     String varientName, discription12, price12, mrp12, unit12, qty, varientimage;
     ProgressDialog progressDialog;
     String product_id, varient_id, store_id;
+    private  ArrayList<NewCategoryVarientList> newCategoryVarientLists;
     private DatabaseHandler dbcart;
     private SharedPreferences preferences;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
@@ -96,6 +97,7 @@ public class ProductDetails extends AppCompatActivity {
         qty = getIntent().getStringExtra("qty");
         varientimage = getIntent().getStringExtra("image");
         varient_id = getIntent().getStringExtra("sVariant_id");
+        newCategoryVarientLists = (ArrayList<NewCategoryVarientList>) getIntent().getSerializableExtra("variants");
         stock = getIntent().getStringExtra("stock");
 
         ll_details = findViewById(R.id.ll3);
@@ -136,7 +138,14 @@ public class ProductDetails extends AppCompatActivity {
             outofs.setVisibility(View.VISIBLE);
         }
 
-        selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
+       // selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
+        ArrayList<NewCategoryVarientList> variants = new ArrayList<>();
+        for (NewCategoryVarientList variant : newCategoryVarientLists) {
+            if (variant.getVarient_id().equals(varient_id)) continue;
+            variants.add(variant);
+        }
+
+        selectCityAdapter = new Adapter_popup(ProductDetails.this, variants, varientName, position -> {
             if (varient_id.equalsIgnoreCase(varientProducts.get(position).getVarient_id())) {
                 int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
                 if (qtyd > 0) {
@@ -155,7 +164,7 @@ public class ProductDetails extends AppCompatActivity {
                     txtQuan.setText("" + 0);
                 }
             }
-        });
+        }, bottom_lay_total, total_price, total_count);
         recyclerUnit.setAdapter(selectCityAdapter);
 
         Varient_product(product_id);
@@ -353,6 +362,7 @@ public class ProductDetails extends AppCompatActivity {
     private void updateMultiply() {
         HashMap<String, String> map = new HashMap<>();
         map.put("product_id", product_id);
+        map.put("store_id", store_id);
         map.put("product_name", varientName);
         map.put("varient_id", varient_id);
         map.put("title", varientName);
