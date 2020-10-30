@@ -34,6 +34,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.myshopmate.user.ModelClass.Store;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
@@ -58,6 +60,8 @@ public class Utils {
     public static final int LAST_DAY_OF_WEEK = 2;
     public static final int FIRST_DAY_OF_MONTH = 3;
     public static final int LAST_DAY_OF_MONTH = 4;
+
+    public static final HashMap<String, Store> stores = new HashMap<>();
 
     // TODO Get String From Spinner
     public static String stringOf(Spinner spinner) {

@@ -83,6 +83,7 @@ import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DistanceCalculator;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 import com.volley.simple_request.OnResponseListener;
 import com.volley.simple_request.SimpleRequest;
 
@@ -422,8 +423,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onSuccess(com.volley.response.Response response) {
 
                 try {
-
                     store_modelList = getStores(response.getString());
+                    for (Store store: store_modelList) {
+                        Utils.stores.put(store.getStore_id(),store);
+                    }
                     adapter1 = new HomeAdapter(store_modelList,getActivity());
                     rv_items.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();

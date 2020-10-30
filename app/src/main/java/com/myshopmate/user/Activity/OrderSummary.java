@@ -28,6 +28,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
+import com.myshopmate.user.Adapters.BasketAdapter;
 import com.myshopmate.user.Adapters.Timing_Adapter;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.CartModel;
@@ -71,7 +72,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     TextView btn_Contine, txt_deliver, txtTotalItems, pPrice, pMrp, totalItms, price, DeliveryCharge, Amounttotal, txt_totalPrice;
     String dname;
     int orderCount;
-    List<JSONArray> carts;
+    ArrayList<JSONArray> carts;
 
     RecyclerView recycler_itemsList, recyclerTimeSlot;
     RecyclerView calendarview2;
@@ -138,7 +139,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         add_check_notice = findViewById(R.id.add_check_notice);
         txt_deliver = findViewById(R.id.txt_deliver);
         textview_mobile_delivery = findViewById(R.id.textview_mobile_delivery);
-        recycler_itemsList = findViewById(R.id.recycler_itemsList);
+        recycler_itemsList = findViewById(R.id.recycler_basket_list);
         textview_name_ofdata = findViewById(R.id.textview_name_ofdata);
         recyclerTimeSlot = findViewById(R.id.recyclerTimeSlot);
         pPrice = findViewById(R.id.pPrice);
@@ -200,7 +201,11 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                     product_object.put("varient_id", object1.getString("varient_id"));
                     product_object.put("product_image", object1.getString("product_image"));
                     product_object.put("store_id", object1.getString("store_id"));
+                    product_object.put("p_name", object1.getString("product_name"));
 
+                    int qty = Integer.parseInt(object1.getString("qty"));
+                    double price = Double.parseDouble(object1.getString("price"));
+                    product_object.put("total_price", price*qty);
                     Log.d("sdf", product_object.toString());
                     products.put(product_object);
                 }
@@ -215,10 +220,10 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
 
 //        Log.d("sdfa", array.toString());
-       /* ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
-
-        recycler_itemsList.setLayoutManager(new LinearLayoutManager(OrderSummary.this, LinearLayoutManager.HORIZONTAL, false));
-        recycler_itemsList.setAdapter(adapters);*/
+      //  ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
+        BasketAdapter basketAdapter = new BasketAdapter(OrderSummary.this,carts);
+        recycler_itemsList.setLayoutManager(new LinearLayoutManager(OrderSummary.this, LinearLayoutManager.VERTICAL, false));
+        recycler_itemsList.setAdapter(basketAdapter);
 //        adapter.notifyDataSetChanged();
         showAdreesUrl();
 //        Toast.makeText(getApplicationContext(), "Please select a time slot on available date!", Toast.LENGTH_LONG).show();

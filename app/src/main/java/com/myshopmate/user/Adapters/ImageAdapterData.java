@@ -6,15 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.myshopmate.user.Config.BaseURL.IMG_URL;
 
@@ -23,7 +25,7 @@ import static com.myshopmate.user.Config.BaseURL.IMG_URL;
  */
 
 public class ImageAdapterData extends RecyclerView.Adapter<ImageAdapterData.ProductHolder> {
-    ArrayList<HashMap<String, String>> list;
+    JSONArray list;
     Activity activity;
     String price_tx;
     SharedPreferences preferences;
@@ -32,7 +34,7 @@ public class ImageAdapterData extends RecyclerView.Adapter<ImageAdapterData.Prod
     int lastpostion;
     DatabaseHandler dbHandler;
 
-    public ImageAdapterData(Activity activity, ArrayList<HashMap<String, String>> list) {
+    public ImageAdapterData(Activity activity, JSONArray list) {
         this.list = list;
         this.activity = activity;
 
@@ -49,27 +51,36 @@ public class ImageAdapterData extends RecyclerView.Adapter<ImageAdapterData.Prod
     @Override
     public void onBindViewHolder(final ProductHolder holder, final int position) {
 
-        final HashMap<String, String> map = list.get(position);
-        Picasso.with(activity)
-                .load(IMG_URL+ map.get("product_image"))
-                .into(holder.image_data);
+        JSONObject map = null;
+        try {
+            map = list.getJSONObject(position);
+            Picasso.with(activity)
+                    .load(IMG_URL+ map.getString("product_image"))
+                    .into(holder.image_data);
+            holder.tvPName.setText(map.getString("p_name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.length();
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
 
         public ImageView image_data;
+        TextView tvPName;
 
 
         public ProductHolder(View view) {
             super(view);
 
 
-            image_data = (ImageView) view.findViewById(R.id.image_data);
+            image_data = view.findViewById(R.id.image_data);
+            tvPName = view.findViewById(R.id.tv_p_name);
 
            ;
 
