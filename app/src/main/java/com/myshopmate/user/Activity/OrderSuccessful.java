@@ -27,8 +27,8 @@ public class OrderSuccessful extends AppCompatActivity {
         pref = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
 //        pref.registerOnSharedPreferenceChangeListener(this);
         sessionManagement = new Session_management(OrderSuccessful.this);
-        dbHandler = new DatabaseHandler(OrderSuccessful.this);
-        dbHandler.clearCart();
+        //dbHandler = new DatabaseHandler(OrderSuccessful.this);
+        //dbHandler.clearCart();
         SharedPreferences preferences = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
         preferences.edit().putInt("cardqnty", 0).apply();
 

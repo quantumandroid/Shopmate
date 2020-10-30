@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -167,6 +168,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public List<String> getStoreIds() {
+        List<String> list = new ArrayList<>();
+        db = getReadableDatabase();
+        String qry = "Select "+ STORE_ID +" from " + CART_TABLE + " GROUP BY " + STORE_ID;
+        Cursor cursor = db.rawQuery(qry, null);
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            list.add(cursor.getString(cursor.getColumnIndex(STORE_ID)));
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    public ArrayList<HashMap<String, String>> getCartAll(String storeID) {
+        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+        db = getReadableDatabase();
+        String qry = "Select *  from " + CART_TABLE + " WHERE " + STORE_ID + "=" + storeID;
+        Cursor cursor = db.rawQuery(qry, null);
+        cursor.moveToFirst();
+        for (int i = 0; i < cursor.getCount(); i++) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put(VARIENT_ID, cursor.getString(cursor.getColumnIndex(VARIENT_ID)));
+            map.put(COLUMN_QTY, cursor.getString(cursor.getColumnIndex(COLUMN_QTY)));
+            map.put(COLUMN_IMAGE, cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE)));
+            map.put(COLUMN_NAME, cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+            map.put(COLUMN_PRICE, cursor.getString(cursor.getColumnIndex(COLUMN_PRICE)));
+            map.put(COLUMN_REWARDS, cursor.getString(cursor.getColumnIndex(COLUMN_REWARDS)));
+            map.put(COLUMN_UNIT_VALUE, cursor.getString(cursor.getColumnIndex(COLUMN_UNIT_VALUE)));
+            map.put(COLUMN_INCREAMENT, cursor.getString(cursor.getColumnIndex(COLUMN_INCREAMENT)));
+            map.put(COLUMN_STOCK, cursor.getString(cursor.getColumnIndex(COLUMN_STOCK)));
+            map.put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
+            map.put(COLUMN_DESCRIPTION, cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)));
+            map.put(STORE_ID, cursor.getString(cursor.getColumnIndex(STORE_ID)));
+            list.add(map);
+            cursor.moveToNext();
+        }
+        return list;
+    }
 
     public ArrayList<HashMap<String, String>> getCartAll() {
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
@@ -228,6 +267,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void clearCart() {
         db = getReadableDatabase();
         db.execSQL("delete from " + CART_TABLE);
+    }
+
+    public void clearCart(String storeID) {
+        db = getReadableDatabase();
+        db.execSQL("delete from " + CART_TABLE + " WHERE " + STORE_ID + "=" + storeID);
     }
 
     public void removeItemFromCart(String variantID, String storeID) {

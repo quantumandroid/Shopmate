@@ -1,5 +1,6 @@
 package com.myshopmate.user.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,13 +28,13 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
-import com.myshopmate.user.Adapters.ImageAdapterData;
 import com.myshopmate.user.Adapters.Timing_Adapter;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.CartModel;
 import com.myshopmate.user.ModelClass.DeliveryModel;
 import com.myshopmate.user.ModelClass.MyCalendarData;
 import com.myshopmate.user.ModelClass.MyCalendarModel;
+import com.myshopmate.user.ModelClass.OrderStatus;
 import com.myshopmate.user.ModelClass.timing_model;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
@@ -69,7 +70,9 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     LinearLayout back;
     TextView btn_Contine, txt_deliver, txtTotalItems, pPrice, pMrp, totalItms, price, DeliveryCharge, Amounttotal, txt_totalPrice;
     String dname;
-    JSONArray array;
+    int orderCount;
+    List<JSONArray> carts;
+
     RecyclerView recycler_itemsList, recyclerTimeSlot;
     RecyclerView calendarview2;
     Timing_Adapter bAdapter1;
@@ -95,7 +98,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
         sessionManagement = new Session_management(getApplicationContext());
         user_id = sessionManagement.userId();
-        array = new JSONArray();
+
         prepareData();
         init();
     }
@@ -181,37 +184,41 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         currency_indicator.setText(session_management.getCurrency());
         currency_indicator_2.setText(session_management.getCurrency());
         ruppy.setText(session_management.getCurrency());
-        ArrayList<HashMap<String, String>> map = db.getCartAll();
+        List<String> storeIds = db.getStoreIds();
+        carts = new ArrayList<>();
+        for (String storeId: storeIds) {
+            JSONArray products = new JSONArray();
+            try {
+                JSONArray object = new JSONArray(db.getCartAll(storeId));
+                for (int i = 0; i < object.length(); i++) {
+                    Log.d("sadf", object.toString());
+                    JSONObject object1 = object.getJSONObject(i);
 
-        try {
-            JSONArray object = new JSONArray(map);
-            for (int i = 0; i < object.length(); i++) {
-                Log.d("sadf", object.toString());
-                JSONObject object1 = object.getJSONObject(i);
+                    JSONObject product_object = new JSONObject();
 
-                JSONObject product_array = new JSONObject();
+                    product_object.put("qty", object1.getString("qty"));
+                    product_object.put("varient_id", object1.getString("varient_id"));
+                    product_object.put("product_image", object1.getString("product_image"));
+                    product_object.put("store_id", object1.getString("store_id"));
 
-                product_array.put("qty", object1.getString("qty"));
-                product_array.put("varient_id", object1.getString("varient_id"));
-                product_array.put("product_image", object1.getString("product_image"));
-                product_array.put("store_id", object1.getString("store_id"));
-
-                Log.d("sdf", product_array.toString());
-                array.put(product_array);
-
-
+                    Log.d("sdf", product_object.toString());
+                    products.put(product_object);
+                }
+                carts.add(products);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
+
+
+
+
 //        Log.d("sdfa", array.toString());
-        ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
+       /* ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
 
         recycler_itemsList.setLayoutManager(new LinearLayoutManager(OrderSummary.this, LinearLayoutManager.HORIZONTAL, false));
-        recycler_itemsList.setAdapter(adapters);
+        recycler_itemsList.setAdapter(adapters);*/
 //        adapter.notifyDataSetChanged();
         showAdreesUrl();
 //        Toast.makeText(getApplicationContext(), "Please select a time slot on available date!", Toast.LENGTH_LONG).show();
@@ -219,7 +226,8 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             @Override
             public void onClick(View v) {
 //                timeslot = bAdapter1.gettimeslot();
-                if (txt_totalPrice.getText().toString() != null && !txt_totalPrice.getText().toString().equalsIgnoreCase("")) {
+                //txt_totalPrice.getText().toString();
+                if (!txt_totalPrice.getText().toString().equalsIgnoreCase("")) {
                     progressDialog.show();
                     if (Integer.parseInt(txt_totalPrice.getText().toString()) <= Integer.parseInt(minVAlue)) {
                         Snackbar.make(v, "Please order more than" + " " + minVAlue, Snackbar.LENGTH_LONG).show();
@@ -228,7 +236,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                         Snackbar.make(v, "Please order less than" + " " + maxValue, Snackbar.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     } else {
-                        continueUrl(todaydatee, timeslot, map);
+                        continueUrl(carts);
                        /* if (timeslot != null && !timeslot.equalsIgnoreCase("")) {
                             continueUrl(todaydatee, timeslot, map);
                         } else {
@@ -365,7 +373,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
-                    String msg = jsonObject.getString("message");
+                    //String msg = jsonObject.getString("message");
                     if (status.equals("1")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                         String id = jsonObject1.getString("min_max_id");
@@ -427,89 +435,212 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
     }
 
-    private void continueUrl(final String todaydate, final String timeslot, final ArrayList<HashMap<String, String>> map) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, OrderContinue, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("ordermake", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    String msg = jsonObject.getString("message");
-                    if (status.equals("1")) {
-
-                        JSONObject object = jsonObject.getJSONObject("data");
-
-                        cart_id = object.getString("cart_id");
-                        sessionManagement.setCartID(cart_id);
-                        Intent intent = new Intent(getApplicationContext(), PaymentDetails.class);
-
-                        intent.putExtra("order_amt", txt_totalPrice.getText().toString());
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                    progressDialog.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                progressDialog.dismiss();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                Log.e(TAG, "onErrorResponse: " + error);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> param = new HashMap<>();
-                HashMap<String, String> map = getDelTime();
-                param.put("time_slot", map.get("time"));
-                param.put("user_id", user_id);
-                param.put("delivery_date", map.get("date"));
-                param.put("order_array", array.toString());
-                param.put("store_id", session_management.getStoreId());
-                return param;
-            }
-        };
-        stringRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 60000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 1;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+    private void continueUrl(final List<JSONArray> carts) {
         RequestQueue requestQueue = Volley.newRequestQueue(OrderSummary.this);
         requestQueue.getCache().clear();
-        stringRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 90000;
+
+        ArrayList<OrderStatus> orderStatuses = new ArrayList<>();
+        orderCount = 0;
+        for (int i = 0; i < carts.size(); i++) {
+            JSONArray array = carts.get(i);
+            OrderStatus orderStatus1 = new OrderStatus();
+            try {
+                orderStatus1.setStoreId(array.getJSONObject(0).getString("store_id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, OrderContinue, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    orderCount++;
+                    Log.d("ordermake", response);
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String status = jsonObject.getString("status");
+                        String msg = jsonObject.getString("message");
+                        if (status.equals("1")) {
+                            JSONObject object = jsonObject.getJSONObject("data");
 
-            @Override
-            public int getCurrentRetryCount() {
-                return 0;
+                            cart_id = object.getString("cart_id");
+                            sessionManagement.setCartID(cart_id);
+
+                            orderStatus1.setStatus(true);
+                            orderStatus1.setCartId(cart_id);
+                            orderStatuses.add(orderStatus1);
+
+
+                            if (orderCount == carts.size()){
+                                goToPayment(orderStatuses);
+                            }
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    progressDialog.dismiss();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    orderCount++;
+                    orderStatus1.setStatus(false);
+                    orderStatus1.setCartId("");
+                    orderStatuses.add(orderStatus1);
+                    progressDialog.dismiss();
+
+                    //Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+
+                    Log.e(TAG, "onErrorResponse: " + error);
+                    if (orderCount == carts.size()){
+                        goToPayment(orderStatuses);
+                    }
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String, String> param = new HashMap<>();
+                    HashMap<String, String> map = getDelTime();
+                    param.put("time_slot", map.get("time"));
+                    param.put("user_id", user_id);
+                    param.put("delivery_date", map.get("date"));
+                    param.put("order_array", array.toString());
+                    //param.put("store_id", session_management.getStoreId());
+                    param.put("store_id", orderStatus1.getStoreId());
+                    return param;
+                }
+            };
+            stringRequest.setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 60000;
+                }
+
+                @Override
+                public int getCurrentRetryCount() {
+                    return 1;
+                }
+
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
+
+                }
+            });
+
+            stringRequest.setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 90000;
+                }
+
+                @Override
+                public int getCurrentRetryCount() {
+                    return 0;
+                }
+
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
+
+                }
+            });
+            requestQueue.add(stringRequest);
+        }
+
+    }
+
+
+    private void goToPayment(ArrayList<OrderStatus> orderStatuses){
+        ArrayList<OrderStatus> failedStores = new ArrayList<>();
+        for (OrderStatus orderStatus : orderStatuses) {
+            if (!orderStatus.isStatus()){
+                failedStores.add(orderStatus);
             }
+        }
+        if (failedStores.size() > 0 && failedStores.size() < orderStatuses.size()){
+            showPopup("Some of your orders were not placed successfully.",false,failedStores,orderStatuses);
+        } else if (failedStores.size() == orderStatuses.size()){
+            showPopup("Your order was not placed successfully.\nPlease try again.",true,failedStores,orderStatuses);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), PaymentDetails.class);
+            intent.putExtra("order_statuses",  orderStatuses);
+            intent.putExtra("order_amt", txt_totalPrice.getText().toString());
+            startActivity(intent);
+        }
 
+    }
+
+
+    private void showPopup(String msg, boolean isCompleteFailed, ArrayList<OrderStatus> failedOrders, ArrayList<OrderStatus> orderStatuses) {
+        View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.layout_order_status_popup),null);
+        TextView tvMsg = view.findViewById(R.id.tv_msg);
+        TextView tvCancel = view.findViewById(R.id.tv_cancel);
+        TextView tvContinue = view.findViewById(R.id.tv_continue);
+        TextView tvTryAgain = view.findViewById(R.id.tv_try_again);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+        tvMsg.setText(msg);
+        tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void retry(VolleyError error) throws VolleyError {
-
+            public void onClick(View v) {
+                finish();
             }
         });
-        requestQueue.add(stringRequest);
+        tvContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent(getApplicationContext(), PaymentDetails.class);
+                intent.putExtra("order_statuses",  orderStatuses);
+                intent.putExtra("order_amt", txt_totalPrice.getText().toString());
+                startActivity(intent);
+            }
+        });
+        List<JSONArray> failedCarts = new ArrayList<>();
+        for (OrderStatus orderStatus: failedOrders) {
+            JSONArray products = new JSONArray();
+            try {
+                JSONArray object = new JSONArray(db.getCartAll(orderStatus.getStoreId()));
+                for (int i = 0; i < object.length(); i++) {
+                    Log.d("sadf", object.toString());
+                    JSONObject object1 = object.getJSONObject(i);
 
+                    JSONObject product_object = new JSONObject();
+
+                    product_object.put("qty", object1.getString("qty"));
+                    product_object.put("varient_id", object1.getString("varient_id"));
+                    product_object.put("product_image", object1.getString("product_image"));
+                    product_object.put("store_id", object1.getString("store_id"));
+
+                    Log.d("sdf", product_object.toString());
+                    products.put(product_object);
+                }
+                failedCarts.add(products);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        tvTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                progressDialog.show();
+                continueUrl(failedCarts);
+            }
+        });
+
+        if (isCompleteFailed) {
+            tvContinue.setVisibility(View.GONE);
+        } else {
+            tvContinue.setVisibility(View.VISIBLE);
+        }
     }
 
     private HashMap<String, String> getDelTime() {

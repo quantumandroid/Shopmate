@@ -1,7 +1,9 @@
 package com.myshopmate.user.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -32,6 +34,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.myshopmate.user.Config.BaseURL;
+import com.myshopmate.user.Config.SharedPref;
+import com.myshopmate.user.ModelClass.CoupunModel;
+import com.myshopmate.user.ModelClass.OrderStatus;
+import com.myshopmate.user.R;
+import com.myshopmate.user.util.AppController;
+import com.myshopmate.user.util.CustomVolleyJsonRequest;
+import com.myshopmate.user.util.DatabaseHandler;
+import com.myshopmate.user.util.Session_management;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -39,14 +50,6 @@ import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
-import com.myshopmate.user.Config.BaseURL;
-import com.myshopmate.user.Config.SharedPref;
-import com.myshopmate.user.ModelClass.CoupunModel;
-import com.myshopmate.user.R;
-import com.myshopmate.user.util.AppController;
-import com.myshopmate.user.util.CustomVolleyJsonRequest;
-import com.myshopmate.user.util.DatabaseHandler;
-import com.myshopmate.user.util.Session_management;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,6 +129,9 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
     private LinearLayout paypal_lay;
 
     public static final int PAYPAL_REQUEST_CODE = 123;
+
+    private ArrayList<OrderStatus> orderStatuses;
+    private int orderCount;
 
 
     @Override
@@ -263,6 +269,8 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         });
         total_amount = getIntent().getStringExtra("order_amt");
         payable_amt = getIntent().getStringExtra("order_amt");
+
+        orderStatuses = (ArrayList<OrderStatus>) getIntent().getSerializableExtra("order_statuses");
 
         order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
 
@@ -1049,79 +1057,142 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
 //    }
 
     private void makeAddOrderRequest(String userid, String cart_id, String payment_method, String wallet_status, String payment_status) {
-        String tag_json_obj = "json_add_order_req";
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", userid);
-        params.put("payment_status", payment_status);
-        params.put("cart_id", cart_id);
-        params.put("payment_method", payment_method);
-        params.put("wallet", wallet_status);
-       // params.put("lat",lat);
-        //params.put("lng",lng);
+        orderCount = 0;
+        for(OrderStatus orderStatus: orderStatuses) {
+            if (orderStatus.isStatus()) {
+                String tag_json_obj = "json_add_order_req";
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", userid);
+                params.put("payment_status", payment_status);
+                params.put("cart_id", orderStatus.getCartId());
+                params.put("payment_method", payment_method);
+                params.put("wallet", wallet_status);
+                // params.put("lat",lat);
+                //params.put("lng",lng);
 
-        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
-                BaseURL.ADD_ORDER_URL, params, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d(TAG, response.toString());
+                CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                        BaseURL.ADD_ORDER_URL, params, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        orderCount++;
+                        Log.d(TAG, response.toString());
+                        try {
+                            String status = response.getString("status");
+                            //String message = response.getString("message");
+                            if (status.equalsIgnoreCase("1") || status.equalsIgnoreCase("2")) {
+                                db_cart.clearCart(orderStatus.getStoreId());
+                                sessionManagement.setCartID("");
+                                orderStatus.setPaymentSuccess(true);
+                            } else {
+                                orderStatus.setPaymentSuccess(false);
+                                Toast.makeText(PaymentDetails.this, "Failed " + orderCount, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (orderCount == orderStatuses.size()) {
+                            processOrderStatus();
+                        }
 
-                try {
-                    String status = response.getString("status");
-                    String message = response.getString("message");
-                    if (status.equalsIgnoreCase("1")) {
-                        sessionManagement.setCartID("");
-                        JSONObject jsonObject = response.getJSONObject("data");
-                        db_cart.clearCart();
-                        Intent intent = new Intent(getApplicationContext(), OrderSuccessful.class);
-                        intent.putExtra("msg", message);
-                        startActivity(intent);
-                        Toast.makeText(PaymentDetails.this, "" + message, Toast.LENGTH_SHORT).show();
-                    } else if (status.equalsIgnoreCase("2")) {
-                        sessionManagement.setCartID("");
-                        JSONObject jsonObject = response.getJSONObject("data");
-                        db_cart.clearCart();
-                        Intent intent = new Intent(getApplicationContext(), OrderSuccessful.class);
-                        intent.putExtra("msg", message);
-                        startActivity(intent);
-                        Toast.makeText(PaymentDetails.this, "" + message, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(PaymentDetails.this, "" + message, Toast.LENGTH_SHORT).show();
+
+                            /*if (status.equalsIgnoreCase("1")) {
+                                sessionManagement.setCartID("");
+                                JSONObject jsonObject = response.getJSONObject("data");
+                                db_cart.clearCart(orderStatus.getStoreId());
+
+                            } else if (status.equalsIgnoreCase("2")) {
+                                sessionManagement.setCartID("");
+                                JSONObject jsonObject = response.getJSONObject("data");
+                                db_cart.clearCart(orderStatus.getStoreId());
+                            } else {
+                                Toast.makeText(PaymentDetails.this, "" + message, Toast.LENGTH_SHORT).show();
+                            }*/
+                           // progressDialog.dismiss();
                     }
-                    progressDialog.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        orderCount++;
+                        progressDialog.dismiss();
+                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        orderStatus.setPaymentSuccess(false);
+                        if (orderCount == orderStatuses.size()) {
+                            processOrderStatus();
+                        }
                /* if (error instanceof TimeoutError || error instanceof NoConnectionError) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.connection_time_out), Toast.LENGTH_SHORT).show();
                 }*/
+                    }
+                });
+
+                jsonObjReq.setRetryPolicy(new RetryPolicy() {
+                    @Override
+                    public int getCurrentTimeout() {
+                        return 90000;
+                    }
+
+                    @Override
+                    public int getCurrentRetryCount() {
+                        return 0;
+                    }
+
+                    @Override
+                    public void retry(VolleyError error) throws VolleyError {
+
+                    }
+                });
+
+                AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+            }
+        }
+    }
+
+    private void processOrderStatus() {
+        ArrayList<OrderStatus> successOrders = new ArrayList<>();
+        int orderCount = 0;
+        for (OrderStatus orderStatus : orderStatuses) {
+            if (orderStatus.isStatus()) {
+                orderCount++;
+                if (orderStatus.isPaymentSuccess()) {
+                    successOrders.add(orderStatus);
+                }
+            }
+        }
+        /* if (successOrders.size() > 0 && successOrders.size() < orderCount){
+            //showPopup("Some of your orders were not placed successfully.",false,failedStores,orderStatuses);
+            showPopup();
+        } else*/
+        if (successOrders.size() == orderCount){
+            Intent intent = new Intent(getApplicationContext(), OrderSuccessful.class);
+            //intent.putExtra("msg", message);
+            startActivity(intent);
+        } else {
+            showPopup();
+        }
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentDetails.this);
+        builder.setTitle("Payment not successful");
+        builder.setMessage("Please go to cart and try again!");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
         });
-
-        jsonObjReq.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 90000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 0;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
 //    private void Usewalletfororder(String userid, String Wallet) {
