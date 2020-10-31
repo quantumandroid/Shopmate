@@ -54,6 +54,7 @@ public class Cancel_Order extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cancel__order);
+        setTitle("Cancel Order");
 
         cart_id = Objects.requireNonNull(getIntent().getExtras()).getString("cart_id");
 //        cart_id = My_Pending_Order.cart_id;
@@ -110,11 +111,11 @@ public class Cancel_Order extends AppCompatActivity {
                     if (status.contains("1")) {
 
                         JSONArray jsonArray = response.getJSONArray("data");
-
+                        complainModels.clear(); //Clear your array list before adding new data in it
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            complainModels.clear(); //Clear your array list before adding new data in it
+
 
                             reason = jsonObject.getString("reason");
 

@@ -22,6 +22,7 @@ import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -29,11 +30,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.myshopmate.user.ModelClass.Store;
 
 import java.io.ByteArrayOutputStream;
@@ -176,7 +178,7 @@ public class Utils {
     public static boolean PressedOnce = false;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public static void doubleBackExit(final Context context) {
+    public static void doubleBackExit(final Context context, View view) {
 
 
         if (PressedOnce) {
@@ -186,7 +188,9 @@ public class Utils {
         }
 
         PressedOnce = true;
-        Toast.makeText(context, "Press again to exit", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Press again to exit", Toast.LENGTH_LONG).show();
+        Snackbar.make(view,"Press again to exit", BaseTransientBottomBar.LENGTH_LONG).show();
+
 
         new Handler().postDelayed(new Runnable() {
 

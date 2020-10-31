@@ -72,7 +72,8 @@
         <activity
             android:name="com.myshopmate.user.Activity.Myorderdetails"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name="com.myshopmate.user.Activity.Cancel_Order" />
+        <activity android:name="com.myshopmate.user.Activity.Cancel_Order"
+            android:parentActivityName=".Activity.My_Order_activity"/>
         <activity
             android:name="com.myshopmate.user.Activity.ForgotPassOtp"
             android:theme="@style/StatusBarOrange" />

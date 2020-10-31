@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.myshopmate.user.ModelClass.Store;
+import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
@@ -70,6 +72,13 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 .into(holder.iv_logo);
 
         holder.tv_title.setText(map.get("product_name"));
+        holder.tvStoreName.setText(map.get("store_name"));
+        Store store = Utils.stores.get(map.get("store_id"));
+        if (store == null) {
+            holder.tvStoreName.setText("");
+        } else {
+            holder.tvStoreName.setText(store.getStore_name());
+        }
         holder.pDescrptn.setText(map.get("product_description"));
         int items = (int) Double.parseDouble(dbHandler.getInCartItemQty(map.get("varient_id"),map.get("store_id")));
         int sprice = (int) Double.parseDouble(map.get("price"));
@@ -284,9 +293,12 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
         LinearLayout tv_add, ll_addQuan;
         int minteger = 0;
         int price = 0;
+        public TextView tvStoreName;
 
         public ProductHolder(View view) {
             super(view);
+
+            tvStoreName = view.findViewById(R.id.tv_store_name_cart);
 
             tv_title = view.findViewById(R.id.txt_pName);
             currency_indicator = view.findViewById(R.id.currency_indicator);

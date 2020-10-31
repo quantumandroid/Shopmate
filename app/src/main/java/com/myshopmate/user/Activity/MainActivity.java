@@ -81,6 +81,7 @@ import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.FetchAddressTask;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -480,6 +481,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
+
+
     private void showBloackDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setCancelable(true);
@@ -820,7 +823,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.navigation_home:
                    // loadFragment(new HomeeeFragment(fragmentClickListner));
                     loadFragment(new HomeFragment(fragmentClickListner));
-
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
 //                        FragmentTransaction transaction = manager.beginTransaction();
@@ -1323,4 +1325,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        try {
+            Fragment fr = getSupportFragmentManager().findFragmentById(R.id.contentPanel);
+            final String fm_name = fr.getClass().getSimpleName();
+            if (drawer.isDrawerOpen(navigationView)) {
+                drawer.closeDrawer(navigationView);
+            } else if (!fm_name.contentEquals("HomeFragment")) {
+                navigation.setSelectedItemId(R.id.navigation_home);
+            } else {
+                Utils.doubleBackExit(this,navigation);
+            }
+        } catch (Exception e) {
+            super.onBackPressed();
+        }
+    }
 }
