@@ -69,9 +69,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -79,8 +79,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="5dp"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="Add delivery address here .." />
 
@@ -89,7 +89,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
                     android:layout_marginEnd="10dp" />
 
                 <TextView
@@ -146,7 +147,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_deliver"
                     android:layout_gravity="center"
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:backgroundTint="@color/orange"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="center"
@@ -161,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/addressCard"
-            android:layout_marginBottom="50dp">
+            android:layout_above="@id/layout_delivery_charges">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -223,6 +227,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="center|left"
                             android:text="("
+                            android:visibility="gone"
                             android:textColor="@color/darkGrey"
                             android:textSize="15sp" />
 
@@ -235,6 +240,7 @@
                             android:gravity="center|left"
                             android:padding="5dp"
                             android:text="7"
+                            android:visibility="gone"
                             android:textColor="@color/darkGrey"
                             android:textSize="15sp" />
 
@@ -245,6 +251,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:gravity="center|left"
                             android:text=")"
+                            android:visibility="gone"
                             android:textColor="@color/darkGrey"
                             android:textSize="15sp" />
 
@@ -253,7 +260,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_basket_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -349,11 +356,6 @@
                     <!--
                                         </com.google.android.material.appbar.AppBarLayout>
                     -->
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/lightGrey" />
 
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -492,66 +494,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="center|left"
-                                android:padding="5dp"
-                                android:text="Delivery"
-                                android:textColor="@color/darkGrey"
-                                android:textSize="14sp" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginLeft="10dp"
-                                android:gravity="center|end"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/currency_indicator_2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="10dp"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="center|left"
-                                    android:paddingRight="2dp"
-                                    android:text="@string/currency"
-                                    android:textColor="@color/darkGrey"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/DeliveryCharge"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="10dp"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="center|end"
-                                    android:text="0"
-                                    android:textColor="@color/darkGrey"
-                                    android:textSize="14sp" />
-
-
-                            </LinearLayout>
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
 
@@ -619,7 +561,67 @@
             </RelativeLayout>
         </ScrollView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:background="@color/very_lightGrey"
+            android:layout_above="@id/card_ll_checkout"
+            android:id="@+id/layout_delivery_charges">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_regular"
+                    android:gravity="center|left"
+                    android:padding="5dp"
+                    android:text="Delivery Fees"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center|end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/currency_indicator_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center|left"
+                        android:paddingRight="2dp"
+                        android:text="@string/currency"
+                        android:textColor="@color/darkGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/DeliveryCharge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center|end"
+                        android:text="0"
+                        android:textColor="@color/darkGrey"
+                        android:textSize="14sp" />
+
+
+                </LinearLayout>
+
+        </LinearLayout>
+
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_ll_checkout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -679,13 +681,16 @@
 
                     <TextView
                         android:id="@+id/btn_Contine"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@color/orange"
                         android:fontFamily="@font/opensans_semibold"
                         android:gravity="center"
-                        android:padding="10dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
                         android:text="Continue"
                         android:textAllCaps="true"
                         android:textColor="@color/white" />

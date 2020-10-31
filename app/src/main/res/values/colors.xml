@@ -12,7 +12,9 @@
     <color name="black_fade">#C4000000</color>
     <color name="hintColor">#808080</color>
     <color name="lightGrey">#dcdcdc</color>
+    <color name="very_lightGrey">#EAE6E6</color>
     <color name="darkGrey">#2F2929</color>
+    <color name="darkGrey_custom">#4C4848</color>
     <color name="mediumGrey">#B9B8B6</color>
 
     <color name="green">#FE8100</color>
