@@ -47,9 +47,9 @@ public class About_us extends AppCompatActivity {
         // check internet connection
         if (ConnectivityReceiver.isConnected()) {
             makeGetInfoRequest();
-        } else {
-            // ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
-        }
+        } /*else {
+             ((MainActivity) getActivity()).onNetworkConnectionChanged(false);
+        }*/
     }
 
         private void makeGetInfoRequest() {

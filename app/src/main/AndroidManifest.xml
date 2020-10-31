@@ -67,7 +67,8 @@
             android:name="com.myshopmate.user.Activity.ViewAll_TopDeals"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity android:name="com.myshopmate.user.Activity.Forget_otp_verify" />
-        <activity android:name="com.myshopmate.user.Activity.About_us" />
+        <activity android:name="com.myshopmate.user.Activity.About_us"
+            android:parentActivityName=".Activity.MainActivity"/>
         <activity android:name="com.myshopmate.user.Activity.Coupen" />
         <activity
             android:name="com.myshopmate.user.Activity.Myorderdetails"
