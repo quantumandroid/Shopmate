@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -70,6 +72,7 @@ import com.myshopmate.user.Adapters.HomeCategoryAdapter;
 import com.myshopmate.user.Adapters.Home_adapter;
 import com.myshopmate.user.Adapters.MainScreenAdapter;
 import com.myshopmate.user.Adapters.PageAdapter;
+import com.myshopmate.user.Adapters.StoreProductsPagerAdapter;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.Constans.RecyclerTouchListener;
 import com.myshopmate.user.ModelClass.Category_model;
@@ -163,11 +166,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private List<NewCartModel> recentSelling = new ArrayList<>();
     private List<NewCartModel> dealOftheday = new ArrayList<>();
     private MainScreenAdapter screenAdapter;
-    private Context contexts;
+    private Context context;
     private int tabCounter = 0;
 
-    public HomeFragment(FragmentClickListner fragmentClickListner) {
+    private ViewPager viewPagerStoresProducts;
+    private RecyclerView rvProducts;
+    private EditText etSearch;
+    private TabLayout stores_products_tab_layout;
+    private BottomNavigationView bottomNavigationView;
+
+    public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
+        this.bottomNavigationView = bottomNavigationView;
         // Required empty public constructor
     }
 
@@ -176,7 +186,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.home, container, false);
         requireActivity().setTitle(getResources().getString(R.string.app_name));
-        contexts = container.getContext();
+        context = container.getContext();
         sharedPreferences = requireContext().getSharedPreferences(MyPrefreance, MODE_PRIVATE);
         session_management = new Session_management(container.getContext());
         progressDialog = new ProgressDialog(container.getContext());
@@ -187,9 +197,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         address = sharedPreferences.getString(ADDRESS, null);
         city = sharedPreferences.getString(CITY, null);
         bannerAdapter = new BannerAdapter(getActivity(), imageString);
+        viewPagerStoresProducts = view.findViewById(R.id.viewPagerStoresProducts);
+        etSearch = view.findViewById(R.id.et_search);
+        stores_products_tab_layout = view.findViewById(R.id.stores_products_tab_layout);
 
         // loc.setText(address+", "+city+", "+postalCode);
         rv_items = view.findViewById(R.id.rv_home);
+        rvProducts = view.findViewById(R.id.rv_home_products);
         change_loc_lay = view.findViewById(R.id.change_loc_lay);
         viewpager_layout = view.findViewById(R.id.viewpager_layout);
         not_product = view.findViewById(R.id.not_product);
@@ -220,6 +234,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerImages.setAdapter(bannerAdapter);
         // home_list.setLayoutManager(new GridLayoutManager(getContext(), 1, LinearLayoutManager.HORIZONTAL, false));
 
+        stores_products_tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPagerStoresProducts.setCurrentItem(stores_products_tab_layout.getSelectedTabPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPagerStoresProducts.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                stores_products_tab_layout.getTabAt(position).select();
+                etSearch.setText("");
+                if (position == 1) {
+                    etSearch.setHint("What are you looking for?");
+                    Utils.hideKeyboard(getActivity());
+                    etSearch.clearFocus();
+                } else {
+                    etSearch.setHint("Find stores");
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         LinearLayoutManager linearLayoutManager =  new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -240,10 +295,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                // String getid = store_modelList.get(position).getStore_id();
                 Intent intent = new Intent(getActivity(), CategoryPage.class);
                 intent.putExtra("cat_id", "47");
-                intent.putExtra("title", store_modelList.get(position).getStore_name());
-                intent.putExtra("store_id", store_modelList.get(position).getStore_id());
+               // intent.putExtra("title", store_modelList.get(position).getStore_name());
+               // intent.putExtra("store_id", store_modelList.get(position).getStore_id());
+                intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
+                intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
               //  intent.putExtra("image", store_modelList.get(position).ge());
                 startActivityForResult(intent, 24);
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
+        LinearLayoutManager layoutManagerProducts =  new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rvProducts.setLayoutManager(layoutManagerProducts);
+        rvProducts.setItemAnimator(new DefaultItemAnimator());
+        rvProducts.setNestedScrollingEnabled(false);
+        rvProducts.addOnItemTouchListener(new RecyclerTouchListener(context, rvProducts, new RecyclerTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
 
             }
 
@@ -271,20 +344,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             selectStores();
         }
 
-
-        Search_layout.setOnClickListener(new View.OnClickListener() {
+        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View v) {
-
-                SearchFragment trending_fragment = new SearchFragment();
-                FragmentManager manager = getParentFragmentManager();
-//                FragmentManager m = getSu();
-                FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                fragmentTransaction.replace(R.id.contentPanel, trending_fragment);
-                fragmentTransaction.commit();
-
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (viewPagerStoresProducts.getCurrentItem() == 1) {
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications1);
+                        SearchFragment trending_fragment = new SearchFragment();
+                        FragmentManager manager = getParentFragmentManager();
+                        // FragmentManager m = getSu();
+                        FragmentTransaction fragmentTransaction = manager.beginTransaction();
+                        fragmentTransaction.replace(R.id.contentPanel, trending_fragment);
+                        fragmentTransaction.commit();
+                    }
+                }
             }
         });
+
+        /*etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });*/
 
 
         fabOne.setAlpha(0f);
@@ -366,14 +458,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     intent.putExtra("action_name", "Top_Deals_Fragment");
                     startActivityForResult(intent, 56);
                 } else {
-                    Toast.makeText(contexts, "No Order found in your location!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Order found in your location!", Toast.LENGTH_SHORT).show();
                 }
             } else if (tabLayout.getTabAt(viewPager2.getCurrentItem()).getText().toString().equalsIgnoreCase("RECENT SELLING")) {
                 if (recentSelling.size() > 0) {
                     intent.putExtra("action_name", "Recent_Details_Fragment");
                     startActivityForResult(intent, 56);
                 } else {
-                    Toast.makeText(contexts, "No Order found in your location!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Order found in your location!", Toast.LENGTH_SHORT).show();
                 }
 
             } else if (tabLayout.getTabAt(viewPager2.getCurrentItem()).getText().toString().equalsIgnoreCase("DEALS OF THE DAY")) {
@@ -382,7 +474,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     intent1.putExtra("action_name", "Deals_Fragment");
                     startActivityForResult(intent1, 56);
                 } else {
-                    Toast.makeText(contexts, "No Order found in your location!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Order found in your location!", Toast.LENGTH_SHORT).show();
                 }
 
             } else if (tabLayout.getTabAt(viewPager2.getCurrentItem()).getText().toString().equalsIgnoreCase("WHAT'S NEW")) {
@@ -390,7 +482,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     intent.putExtra("action_name", "Whats_New_Fragment");
                     startActivityForResult(intent, 56);
                 } else {
-                    Toast.makeText(contexts, "No Order found in your location!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Order found in your location!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -417,7 +509,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void selectStores() {
         String sql = "select * from store";
-        SimpleRequest simpleRequest = new SimpleRequest(contexts);
+        SimpleRequest simpleRequest = new SimpleRequest(context);
         simpleRequest.get(sql, new OnResponseListener() {
             @Override
             public void onSuccess(com.volley.response.Response response) {
@@ -429,7 +521,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                     adapter1 = new HomeAdapter(store_modelList,getActivity());
                     rv_items.setAdapter(adapter1);
+                    adapter1.setSearch(etSearch);
                     adapter1.notifyDataSetChanged();
+
+                    setupViewPager();
                 } catch (Exception e) {
                     e.printStackTrace();
                    // showAlert(e.getMessage());
@@ -445,6 +540,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
     }
+
+    private void setupViewPager() {
+        ArrayList<Integer> layouts = new ArrayList<>();
+        layouts.add(R.id.rv_home);
+        layouts.add(R.id.rv_home_products);
+        StoreProductsPagerAdapter storeProductsPagerAdapter = new StoreProductsPagerAdapter(context,layouts);
+        viewPagerStoresProducts.setAdapter(storeProductsPagerAdapter);
+    }
+
     public ArrayList<Store> getStores(String JSON_STRING) {
 
         ArrayList<Store> arrayList = new ArrayList();
@@ -600,7 +704,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(contexts);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.getCache().clear();
         stringRequest.setRetryPolicy(new RetryPolicy() {
             @Override
@@ -695,7 +799,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(contexts);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.getCache().clear();
         stringRequest.setRetryPolicy(new RetryPolicy() {
             @Override
@@ -764,7 +868,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(contexts);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.getCache().clear();
         stringRequest.setRetryPolicy(new RetryPolicy() {
             @Override
@@ -824,7 +928,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(contexts);
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.getCache().clear();
         stringRequest.setRetryPolicy(new RetryPolicy() {
             @Override
@@ -1275,7 +1379,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showAlert(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(contexts);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(msg);
         builder.setPositiveButton("OK", null);
         AlertDialog dialog = builder.create();

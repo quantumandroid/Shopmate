@@ -3,9 +3,13 @@ package com.myshopmate.user.Adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -35,12 +40,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 
     private List<Store> modelList;
+    private ArrayList<Store> modelListSearch;
     private Context context;
     String language;
     SharedPreferences preferences;
     private Session_management session_management;
     DistanceCalculator distanceCalculator;
     DecimalFormat decimalFormat;
+    private ValueFilter valueFilter;
+ //   private String mSearchText;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title,category;
@@ -65,6 +73,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     public HomeAdapter(List<Store> modelList, FragmentActivity activity) {
         this.modelList = modelList;
+         this.modelListSearch = new ArrayList<>();
+         modelListSearch.addAll(modelList);
         session_management = new Session_management(activity);
          distanceCalculator = new DistanceCalculator();
         decimalFormat = new DecimalFormat("0.00");
@@ -162,6 +172,96 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     @Override
     public int getItemCount() {
         return modelList.size();
+    }
+
+
+    public List<Store> getModelList() {
+        return modelList;
+    }
+
+    // method for search list
+    public Filter getFilter() {
+
+        if (valueFilter == null) {
+
+            valueFilter = new ValueFilter();
+        }
+
+        return valueFilter;
+    }
+
+    private class ValueFilter extends Filter {
+
+        //Invoked in a worker thread to filter the data according to the constraint.
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            FilterResults results = new FilterResults();
+
+            if (charSequence != null && charSequence.length() > 0) {
+
+                ArrayList<Store> filterList = new ArrayList<>();
+
+                for (int i = 0; i < modelListSearch.size(); i++) {
+
+                    if ((modelListSearch.get(i).getStore_name().toUpperCase()).contains(charSequence.toString().toUpperCase())) {
+
+                        //HashMap<String, String> hashMap = new HashMap<>();
+                        //Store store = new Store();
+/*
+
+                        for (Object obj : modelListSearch.get(i).entrySet()) {
+                            Map.Entry entry = (Map.Entry) obj;
+
+                            String k = (String) entry.getKey();
+
+                            hashMap.put(k, modelListSearch.get(i).get(k));
+
+                        }
+*/
+
+                        filterList.add(modelListSearch.get(i));
+                    }
+                }
+                results.count = filterList.size();
+                results.values = filterList;
+            } else {
+                results.count = modelListSearch.size();
+                results.values = modelListSearch;
+            }
+            return results;
+        }
+
+        //Invoked in the UI thread to publish the filtering results in the user interface.
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+           // mSearchText = constraint.toString();
+            modelList = (ArrayList<Store>) results.values;
+            notifyDataSetChanged();
+
+        }
+    }
+
+    public void setSearch(EditText search) {
+
+        search.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                getFilter().filter(arg0);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+        });
     }
 
 }

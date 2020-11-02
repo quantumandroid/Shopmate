@@ -13,6 +13,8 @@
         android:layout_margin="0dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="0dp"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,7 +34,8 @@
                 android:background="@drawable/ic_loupe"
                 android:backgroundTint="@color/lightGrey" />
 
-            <TextView
+            <EditText
+                android:id="@+id/et_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -42,7 +45,8 @@
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="What are you looking for (eg.mango, onion)"
+                android:background="@android:color/transparent"
+                android:hint="Find stores"
                 android:textSize="12sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -226,11 +230,28 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <LinearLayout
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/stores_products_tab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#ffffff"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/stores_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Stores" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/products_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Products" />
+                </com.google.android.material.tabs.TabLayout>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPagerStoresProducts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_home"
@@ -241,8 +262,16 @@
                         android:scrollbars="none"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_home_products"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:scrollbars="none"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                </androidx.viewpager.widget.ViewPager>
 
-                </LinearLayout>
             </LinearLayout>
 
             <RelativeLayout
@@ -272,7 +301,7 @@
         android:layout_marginBottom="15dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

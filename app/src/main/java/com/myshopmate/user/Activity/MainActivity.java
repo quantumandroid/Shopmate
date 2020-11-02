@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getAddress();
                 navigation.setSelectedItemId(R.id.navigation_home);
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(new HomeFragment(fragmentClickListner));
+                loadFragment(new HomeFragment(fragmentClickListner,navigation));
             }
         };
 
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // checkConnection();
 
         //loadFragment(new HomeeeFragment(fragmentClickListner));
-        loadFragment(new HomeFragment(fragmentClickListner));
+        loadFragment(new HomeFragment(fragmentClickListner,navigation));
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -447,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onClick(View view) {
                                // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
-                                HomeFragment fm = new HomeFragment(fragmentClickListner);
+                                HomeFragment fm = new HomeFragment(fragmentClickListner,navigation);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
                                         .addToBackStack(null).commit();
@@ -822,7 +822,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                    // loadFragment(new HomeeeFragment(fragmentClickListner));
-                    loadFragment(new HomeFragment(fragmentClickListner));
+                    loadFragment(new HomeFragment(fragmentClickListner,navigation));
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
 //                        FragmentTransaction transaction = manager.beginTransaction();
@@ -1053,7 +1053,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 getAddress();
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
                                     //loadFragment(new HomeeeFragment(fragmentClickListner));
-                                    loadFragment(new HomeFragment(fragmentClickListner));
+                                    loadFragment(new HomeFragment(fragmentClickListner,navigation));
                                 }
                             }
                         } else {
@@ -1061,7 +1061,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (addres.getText().toString().equalsIgnoreCase("")) {
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
                                     //loadFragment(new HomeeeFragment(fragmentClickListner));
-                                    loadFragment(new HomeFragment(fragmentClickListner));
+                                    loadFragment(new HomeFragment(fragmentClickListner,navigation));
                                 }
                                 getAddress();
                             }
@@ -1071,7 +1071,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         location = locations;
                         if (navigation.getSelectedItemId() == R.id.navigation_home) {
                             //loadFragment(new HomeeeFragment(fragmentClickListner));
-                            loadFragment(new HomeFragment(fragmentClickListner));
+                            loadFragment(new HomeFragment(fragmentClickListner,navigation));
                         }
                         getAddress();
                     }
@@ -1251,7 +1251,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getAddress();
             if (navigation.getSelectedItemId() == R.id.navigation_home) {
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(new HomeFragment(fragmentClickListner));
+                loadFragment(new HomeFragment(fragmentClickListner,navigation));
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

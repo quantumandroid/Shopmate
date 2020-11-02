@@ -104,6 +104,8 @@
                             android:hint="Search Products"
                             android:background="@android:color/transparent"
                             android:textSize="15sp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/hintColor"
                             android:fontFamily="@font/opensans_semibold"/>
