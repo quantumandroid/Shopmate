@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -66,6 +65,7 @@ import com.myshopmate.user.Activity.DealActivity;
 import com.myshopmate.user.Activity.Splash;
 import com.myshopmate.user.Activity.ViewAll_TopDeals;
 import com.myshopmate.user.Adapters.BannerAdapter;
+import com.myshopmate.user.Adapters.CategoryGridAdapter;
 import com.myshopmate.user.Adapters.DealsAdapter;
 import com.myshopmate.user.Adapters.HomeAdapter;
 import com.myshopmate.user.Adapters.HomeCategoryAdapter;
@@ -73,16 +73,20 @@ import com.myshopmate.user.Adapters.Home_adapter;
 import com.myshopmate.user.Adapters.MainScreenAdapter;
 import com.myshopmate.user.Adapters.PageAdapter;
 import com.myshopmate.user.Adapters.StoreProductsPagerAdapter;
+import com.myshopmate.user.Categorygridquantity;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.Constans.RecyclerTouchListener;
 import com.myshopmate.user.ModelClass.Category_model;
 import com.myshopmate.user.ModelClass.HomeCate;
 import com.myshopmate.user.ModelClass.MainScreenList;
 import com.myshopmate.user.ModelClass.NewCartModel;
+import com.myshopmate.user.ModelClass.NewCategoryDataModel;
+import com.myshopmate.user.ModelClass.NewCategoryVarientList;
 import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
+import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.DistanceCalculator;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
@@ -125,7 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     LinearLayout parent_lay;
     CardView Search_layout;
     //    ScrollView scrollView;
-    NestedScrollView scrollView;
+    //NestedScrollView scrollView;
     RecyclerView rv_items;
     SliderLayout banner_slider, featuredslider;
     OvershootInterpolator interpolator = new OvershootInterpolator();
@@ -174,6 +178,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private EditText etSearch;
     private TabLayout stores_products_tab_layout;
     private BottomNavigationView bottomNavigationView;
+
+    List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
+    CategoryGridAdapter categoryGridAdapter;
+    List<NewCategoryVarientList> varientProducts = new ArrayList<>();
+    DatabaseHandler dbcart;
 
     public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
@@ -314,17 +323,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rvProducts.setLayoutManager(layoutManagerProducts);
         rvProducts.setItemAnimator(new DefaultItemAnimator());
         rvProducts.setNestedScrollingEnabled(false);
-        rvProducts.addOnItemTouchListener(new RecyclerTouchListener(context, rvProducts, new RecyclerTouchListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position) {
-
-            }
-        }));
 
         change_loc.setOnClickListener(v -> startActivityForResult(new Intent(v.getContext(), AddressLocationActivity.class), 22));
 
@@ -334,14 +332,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerImages1.setAdapter(bannerAdapter1);
 //        loc=view.findViewById(R.id.loc);
         Search_layout = view.findViewById(R.id.ll3);
-        scrollView = view.findViewById(R.id.scroll_view);
-        scrollView.setSmoothScrollingEnabled(true);
+        /*scrollView = view.findViewById(R.id.scroll_view);
+        scrollView.setSmoothScrollingEnabled(true);*/
         if (isOnline()) {
             //makeGetSliderRequest();
             //second_banner();
             //makeGetCategoryRequest();
             //topSelling();
             selectStores();
+            product("");
         }
 
         etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -488,6 +487,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         });
 
+        dbcart = new DatabaseHandler(context);
+
+        Categorygridquantity categorygridquantity = new Categorygridquantity() {
+            @Override
+            public void onClick(View view, int position, String ccId, String id) {
+                varientProducts.clear();
+               // behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+               // TextView txt = view.findViewById(R.id.txt);
+               // txt.setText(id);
+               // LinearLayout cancl = view.findViewById(R.id.cancl);
+              //  cancl.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
+                /*RecyclerView recyler_popup = view.findViewById(R.id.recyclerVarient);
+                recyler_popup.setLayoutManager(new LinearLayoutManager(context));*/
+                varientProducts.addAll(newCategoryDataModel.get(position).getVarients());
+                /*Adapter_popup selectCityAdapter = new Adapter_popup(context, varientProducts, id, position1 -> {
+                    if (varientProducts.get(position1).getVarient_id().equalsIgnoreCase(newCategoryDataModel.get(position).getVarient_id())) {
+                        categoryGridAdapter.notifyItemChanged(position);
+                    }
+                }, null, null, null);
+                recyler_popup.setAdapter(selectCityAdapter);*/
+
+//                Varient_product(ccId, recyler_popup, id);
+
+            }
+
+            @Override
+            public void onCartItemAddOrMinus() {
+                /*if (dbcart.getCartCount() > 0) {
+                    bottom_lay_total.setVisibility(View.VISIBLE);
+                    total_price.setText(session_management.getCurrency() + " " + dbcart.getTotalAmount());
+                    total_count.setText("Total Items " + dbcart.getCartCount());
+                } else {
+                    bottom_lay_total.setVisibility(View.GONE);
+                }*/
+            }
+        };
+
+
+       // rvProducts.setLayoutManager(new GridLayoutManager(context, 1));
+        rvProducts.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL,false));
+        categoryGridAdapter = new CategoryGridAdapter(newCategoryDataModel, context, categorygridquantity);
+        rvProducts.setAdapter(categoryGridAdapter);
+
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 //            @Override
 //            public void onTabSelected(TabLayout.Tab tab) {
@@ -505,6 +547,86 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //            }
 //        });
         return view;
+    }
+
+    private void product(String store_id) {
+        newCategoryDataModel.clear();
+        // Tag used to cancel the request
+        String tag_json_obj = "json_order_detail_req";
+
+        Map<String, String> params = new HashMap<String, String>();
+        /*params.put("store_id", store_id);
+        params.put("cat_id", cat_id);
+        params.put("lat", session_management.getLatPref());
+        params.put("lng", session_management.getLangPref());
+        params.put("city", session_management.getLocationCity());*/
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.cat_product_all, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("CheckApi", response.toString());
+
+
+                try {
+                    String status = response.getString("status");
+
+//                    String message = response.getString("message");
+
+                    if (status.contains("1")) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<NewCategoryDataModel>>() {
+                        }.getType();
+                        List<NewCategoryDataModel> listorl = gson.fromJson(response.getString("data"), listType);
+                        newCategoryDataModel.addAll(listorl);
+
+//                        for (int i = 0; i < listorl.size(); i++) {
+//                            List<NewCategoryVarientList> listddd = listorl.get(i).getVarients();
+//                            for (int j = 0; j < listddd.size(); j++) {
+//                                NewCategoryShowList newCategoryShowList = new NewCategoryShowList(listorl.get(i).getProduct_id(), listorl.get(i).getProduct_name(), listorl.get(i).getProduct_image(), listddd.get(j));
+//                                newModelList.add(newCategoryShowList);
+//                            }
+//                        }
+
+                        categoryGridAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                VolleyLog.d("", "Error: " + error.getMessage());
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                }
+            }
+        });
+
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 60000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 0;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+
     }
 
     private void selectStores() {

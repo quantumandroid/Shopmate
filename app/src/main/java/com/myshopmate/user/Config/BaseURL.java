@@ -128,6 +128,7 @@ public class BaseURL {
 
     public static String EDIT_PROFILE_URL = BASE_URL + "profile_edit";
     public static String cat_product = BASE_URL + "cat_product";
+    public static String cat_product_all = BASE_URL + "cat_product_all";
     public static String OrderContinue = BASE_URL + "make_an_order";
     public static String MinMaxOrder = BASE_URL + "minmax";
     public static String rewardlines = BASE_URL + "rewardlines";
