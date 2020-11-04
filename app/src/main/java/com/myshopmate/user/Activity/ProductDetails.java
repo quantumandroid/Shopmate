@@ -188,7 +188,7 @@ public class ProductDetails extends AppCompatActivity {
                     txtQuan.setText("" + 0);
                 }
             }
-        }, bottom_lay_total, total_price, total_count, false);
+        }, bottom_lay_total, total_price, total_count, false, "");
         recyclerUnit.setAdapter(selectCityAdapter);
 
         pVariantsAdapter = new Adapter_popup(ProductDetails.this, variantsOther, varientName, position -> {
@@ -210,7 +210,7 @@ public class ProductDetails extends AppCompatActivity {
                     txtQuan.setText("" + 0);
                 }
             }
-        }, bottom_lay_total, total_price, total_count, true);
+        }, bottom_lay_total, total_price, total_count, true, varientName);
         rvPVariants.setAdapter(pVariantsAdapter);
 
         Varient_product(product_id);

@@ -492,6 +492,17 @@ public class Utils {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static void showKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.showSoftInput(view,0);
+    }
+
     public static boolean backupDatabase(Context context, String database_name, String backup_dir) {
 
         String databasePath = context.getDatabasePath(database_name).getPath();

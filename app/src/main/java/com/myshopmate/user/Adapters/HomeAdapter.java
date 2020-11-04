@@ -3,13 +3,9 @@ package com.myshopmate.user.Adapters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +22,6 @@ import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -40,14 +35,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 
     private List<Store> modelList;
-    private ArrayList<Store> modelListSearch;
+  //  private ArrayList<Store> modelListSearch;
     private Context context;
     String language;
     SharedPreferences preferences;
     private Session_management session_management;
     DistanceCalculator distanceCalculator;
     DecimalFormat decimalFormat;
-    private ValueFilter valueFilter;
+ //   private ValueFilter valueFilter;
  //   private String mSearchText;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -73,8 +68,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     public HomeAdapter(List<Store> modelList, FragmentActivity activity) {
         this.modelList = modelList;
-         this.modelListSearch = new ArrayList<>();
-         modelListSearch.addAll(modelList);
+       //  this.modelListSearch = new ArrayList<>();
+        // modelListSearch.addAll(modelList);
         session_management = new Session_management(activity);
          distanceCalculator = new DistanceCalculator();
         decimalFormat = new DecimalFormat("0.00");
@@ -175,12 +170,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     }
 
 
-    public List<Store> getModelList() {
+   /* public List<Store> getModelList() {
         return modelList;
-    }
+    }*/
 
     // method for search list
-    public Filter getFilter() {
+    /*public Filter getFilter() {
 
         if (valueFilter == null) {
 
@@ -205,21 +200,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
                 for (int i = 0; i < modelListSearch.size(); i++) {
 
                     if ((modelListSearch.get(i).getStore_name().toUpperCase()).contains(charSequence.toString().toUpperCase())) {
-
-                        //HashMap<String, String> hashMap = new HashMap<>();
-                        //Store store = new Store();
-/*
-
-                        for (Object obj : modelListSearch.get(i).entrySet()) {
-                            Map.Entry entry = (Map.Entry) obj;
-
-                            String k = (String) entry.getKey();
-
-                            hashMap.put(k, modelListSearch.get(i).get(k));
-
-                        }
-*/
-
                         filterList.add(modelListSearch.get(i));
                     }
                 }
@@ -262,7 +242,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
             }
         });
-    }
+    }*/
 
 }
 

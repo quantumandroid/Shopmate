@@ -348,7 +348,7 @@
                         android:layout_marginTop="8dp"
                         android:textSize="12sp"
                         android:textColor="@color/black"
-                        android:text="Products from other stores"/>
+                        android:text="Same products from other stores"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvPVariants"

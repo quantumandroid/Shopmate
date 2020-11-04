@@ -41,8 +41,9 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
     private TextView total_price;
     private TextView total_count;
     private boolean isOtherStore;
+    private String productName;
 
-    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator, LinearLayout bottom_lay_total, TextView total_price, TextView total_count, boolean isOtherStore) {
+    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator, LinearLayout bottom_lay_total, TextView total_price, TextView total_count, boolean isOtherStore, String productName) {
         this.varientProductList = varientProductList;
         this.id = id;
         this.dbcart = new DatabaseHandler(context);
@@ -53,6 +54,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         this.total_price = total_price;
         this.total_count = total_count;
         this.isOtherStore = isOtherStore;
+        this.productName = productName;
     }
 
     @NonNull
@@ -154,14 +156,18 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
         if (isOtherStore) {
             holder.tvStore.setVisibility(View.VISIBLE);
+            holder.tvProductName.setText(productName);
             try {
                 holder.tvStore.setText(Utils.stores.get(selectAreaModel.getStore_id()).getStore_name());
             } catch (Exception e) {
                 holder.tvStore.setText("");
             }
         } else {
+            holder.tvProductName.setVisibility(View.GONE);
             holder.tvStore.setVisibility(View.GONE);
         }
+
+
     }
 
     @Override
@@ -241,8 +247,8 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
     public class holder extends RecyclerView.ViewHolder {
 
-        public TextView prodNAme, pDescrptn, pQuan, pPrice, pdiscountOff, pMrp, minus, plus, txtQuan, txt_unitvalue;
-        TextView unit, unitvalue, mprice, mrp, tvStore;
+        public TextView pDescrptn, pQuan, pPrice, pdiscountOff, pMrp, minus, plus, txtQuan, txt_unitvalue;
+        TextView unit, unitvalue, mprice, mrp, tvStore, tvProductName;
         ImageView prodImage;
         LinearLayout btn_Add, ll_addQuan, outofs_in, outofs;
 
@@ -294,7 +300,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
 //              minus.setOnClickListener(this);
 //               plus.setOnClickListener(this);
-
+            tvProductName = itemView.findViewById(R.id.tv_product_name);
 
         }
 

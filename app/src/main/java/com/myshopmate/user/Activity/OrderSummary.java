@@ -43,6 +43,7 @@ import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.ForClicktimings;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -187,7 +188,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         ruppy.setText(session_management.getCurrency());
         List<String> storeIds = db.getStoreIds();
         carts = new ArrayList<>();
-        for (String storeId: storeIds) {
+        for (String storeId : storeIds) {
             JSONArray products = new JSONArray();
             try {
                 JSONArray object = new JSONArray(db.getCartAll(storeId));
@@ -205,7 +206,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
                     int qty = Integer.parseInt(object1.getString("qty"));
                     double price = Double.parseDouble(object1.getString("price"));
-                    product_object.put("total_price", price*qty);
+                    product_object.put("total_price", price * qty);
                     Log.d("sdf", product_object.toString());
                     products.put(product_object);
                 }
@@ -216,12 +217,9 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }
 
 
-
-
-
 //        Log.d("sdfa", array.toString());
-      //  ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
-        BasketAdapter basketAdapter = new BasketAdapter(OrderSummary.this,carts);
+        //  ImageAdapterData adapters = new ImageAdapterData(OrderSummary.this, map);
+        BasketAdapter basketAdapter = new BasketAdapter(OrderSummary.this, carts);
         recycler_itemsList.setLayoutManager(new LinearLayoutManager(OrderSummary.this, LinearLayoutManager.VERTICAL, false));
         recycler_itemsList.setAdapter(basketAdapter);
 //        adapter.notifyDataSetChanged();
@@ -338,7 +336,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             public void onErrorResponse(VolleyError error) {
 //                progressDialog.dismiss();
                 updateData();
-               // makeGetAddressRequests(todaydatee);
+                // makeGetAddressRequests(todaydatee);
             }
         }) {
             @Override
@@ -474,7 +472,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                             orderStatuses.add(orderStatus1);
 
 
-                            if (orderCount == carts.size()){
+                            if (orderCount == carts.size()) {
                                 goToPayment(orderStatuses);
                             }
 
@@ -501,7 +499,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                     //Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
 
                     Log.e(TAG, "onErrorResponse: " + error);
-                    if (orderCount == carts.size()){
+                    if (orderCount == carts.size()) {
                         goToPayment(orderStatuses);
                     }
                 }
@@ -509,7 +507,10 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String, String> param = new HashMap<>();
-                    HashMap<String, String> map = getDelTime();
+                    HashMap<String, String> map = getDelTime(
+                            Utils.stores.get(orderStatus1.getStoreId()).getOpening_time(),
+                            Utils.stores.get(orderStatus1.getStoreId()).getClosing_time()
+                    );
                     param.put("time_slot", map.get("time"));
                     param.put("user_id", user_id);
                     param.put("delivery_date", map.get("date"));
@@ -558,20 +559,20 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     }
 
 
-    private void goToPayment(ArrayList<OrderStatus> orderStatuses){
+    private void goToPayment(ArrayList<OrderStatus> orderStatuses) {
         ArrayList<OrderStatus> failedStores = new ArrayList<>();
         for (OrderStatus orderStatus : orderStatuses) {
-            if (!orderStatus.isStatus()){
+            if (!orderStatus.isStatus()) {
                 failedStores.add(orderStatus);
             }
         }
-        if (failedStores.size() > 0 && failedStores.size() < orderStatuses.size()){
-            showPopup("Some of your orders were not placed successfully.",false,failedStores,orderStatuses);
-        } else if (failedStores.size() == orderStatuses.size()){
-            showPopup("Your order was not placed successfully.\nPlease try again.",true,failedStores,orderStatuses);
+        if (failedStores.size() > 0 && failedStores.size() < orderStatuses.size()) {
+            showPopup("Some of your orders were not placed successfully.", false, failedStores, orderStatuses);
+        } else if (failedStores.size() == orderStatuses.size()) {
+            showPopup("Your order was not placed successfully.\nPlease try again.", true, failedStores, orderStatuses);
         } else {
             Intent intent = new Intent(getApplicationContext(), PaymentDetails.class);
-            intent.putExtra("order_statuses",  orderStatuses);
+            intent.putExtra("order_statuses", orderStatuses);
             intent.putExtra("order_amt", txt_totalPrice.getText().toString());
             startActivity(intent);
         }
@@ -580,7 +581,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
 
     private void showPopup(String msg, boolean isCompleteFailed, ArrayList<OrderStatus> failedOrders, ArrayList<OrderStatus> orderStatuses) {
-        View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.layout_order_status_popup),null);
+        View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.layout_order_status_popup), null);
         TextView tvMsg = view.findViewById(R.id.tv_msg);
         TextView tvCancel = view.findViewById(R.id.tv_cancel);
         TextView tvContinue = view.findViewById(R.id.tv_continue);
@@ -603,13 +604,13 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), PaymentDetails.class);
-                intent.putExtra("order_statuses",  orderStatuses);
+                intent.putExtra("order_statuses", orderStatuses);
                 intent.putExtra("order_amt", txt_totalPrice.getText().toString());
                 startActivity(intent);
             }
         });
         List<JSONArray> failedCarts = new ArrayList<>();
-        for (OrderStatus orderStatus: failedOrders) {
+        for (OrderStatus orderStatus : failedOrders) {
             JSONArray products = new JSONArray();
             try {
                 JSONArray object = new JSONArray(db.getCartAll(orderStatus.getStoreId()));
@@ -648,21 +649,23 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }
     }
 
-    private HashMap<String, String> getDelTime() {
+    private HashMap<String, String> getDelTime(String storeOpenTime, String storeCloseTime) {
         HashMap<String, String> hashMap = new HashMap<>();
         final Calendar calendar = Calendar.getInstance();
 
-       int hr = calendar.get(Calendar.HOUR_OF_DAY);
-       if (hr < 18){
-           hr+=1;
-           hashMap.put("time", "" + hr + ":00 - "+ Splash.configData.getEnd_time());
-
-       }else {
-           calendar.add(Calendar.DAY_OF_MONTH, 1);
-
-           hashMap.put("time", Splash.configData.getStart_time() + " - " + Splash.configData.getEnd_time());
-
-       }
+        //storeOpenTime = Utils.formatDateTimeString(storeOpenTime,"hh:mm","HH");
+        storeCloseTime = Utils.formatDateTimeString(storeCloseTime,"hh:mm","HH");
+        int hr = calendar.get(Calendar.HOUR_OF_DAY);
+        if (storeCloseTime.isEmpty() && hr < 18) {
+            hr += 1;
+            hashMap.put("time", "" + hr + ":00 - " + Splash.configData.getEnd_time());
+        } else if (hr < Integer.parseInt(storeCloseTime) || hr < 18) {
+            hr += 1;
+            hashMap.put("time", "" + hr + ":00 - " + Splash.configData.getEnd_time());
+        } else {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            hashMap.put("time", Splash.configData.getStart_time() + " - " + Splash.configData.getEnd_time());
+        }
         hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));
         timeslot = hashMap.get("time");
 
@@ -726,7 +729,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                             bAdapter1.notifyDataSetChanged();
                         }
                     } else {
-                       // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         timeslot = "";
                         bAdapter1 = new Timing_Adapter(OrderSummary.this, dateDayModelClasses1, OrderSummary.this);
                         recyclerTimeSlot.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

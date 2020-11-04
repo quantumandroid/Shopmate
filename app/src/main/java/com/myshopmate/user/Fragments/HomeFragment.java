@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,7 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Float translationY = 100f;
     FloatingActionButton fabMain, fabOne, fabTwo, fabThree, fabfour;
     LinearLayout parent_lay;
-   // CardView Search_layout;
+    // CardView Search_layout;
     //    ScrollView scrollView;
     //NestedScrollView scrollView;
     RecyclerView rv_items;
@@ -173,6 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int tabCounter = 0;
 
     private ViewPager viewPagerStoresProducts;
+    private StoreProductsPagerAdapter storeProductsPagerAdapter;
     private RecyclerView rvProducts;
     private EditText etSearch;
     private TabLayout stores_products_tab_layout;
@@ -183,9 +187,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     List<NewCategoryVarientList> varientProducts = new ArrayList<>();
     DatabaseHandler dbcart;
 
-    public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
+    ImageView iv_search_clear, iv_search;
+
+    boolean isSearch;
+
+    public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView, boolean isSearch) {
         this.fragmentClickListner = fragmentClickListner;
         this.bottomNavigationView = bottomNavigationView;
+        this.isSearch = isSearch;
         // Required empty public constructor
     }
 
@@ -208,6 +217,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         viewPagerStoresProducts = view.findViewById(R.id.viewPagerStoresProducts);
         etSearch = view.findViewById(R.id.et_search);
         stores_products_tab_layout = view.findViewById(R.id.stores_products_tab_layout);
+        iv_search_clear = view.findViewById(R.id.iv_search_clear);
+        iv_search = view.findViewById(R.id.iv_search);
 
         // loc.setText(address+", "+city+", "+postalCode);
         rv_items = view.findViewById(R.id.rv_home);
@@ -242,6 +253,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerImages.setAdapter(bannerAdapter);
         // home_list.setLayoutManager(new GridLayoutManager(getContext(), 1, LinearLayoutManager.HORIZONTAL, false));
 
+
         stores_products_tab_layout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -258,34 +270,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-        viewPagerStoresProducts.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                stores_products_tab_layout.getTabAt(position).select();
-                etSearch.setText("");
-                if (position == 1) {
-                    etSearch.setHint("What are you looking for?");
-                    Utils.hideKeyboard(getActivity());
-                    etSearch.clearFocus();
-                } else {
-                    etSearch.setHint("Find stores");
-                }
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        setupViewPager();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        LinearLayoutManager linearLayoutManager =  new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rv_items.setLayoutManager(linearLayoutManager);
         rv_items.setItemAnimator(new DefaultItemAnimator());
         rv_items.setNestedScrollingEnabled(false);
@@ -300,14 +288,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 startActivityForResult(intent, 24);
 */
 
-               // String getid = store_modelList.get(position).getStore_id();
+                // String getid = store_modelList.get(position).getStore_id();
                 Intent intent = new Intent(getActivity(), CategoryPage.class);
                 intent.putExtra("cat_id", "47");
-               // intent.putExtra("title", store_modelList.get(position).getStore_name());
-               // intent.putExtra("store_id", store_modelList.get(position).getStore_id());
-                intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
-                intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
-              //  intent.putExtra("image", store_modelList.get(position).ge());
+                intent.putExtra("title", store_modelList.get(position).getStore_name());
+                intent.putExtra("store_id", store_modelList.get(position).getStore_id());
+               // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
+               // intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
+                //  intent.putExtra("image", store_modelList.get(position).ge());
                 startActivityForResult(intent, 24);
 
             }
@@ -318,7 +306,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         }));
 
-        LinearLayoutManager layoutManagerProducts =  new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        store_modelList = new ArrayList<>();
+        adapter1 = new HomeAdapter(store_modelList, getActivity());
+        rv_items.setAdapter(adapter1);
+
+        LinearLayoutManager layoutManagerProducts = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvProducts.setLayoutManager(layoutManagerProducts);
         rvProducts.setItemAnimator(new DefaultItemAnimator());
         rvProducts.setNestedScrollingEnabled(false);
@@ -330,7 +322,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerImages1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerImages1.setAdapter(bannerAdapter1);
 //        loc=view.findViewById(R.id.loc);
-       // Search_layout = view.findViewById(R.id.ll3);
+        // Search_layout = view.findViewById(R.id.ll3);
         /*scrollView = view.findViewById(R.id.scroll_view);
         scrollView.setSmoothScrollingEnabled(true);*/
         if (isOnline()) {
@@ -338,8 +330,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             //second_banner();
             //makeGetCategoryRequest();
             //topSelling();
-            selectStores();
-            product("","");
+            selectStores("");
+            product("", "");
         }
 
         etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -362,14 +354,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    product("",etSearch.getText().toString().trim());
+                if (actionId == EditorInfo.IME_ACTION_DONE && !etSearch.getText().toString().trim().isEmpty()) {
+                    if (viewPagerStoresProducts.getCurrentItem() == 1) {
+                        product("", etSearch.getText().toString().trim());
+                    } else {
+                        selectStores(etSearch.getText().toString().trim());
+                    }
                 }
                 return false;
             }
         });
 
-        /*etSearch.addTextChangedListener(new TextWatcher() {
+        etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -377,16 +373,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (etSearch.getText().length() > 2) {
-                    product("",etSearch.getText().toString().trim());
+                if (s.toString().isEmpty()) {
+                    iv_search_clear.setVisibility(View.INVISIBLE);
+                    iv_search.setVisibility(View.INVISIBLE);
+                    if (viewPagerStoresProducts.getCurrentItem() == 1) {
+                        product("", "");
+                    } else {
+                        selectStores("");
+                    }
+                } else {
+                    iv_search_clear.setVisibility(View.VISIBLE);
+                    iv_search.setVisibility(View.VISIBLE);
                 }
             }
-        });*/
+        });
 
 
         fabOne.setAlpha(0f);
@@ -404,6 +409,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         fabTwo.setOnClickListener(this);
         fabThree.setOnClickListener(this);
         fabfour.setOnClickListener(this);
+        iv_search_clear.setOnClickListener(this);
+        iv_search.setOnClickListener(this);
 
         closeMenu(false);
 
@@ -504,11 +511,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view, int position, String ccId, String id) {
                 varientProducts.clear();
-               // behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-               // TextView txt = view.findViewById(R.id.txt);
-               // txt.setText(id);
-               // LinearLayout cancl = view.findViewById(R.id.cancl);
-              //  cancl.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
+                // behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                // TextView txt = view.findViewById(R.id.txt);
+                // txt.setText(id);
+                // LinearLayout cancl = view.findViewById(R.id.cancl);
+                //  cancl.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
                 /*RecyclerView recyler_popup = view.findViewById(R.id.recyclerVarient);
                 recyler_popup.setLayoutManager(new LinearLayoutManager(context));*/
                 varientProducts.addAll(newCategoryDataModel.get(position).getVarients());
@@ -536,10 +543,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         };
 
 
-       // rvProducts.setLayoutManager(new GridLayoutManager(context, 1));
-        rvProducts.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL,false));
+        // rvProducts.setLayoutManager(new GridLayoutManager(context, 1));
+        rvProducts.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         categoryGridAdapter = new CategoryGridAdapter(newCategoryDataModel, context, categorygridquantity);
         rvProducts.setAdapter(categoryGridAdapter);
+
+        if (isSearch) {
+            etSearch.requestFocus();
+            Utils.showKeyboard(getActivity());
+        } else {
+            Utils.hideKeyboard(getActivity());
+        }
 
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 //            @Override
@@ -561,12 +575,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void product(String store_id, String search) {
+        try {
+            progressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("search_key",search);
+        params.put("search_key", search);
         /*params.put("store_id", store_id);
         params.put("cat_id", cat_id);
         params.put("lat", session_management.getLatPref());
@@ -579,7 +598,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("CheckApi", response.toString());
-
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 try {
                     String status = response.getString("status");
@@ -606,6 +629,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+
                 }
 
 
@@ -613,6 +637,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 error.printStackTrace();
                 VolleyLog.d("", "Error: " + error.getMessage());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -641,27 +670,37 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void selectStores() {
-        String sql = "select * from store";
+    private void selectStores(String search_key) {
+        try {
+            progressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String sql = "select * from store where store_name like '%" + search_key + "%'";
+        //String sql = "select * from store";
         SimpleRequest simpleRequest = new SimpleRequest(context);
         simpleRequest.get(sql, new OnResponseListener() {
             @Override
             public void onSuccess(com.volley.response.Response response) {
-
                 try {
-                    store_modelList = getStores(response.getString());
-                    for (Store store: store_modelList) {
-                        Utils.stores.put(store.getStore_id(),store);
-                    }
-                    adapter1 = new HomeAdapter(store_modelList,getActivity());
-                    rv_items.setAdapter(adapter1);
-                    adapter1.setSearch(etSearch);
-                    adapter1.notifyDataSetChanged();
-
-                    setupViewPager();
+                    progressDialog.dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
-                   // showAlert(e.getMessage());
+                }
+                try {
+                    store_modelList.clear();
+                    //store_modelList = getStores(response.getString());
+                    store_modelList.addAll(getStores(response.getString()));
+                    for (Store store : store_modelList) {
+                        Utils.stores.put(store.getStore_id(), store);
+                    }
+                   /*adapter1 = new HomeAdapter(store_modelList, getActivity());
+                    rv_items.setAdapter(adapter1);*/
+                   // adapter1.setSearch(etSearch);
+                    adapter1.notifyDataSetChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // showAlert(e.getMessage());
                 }
 
 
@@ -670,16 +709,46 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(String error) {
                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
     }
 
     private void setupViewPager() {
+        viewPagerStoresProducts.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                stores_products_tab_layout.getTabAt(position).select();
+                etSearch.setText("");
+                if (position == 1) {
+                    etSearch.setHint("What are you looking for?");
+                    Utils.hideKeyboard(getActivity());
+                    etSearch.clearFocus();
+                } else {
+                    etSearch.setHint("Find stores");
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         ArrayList<Integer> layouts = new ArrayList<>();
         layouts.add(R.id.rv_home);
         layouts.add(R.id.rv_home_products);
-        StoreProductsPagerAdapter storeProductsPagerAdapter = new StoreProductsPagerAdapter(context,layouts);
+        storeProductsPagerAdapter = new StoreProductsPagerAdapter(context, layouts);
         viewPagerStoresProducts.setAdapter(storeProductsPagerAdapter);
     }
 
@@ -697,7 +766,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 Gson gson = new Gson();
                 Store store = gson.fromJson(jo.toString(), Store.class);
-                if (storeInDelRange(store)){
+                if (storeInDelRange(store)) {
                     arrayList.add(store);
                 }
 
@@ -719,8 +788,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         double lng2 = Double.parseDouble(session_management.getLangPref());
 
         double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
-        distance = distance *2;
-       // Toast.makeText(contexts, "Distance : " + distance, Toast.LENGTH_LONG).show();
+        distance = distance * 2;
+        // Toast.makeText(contexts, "Distance : " + distance, Toast.LENGTH_LONG).show();
 
         return distance <= delRange;
 
@@ -1140,8 +1209,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_search_clear:
+                etSearch.setText("");
+                break;
+            case R.id.iv_search:
+                if (viewPagerStoresProducts.getCurrentItem() == 1) {
+                    product("", etSearch.getText().toString().trim());
+                } else {
+                    selectStores(etSearch.getText().toString().trim());
+                }
+                break;
             case R.id.fabMain:
-
                 Log.i(TAG, "onClick: fab main");
                 if (isMenuOpen) {
                     fabOne.setVisibility(View.GONE);
@@ -1285,82 +1363,82 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-   /* private void makeGetSliderRequest() {
-        imageString.clear();
-        String tag_json_obj = "json_category_req";
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("parent", "");
-        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.GET, BANNER, params,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("fghgh", response.toString());
-                        try {
-                            ArrayList<HashMap<String, String>> listarray = new ArrayList<>();
-                            JSONArray jsonArray = response.getJSONArray("data");
-                            if (jsonArray.length() <= 0) {
-                                recyclerImages.setVisibility(View.GONE);
-                            } else {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    HashMap<String, String> url_maps = new HashMap<String, String>();
-                                    url_maps.put("banner_name", jsonObject.getString("banner_name"));
-                                    url_maps.put("banner_id", jsonObject.getString("banner_id"));
-                                    url_maps.put("banner_image", BANN_IMG_URL + jsonObject.getString("banner_image"));
-                                    imageString.add(BANN_IMG_URL + jsonObject.getString("banner_image"));
-                                    listarray.add(url_maps);
-                                }
+    /* private void makeGetSliderRequest() {
+         imageString.clear();
+         String tag_json_obj = "json_category_req";
+         Map<String, String> params = new HashMap<String, String>();
+         params.put("parent", "");
+         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.GET, BANNER, params,
+                 new Response.Listener<JSONObject>() {
+                     @Override
+                     public void onResponse(JSONObject response) {
+                         Log.d("fghgh", response.toString());
+                         try {
+                             ArrayList<HashMap<String, String>> listarray = new ArrayList<>();
+                             JSONArray jsonArray = response.getJSONArray("data");
+                             if (jsonArray.length() <= 0) {
+                                 recyclerImages.setVisibility(View.GONE);
+                             } else {
+                                 for (int i = 0; i < jsonArray.length(); i++) {
+                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                     HashMap<String, String> url_maps = new HashMap<String, String>();
+                                     url_maps.put("banner_name", jsonObject.getString("banner_name"));
+                                     url_maps.put("banner_id", jsonObject.getString("banner_id"));
+                                     url_maps.put("banner_image", BANN_IMG_URL + jsonObject.getString("banner_image"));
+                                     imageString.add(BANN_IMG_URL + jsonObject.getString("banner_image"));
+                                     listarray.add(url_maps);
+                                 }
 
 
-                                bannerAdapter.notifyDataSetChanged();
+                                 bannerAdapter.notifyDataSetChanged();
 
 
-                                for (HashMap<String, String> name : listarray) {
-                                    CustomSlider textSliderView = new CustomSlider(getActivity());
-                                    textSliderView.description(name.get("")).image(name.get("banner_image")).setScaleType(BaseSliderView.ScaleType.Fit);
-                                    textSliderView.bundle(new Bundle());
-                                    textSliderView.getBundle().putString("extra", name.get("banner_name"));
-                                    textSliderView.getBundle().putString("extra", name.get("banner_id"));
-//                                home_list_banner.addSlider(textSliderView);
-                                    //   banner_slider.addSlider(textSliderView);
-                                    final String sub_cat = (String) textSliderView.getBundle().get("extra");
-                                    textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                                        @Override
-                                        public void onSliderClick(BaseSliderView slider) {
-                                            //   Toast.makeText(getActivity(), "" + sub_cat, Toast.LENGTH_SHORT).show();
-//                                        Bundle args = new Bundle();
-//                                        android.app.Fragment fm = new Product_fragment();
-//                                        args.putString("id", sub_cat);
-//                                        fm.setArguments(args);
-//                                        FragmentManager fragmentManager = getFragmentManager();
-//                                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
-//                                                .addToBackStack(null).commit();
-                                        }
-                                    });
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> param = new HashMap<>();
-                return param;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.getCache().clear();
-        requestQueue.add(jsonObjReq);
+                                 for (HashMap<String, String> name : listarray) {
+                                     CustomSlider textSliderView = new CustomSlider(getActivity());
+                                     textSliderView.description(name.get("")).image(name.get("banner_image")).setScaleType(BaseSliderView.ScaleType.Fit);
+                                     textSliderView.bundle(new Bundle());
+                                     textSliderView.getBundle().putString("extra", name.get("banner_name"));
+                                     textSliderView.getBundle().putString("extra", name.get("banner_id"));
+ //                                home_list_banner.addSlider(textSliderView);
+                                     //   banner_slider.addSlider(textSliderView);
+                                     final String sub_cat = (String) textSliderView.getBundle().get("extra");
+                                     textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                                         @Override
+                                         public void onSliderClick(BaseSliderView slider) {
+                                             //   Toast.makeText(getActivity(), "" + sub_cat, Toast.LENGTH_SHORT).show();
+ //                                        Bundle args = new Bundle();
+ //                                        android.app.Fragment fm = new Product_fragment();
+ //                                        args.putString("id", sub_cat);
+ //                                        fm.setArguments(args);
+ //                                        FragmentManager fragmentManager = getFragmentManager();
+ //                                        fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+ //                                                .addToBackStack(null).commit();
+                                         }
+                                     });
+                                 }
+                             }
+                         } catch (JSONException e) {
+                             e.printStackTrace();
+                         }
+                     }
+                 }, new Response.ErrorListener() {
+             @Override
+             public void onErrorResponse(VolleyError error) {
+             }
+         }) {
+             @Override
+             protected Map<String, String> getParams() throws AuthFailureError {
+                 HashMap<String, String> param = new HashMap<>();
+                 return param;
+             }
+         };
+         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+         requestQueue.getCache().clear();
+         requestQueue.add(jsonObjReq);
 
 
-    }
-*/
+     }
+ */
     private void second_banner() {
         imageString1.clear();
         String tag_json_obj = "json_category_req";
