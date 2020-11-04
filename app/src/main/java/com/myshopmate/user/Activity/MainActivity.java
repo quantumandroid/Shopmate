@@ -68,7 +68,6 @@ import com.myshopmate.user.Fragments.Edit_profile_fragment;
 import com.myshopmate.user.Fragments.HomeFragment;
 import com.myshopmate.user.Fragments.NotificationFragment;
 import com.myshopmate.user.Fragments.Reward_fragment;
-import com.myshopmate.user.Fragments.SearchFragment;
 import com.myshopmate.user.Fragments.Terms_and_Condition_fragment;
 import com.myshopmate.user.Fragments.Wallet_fragment;
 import com.myshopmate.user.ModelClass.ForgotEmailModel;
@@ -839,7 +838,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return true;
 
                 case R.id.navigation_notifications1:
-                    loadFragment(new SearchFragment());
+                    //loadFragment(new SearchFragment());
+
 //                    startActivity(new Intent(MainActivity.this, GameWebActivity.class));
                     return true;
 

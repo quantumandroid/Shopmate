@@ -17,10 +17,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,11 +30,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -127,7 +126,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Float translationY = 100f;
     FloatingActionButton fabMain, fabOne, fabTwo, fabThree, fabfour;
     LinearLayout parent_lay;
-    CardView Search_layout;
+   // CardView Search_layout;
     //    ScrollView scrollView;
     //NestedScrollView scrollView;
     RecyclerView rv_items;
@@ -331,7 +330,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerImages1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerImages1.setAdapter(bannerAdapter1);
 //        loc=view.findViewById(R.id.loc);
-        Search_layout = view.findViewById(R.id.ll3);
+       // Search_layout = view.findViewById(R.id.ll3);
         /*scrollView = view.findViewById(R.id.scroll_view);
         scrollView.setSmoothScrollingEnabled(true);*/
         if (isOnline()) {
@@ -340,7 +339,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             //makeGetCategoryRequest();
             //topSelling();
             selectStores();
-            product("");
+            product("","");
         }
 
         etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -349,14 +348,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (hasFocus) {
                     if (viewPagerStoresProducts.getCurrentItem() == 1) {
                         bottomNavigationView.setSelectedItemId(R.id.navigation_notifications1);
-                        SearchFragment trending_fragment = new SearchFragment();
+                        /*SearchFragment trending_fragment = new SearchFragment();
                         FragmentManager manager = getParentFragmentManager();
                         // FragmentManager m = getSu();
                         FragmentTransaction fragmentTransaction = manager.beginTransaction();
                         fragmentTransaction.replace(R.id.contentPanel, trending_fragment);
-                        fragmentTransaction.commit();
+                        fragmentTransaction.commit();*/
                     }
                 }
+            }
+        });
+
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    product("",etSearch.getText().toString().trim());
+                }
+                return false;
             }
         });
 
@@ -373,7 +382,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (etSearch.getText().length() > 2) {
+                    product("",etSearch.getText().toString().trim());
+                }
             }
         });*/
 
@@ -549,12 +560,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    private void product(String store_id) {
+    private void product(String store_id, String search) {
         newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
 
         Map<String, String> params = new HashMap<String, String>();
+        params.put("search_key",search);
         /*params.put("store_id", store_id);
         params.put("cat_id", cat_id);
         params.put("lat", session_management.getLatPref());
