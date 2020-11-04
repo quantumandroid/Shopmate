@@ -255,14 +255,14 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerStoresProducts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="6dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_margin="12dp"
                     android:scrollbars="none"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -270,8 +270,7 @@
                     android:id="@+id/rv_home_products"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_margin="12dp"
                     android:scrollbars="none"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
             </androidx.viewpager.widget.ViewPager>

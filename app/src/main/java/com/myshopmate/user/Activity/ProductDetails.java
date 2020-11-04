@@ -33,6 +33,7 @@ import com.myshopmate.user.ModelClass.NewCategoryVarientList;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -59,6 +60,7 @@ public class ProductDetails extends AppCompatActivity {
     private DatabaseHandler dbcart;
     private SharedPreferences preferences;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
+    private List<NewCategoryVarientList> variantProductsOther = new ArrayList<>();
     private Session_management session_management;
 
     private LinearLayout bottom_lay_total;
@@ -68,7 +70,10 @@ public class ProductDetails extends AppCompatActivity {
 
     private RecyclerView recyclerUnit;
     private String stock = "0";
-    private Adapter_popup selectCityAdapter;
+    private Adapter_popup selectCityAdapter, pVariantsAdapter;
+    private TextView tv_store_name;
+    private RecyclerView rvPVariants;
+    private TextView lbl_other_stores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class ProductDetails extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
+
+        tv_store_name = findViewById(R.id.tv_store_name);
 
         product_id = getIntent().getStringExtra("sId");
         store_id = getIntent().getStringExtra("store_id");
@@ -118,6 +125,8 @@ public class ProductDetails extends AppCompatActivity {
         txt_unit = findViewById(R.id.txt_unit);
         txt_qty = findViewById(R.id.txt_qty);
         recyclerUnit = findViewById(R.id.recyclerUnit);
+        rvPVariants = findViewById(R.id.rvPVariants);
+        lbl_other_stores = findViewById(R.id.lbl_other_stores);
 
         bottom_lay_total = findViewById(R.id.bottom_lay_total);
         total_price = findViewById(R.id.total_price);
@@ -126,6 +135,8 @@ public class ProductDetails extends AppCompatActivity {
 
         recyclerUnit.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerUnit.setHasFixedSize(true);
+        rvPVariants.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        rvPVariants.setHasFixedSize(true);
 
         back.setOnClickListener(v -> finish());
         prodDesc.setText(discription12);
@@ -140,9 +151,22 @@ public class ProductDetails extends AppCompatActivity {
 
        // selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
         ArrayList<NewCategoryVarientList> variants = new ArrayList<>();
+        ArrayList<NewCategoryVarientList> variantsOther = new ArrayList<>();
         for (NewCategoryVarientList variant : newCategoryVarientLists) {
             if (variant.getVarient_id().equals(varient_id)) continue;
-            variants.add(variant);
+            //variants.add(variant);
+            if (store_id.equals(variant.getStore_id())) {
+                variants.add(variant);
+            } else {
+                variantsOther.add(variant);
+            }
+        }
+        if (variantsOther.size() > 0) {
+            rvPVariants.setVisibility(View.VISIBLE);
+            lbl_other_stores.setVisibility(View.VISIBLE);
+        } else {
+            lbl_other_stores.setVisibility(View.GONE);
+            rvPVariants.setVisibility(View.GONE);
         }
 
         selectCityAdapter = new Adapter_popup(ProductDetails.this, variants, varientName, position -> {
@@ -164,8 +188,30 @@ public class ProductDetails extends AppCompatActivity {
                     txtQuan.setText("" + 0);
                 }
             }
-        }, bottom_lay_total, total_price, total_count);
+        }, bottom_lay_total, total_price, total_count, false);
         recyclerUnit.setAdapter(selectCityAdapter);
+
+        pVariantsAdapter = new Adapter_popup(ProductDetails.this, variantsOther, varientName, position -> {
+            if (varient_id.equalsIgnoreCase(varientProducts.get(position).getVarient_id())) {
+                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
+                if (qtyd > 0) {
+                    btn_Add.setVisibility(View.GONE);
+                    ll_addQuan.setVisibility(View.VISIBLE);
+                    txtQuan.setText("" + qtyd);
+                    double priced = Double.parseDouble(price12);
+                    double mrpd = Double.parseDouble(mrp12);
+                    ProdPrice.setText("" + (priced * qtyd));
+                    prodMrp.setText("" + (mrpd * qtyd));
+                } else {
+                    btn_Add.setVisibility(View.VISIBLE);
+                    ll_addQuan.setVisibility(View.GONE);
+                    ProdPrice.setText(price12);
+                    prodMrp.setText(mrp12);
+                    txtQuan.setText("" + 0);
+                }
+            }
+        }, bottom_lay_total, total_price, total_count, true);
+        rvPVariants.setAdapter(pVariantsAdapter);
 
         Varient_product(product_id);
 
@@ -241,6 +287,12 @@ public class ProductDetails extends AppCompatActivity {
         }
 
         /////////////////////////////////
+
+        try {
+            tv_store_name.setText(Utils.stores.get(store_id).getStore_name());
+        } catch (Exception e) {
+            tv_store_name.setText("");
+        }
 
     }
 
@@ -426,10 +478,29 @@ public class ProductDetails extends AppCompatActivity {
                     }.getType();
                     List<NewCategoryVarientList> listorl = gson.fromJson(jsonObject.getString("data"), listType);
                     varientProducts.addAll(listorl);
+                    /*if (store_id == null || store_id.isEmpty()) {
+                        rvPVariants.setVisibility(View.GONE);
+                        varientProducts.addAll(listorl);
+                    } else {
+                        for (NewCategoryVarientList variant : listorl) {
+                            if (variant.getStore_id() != null && store_id.equals(variant.getStore_id())) {
+                                varientProducts.add(variant);
+                            } else {
+                                variantProductsOther.add(variant);
+                            }
+                        }
+                        if (variantProductsOther.size() > 0) {
+                            rvPVariants.setVisibility(View.VISIBLE);
+                            lbl_other_stores.setVisibility(View.VISIBLE);
+                        } else {
+                            lbl_other_stores.setVisibility(View.GONE);
+                            rvPVariants.setVisibility(View.GONE);
+                        }
+                    }*/
 
-                    selectCityAdapter.notifyDataSetChanged();
 
-//                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    //                        JSONArray jsonArray = jsonObject.getJSONArray("data");
 //                        for (int i = 0; i < jsonArray.length(); i++) {
 //
 //                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -461,16 +532,19 @@ public class ProductDetails extends AppCompatActivity {
 
                 } else {
                     varientProducts.clear();
-                    selectCityAdapter.notifyDataSetChanged();
+                   // variantProductsOther.clear();
                     //JSONObject resultObj = jsonObject.getJSONObject("results");
 
                 }
+                selectCityAdapter.notifyDataSetChanged();
+                pVariantsAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }, error -> {
             selectCityAdapter.notifyDataSetChanged();
+            pVariantsAdapter.notifyDataSetChanged();
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

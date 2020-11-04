@@ -20,6 +20,7 @@ import com.myshopmate.user.R;
 import com.myshopmate.user.util.Communicator;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -39,8 +40,9 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
     private LinearLayout bottom_lay_total;
     private TextView total_price;
     private TextView total_count;
+    private boolean isOtherStore;
 
-    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator, LinearLayout bottom_lay_total, TextView total_price, TextView total_count) {
+    public Adapter_popup(Context context, List<NewCategoryVarientList> varientProductList, String id, Communicator communicator, LinearLayout bottom_lay_total, TextView total_price, TextView total_count, boolean isOtherStore) {
         this.varientProductList = varientProductList;
         this.id = id;
         this.dbcart = new DatabaseHandler(context);
@@ -50,6 +52,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         this.bottom_lay_total = bottom_lay_total;
         this.total_price = total_price;
         this.total_count = total_count;
+        this.isOtherStore = isOtherStore;
     }
 
     @NonNull
@@ -149,7 +152,16 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 //
 //        holder.varientdiscount.setText("Rs" + " " + savingprice +" " + "off");
 
-
+        if (isOtherStore) {
+            holder.tvStore.setVisibility(View.VISIBLE);
+            try {
+                holder.tvStore.setText(Utils.stores.get(selectAreaModel.getStore_id()).getStore_name());
+            } catch (Exception e) {
+                holder.tvStore.setText("");
+            }
+        } else {
+            holder.tvStore.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -230,13 +242,14 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
     public class holder extends RecyclerView.ViewHolder {
 
         public TextView prodNAme, pDescrptn, pQuan, pPrice, pdiscountOff, pMrp, minus, plus, txtQuan, txt_unitvalue;
-        TextView unit, unitvalue, mprice, mrp;
+        TextView unit, unitvalue, mprice, mrp, tvStore;
         ImageView prodImage;
         LinearLayout btn_Add, ll_addQuan, outofs_in, outofs;
 
         public holder(@NonNull View itemView) {
             super(itemView);
 
+            tvStore = itemView.findViewById(R.id.tv_store);
             unit = itemView.findViewById(R.id.unit);
             unitvalue = itemView.findViewById(R.id.unitvalue);
 

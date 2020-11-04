@@ -42,20 +42,21 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_store_name"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="left"
                     android:layout_marginRight="10dp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:gravity="center|left"
-
-                    android:text=""
+                    android:gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/orange"
                     android:textSize="22sp"/>
 <!--                android:text="Home"-->
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="end"
                     android:orientation="vertical">
@@ -289,13 +290,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height=".5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/lightGrey"/>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -331,6 +325,13 @@
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height=".5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/lightGrey"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerUnit"
                         android:layout_marginTop="5dp"
@@ -339,12 +340,30 @@
                         android:layout_height="wrap_content">
 
                     </androidx.recyclerview.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/lbl_other_stores"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:text="Products from other stores"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvPVariants"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
                 </LinearLayout>
-                <View
+                <!--<View
                     android:layout_width="match_parent"
                     android:layout_height=".5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@color/lightGrey"/>
+                    android:background="@color/lightGrey"/>-->
 
                 <LinearLayout
                     android:visibility="gone"

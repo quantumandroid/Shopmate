@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.Activity.ProductDetails;
 import com.myshopmate.user.Categorygridquantity;
 import com.myshopmate.user.ModelClass.NewCategoryDataModel;
@@ -24,6 +23,7 @@ import com.myshopmate.user.ModelClass.varient_product;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -330,6 +330,11 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             updateMultiply(position, 1);
         });
 
+        /*try {
+            holder.tvStore.setText(Utils.stores.get(cc.getStore_id()).getStore_name());
+        } catch (Exception e) {
+            holder.tvStore.setText("");
+        }*/
 
     }
 
@@ -481,6 +486,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         int minteger = 0;
         RelativeLayout rlQuan;
         String catId, catName;
+       // TextView tvStore;
 
         public MyViewHolder(View view) {
             super(view);
@@ -535,6 +541,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 //              minus.setOnClickListener(this);
 //               plus.setOnClickListener(this);
 
+           // tvStore = view.findViewById(R.id.tv_store);
 
         }
 

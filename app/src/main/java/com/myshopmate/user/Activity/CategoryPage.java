@@ -123,7 +123,7 @@ public class CategoryPage extends AppCompatActivity {
                     if (varientProducts.get(position1).getVarient_id().equalsIgnoreCase(newCategoryDataModel.get(position).getVarient_id())) {
                         adapter.notifyItemChanged(position);
                     }
-                }, null, null, null);
+                }, null, null, null, false);
                 recyler_popup.setAdapter(selectCityAdapter);
 
 //                Varient_product(ccId, recyler_popup, id);
