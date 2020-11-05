@@ -89,7 +89,6 @@ import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
-import com.myshopmate.user.util.DistanceCalculator;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.Utils;
@@ -322,14 +321,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Search_layout = view.findViewById(R.id.ll3);
         /*scrollView = view.findViewById(R.id.scroll_view);
         scrollView.setSmoothScrollingEnabled(true);*/
-        if (isOnline()) {
-            //makeGetSliderRequest();
-            //second_banner();
-            //makeGetCategoryRequest();
-            //topSelling();
-            selectStores("");
-            product("", "");
-        }
+
 
         /*etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -566,22 +558,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void product(String store_id, String search) {
+        newCategoryDataModel.clear();
+        categoryGridAdapter.notifyDataSetChanged();
+        if (!isUserInDelRange()) {
+            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            return;
+        }
         try {
             progressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("search_key", search);
-        params.put("user_lat", session_management.getLatPref());
+        /*params.put("user_lat", session_management.getLatPref());
         params.put("user_lng", session_management.getLangPref());
         params.put("centre_lat", Splash.configData.getCentre_lat());
         params.put("centre_lng", Splash.configData.getCentre_lng());
-        params.put("delivery_range", Splash.configData.getDelivery_range());
+        params.put("delivery_range", Splash.configData.getDelivery_range());*/
         /*params.put("store_id", store_id);
         params.put("cat_id", cat_id);
         params.put("lat", session_management.getLatPref());
@@ -671,6 +668,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void selectStores(String search_key) {
+        store_modelList.clear();
+        adapter1.notifyDataSetChanged();
+        if (!isUserInDelRange()) {
+            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            return;
+        }
         try {
             progressDialog.show();
         } catch (Exception e) {
@@ -688,7 +691,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 try {
-                    store_modelList.clear();
+                   // store_modelList.clear();
                     //store_modelList = getStores(response.getString());
                     store_modelList.addAll(getStores(response.getString()));
                     for (Store store : store_modelList) {
@@ -708,6 +711,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(String error) {
+                store_modelList.clear();
                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
                 try {
                     progressDialog.dismiss();
@@ -766,9 +770,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 Gson gson = new Gson();
                 Store store = gson.fromJson(jo.toString(), Store.class);
-                if (storeInDelRange(store)) {
+                arrayList.add(store);
+                /*if (isUserInDelRange()) {
                     arrayList.add(store);
-                }
+                }*/
 
             }
         } catch (JSONException var8) {
@@ -778,8 +783,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return arrayList;
     }
 
-    private boolean storeInDelRange(Store store) {
-        DistanceCalculator distanceCalculator = new DistanceCalculator();
+    private boolean isUserInDelRange() {
+       // DistanceCalculator distanceCalculator = new DistanceCalculator();
         //double delRange = Double.valueOf(store.getDel_range());
         double delRange = Double.parseDouble(Splash.configData.getDelivery_range());
 
@@ -1567,6 +1572,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isOnline()) {
+            //makeGetSliderRequest();
+            //second_banner();
+            //makeGetCategoryRequest();
+            //topSelling();
+            selectStores("");
+            product("", "");
+        }
     }
 
     @Override
