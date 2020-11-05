@@ -17,10 +17,14 @@
 <!--        android:icon="@drawable/ic_game_v1"-->
 <!--        android:title="Game" />-->
 
-        <item
+        <!--<item
             android:id="@+id/navigation_notifications1"
             android:icon="@drawable/ic_loupe"
-            android:title="Search" />
+            android:title="Search" />-->
+    <item
+        android:id="@+id/navigation_my_orders"
+        android:icon="@drawable/order"
+        android:title="My Orders" />
 
     <item
         android:id="@+id/navigation_notifications12"

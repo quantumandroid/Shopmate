@@ -189,12 +189,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     ImageView iv_search_clear, iv_search;
 
-    boolean isSearch;
-
-    public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView, boolean isSearch) {
+    public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
         this.bottomNavigationView = bottomNavigationView;
-        this.isSearch = isSearch;
         // Required empty public constructor
     }
 
@@ -334,22 +331,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             product("", "");
         }
 
-        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     if (viewPagerStoresProducts.getCurrentItem() == 1) {
-                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications1);
-                        /*SearchFragment trending_fragment = new SearchFragment();
+                       // bottomNavigationView.setSelectedItemId(R.id.navigation_notifications1);
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_my_orders);
+                        *//*SearchFragment trending_fragment = new SearchFragment();
                         FragmentManager manager = getParentFragmentManager();
                         // FragmentManager m = getSu();
                         FragmentTransaction fragmentTransaction = manager.beginTransaction();
                         fragmentTransaction.replace(R.id.contentPanel, trending_fragment);
-                        fragmentTransaction.commit();*/
+                        fragmentTransaction.commit();*//*
                     }
                 }
             }
-        });
+        });*/
 
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -548,13 +546,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         categoryGridAdapter = new CategoryGridAdapter(newCategoryDataModel, context, categorygridquantity);
         rvProducts.setAdapter(categoryGridAdapter);
 
-        if (isSearch) {
-            etSearch.requestFocus();
-            Utils.showKeyboard(getActivity());
-        } else {
-            Utils.hideKeyboard(getActivity());
-        }
-
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 //            @Override
 //            public void onTabSelected(TabLayout.Tab tab) {
@@ -668,6 +659,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
 
+    }
+
+    public void setSearch() {
+        etSearch.requestFocus();
     }
 
     private void selectStores(String search_key) {

@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Location location;
     private boolean enterInFirst = false;
     private FragmentClickListner fragmentClickListner;
+    private Fragment homeFragment;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -159,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             getWindow().setStatusBarColor(Color.BLACK);
         }
+
+        homeFragment = new HomeFragment(fragmentClickListner,navigation);
 
 
         sessionManagement = new Session_management(MainActivity.this);
@@ -229,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getAddress();
                 navigation.setSelectedItemId(R.id.navigation_home);
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                loadFragment(homeFragment);
             }
         };
 
@@ -413,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // checkConnection();
 
         //loadFragment(new HomeeeFragment(fragmentClickListner));
-        loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+        loadFragment(homeFragment);
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -446,9 +449,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onClick(View view) {
                                // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
-                                HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
+                               // HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.contentPanel, fm)
+                                fragmentManager.beginTransaction().replace(R.id.contentPanel, homeFragment)
                                         .addToBackStack(null).commit();
                             }
                         });
@@ -817,11 +820,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initComponent() {
+
         navigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                    // loadFragment(new HomeeeFragment(fragmentClickListner));
-                    loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                    loadFragment(homeFragment);
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
 //                        FragmentTransaction transaction = manager.beginTransaction();
@@ -837,10 +841,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        transaction2.commit();
                     return true;
 
-                case R.id.navigation_notifications1:
+                /*case R.id.navigation_notifications1:
                     //loadFragment(new SearchFragment());
                     //startActivity(new Intent(MainActivity.this, GameWebActivity.class));
-                    loadFragment(new HomeFragment(fragmentClickListner,navigation,true));
+                   // loadFragment(new HomeFragment(fragmentClickListner,navigation));
+                    try {
+                        *//*loadFragment(homeFragment);
+                        ((HomeFragment)homeFragment).setSearch();*//*
+                        Fragment fr = getSupportFragmentManager().findFragmentById(R.id.contentPanel);
+                        final String fm_name = fr.getClass().getSimpleName();
+                        if (!fm_name.contentEquals("HomeFragment")) {
+                            //navigation.setSelectedItemId(R.id.navigation_home);
+                            loadFragment(homeFragment);
+                        }
+                        ((HomeFragment)homeFragment).setSearch();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        navigation.setSelectedItemId(R.id.navigation_home);
+                    }
+                    return true;*/
+
+                case R.id.navigation_my_orders:
+                    if (sessionManagement.isLoggedIn()) {
+                        Intent intent = new Intent(MainActivity.this, My_Order_activity.class);
+                        startActivityForResult(intent, 4);
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
                     return true;
 
 
@@ -1053,7 +1081,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 getAddress();
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
                                     //loadFragment(new HomeeeFragment(fragmentClickListner));
-                                    loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                                    loadFragment(homeFragment);
                                 }
                             }
                         } else {
@@ -1061,7 +1089,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (addres.getText().toString().equalsIgnoreCase("")) {
                                 if (navigation.getSelectedItemId() == R.id.navigation_home) {
                                     //loadFragment(new HomeeeFragment(fragmentClickListner));
-                                    loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                                    loadFragment(homeFragment);
                                 }
                                 getAddress();
                             }
@@ -1071,7 +1099,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         location = locations;
                         if (navigation.getSelectedItemId() == R.id.navigation_home) {
                             //loadFragment(new HomeeeFragment(fragmentClickListner));
-                            loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                            loadFragment(homeFragment);
                         }
                         getAddress();
                     }
@@ -1251,7 +1279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getAddress();
             if (navigation.getSelectedItemId() == R.id.navigation_home) {
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(new HomeFragment(fragmentClickListner,navigation,false));
+                loadFragment(homeFragment);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -1323,6 +1351,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigation.setSelectedItemId(R.id.navigation_home);
     }
 
     @Override
