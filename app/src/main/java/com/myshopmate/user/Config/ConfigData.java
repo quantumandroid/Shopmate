@@ -6,6 +6,10 @@ public class ConfigData {
     private String end_time = "20:00";
     private String app_update = "0";
     private int app_version = 1;
+    // Centre Location: Maruti Mandir
+    private String centre_lat = "16.990785";
+    private String centre_lng = "73.311970";
+    private String delivery_range = "5"; // 5 km
 
     public String getPhone_number() {
         return phone_number;
@@ -55,5 +59,29 @@ public class ConfigData {
 
     public void setApp_version(int app_version) {
         this.app_version = app_version;
+    }
+
+    public String getCentre_lat() {
+        return centre_lat;
+    }
+
+    public void setCentre_lat(String centre_lat) {
+        this.centre_lat = centre_lat;
+    }
+
+    public String getCentre_lng() {
+        return centre_lng;
+    }
+
+    public void setCentre_lng(String centre_lng) {
+        this.centre_lng = centre_lng;
+    }
+
+    public String getDelivery_range() {
+        return delivery_range;
+    }
+
+    public void setDelivery_range(String delivery_range) {
+        this.delivery_range = delivery_range;
     }
 }

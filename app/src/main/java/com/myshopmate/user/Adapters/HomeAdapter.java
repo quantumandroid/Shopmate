@@ -135,8 +135,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         double lat2 = Double.parseDouble(session_management.getLatPref());
         double lng2 = Double.parseDouble(session_management.getLangPref());
 
-        double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
-        distance *= 2;
+       // double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
+        double distance = Utils.calculateMapDistance(lat1, lng1, lat2, lng2);
+        // distance *= 2;
 
         return decimalFormat.format(distance);
     }

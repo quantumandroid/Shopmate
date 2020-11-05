@@ -34,7 +34,6 @@ import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.myshopmate.user.ModelClass.Store;
@@ -639,14 +638,10 @@ public class Utils {
         return date_str;
     }
 
-    public double calculateMapDistance(LatLng StartP, LatLng EndP) {
+    public static double calculateMapDistance(double lat1, double lng1,double lat2, double lng2) {
         int radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
         double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
+        double dLon = Math.toRadians(lng2 - lng1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
                 + Math.cos(Math.toRadians(lat1))
                 * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)

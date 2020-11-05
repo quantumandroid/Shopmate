@@ -577,6 +577,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("search_key", search);
+        params.put("user_lat", session_management.getLatPref());
+        params.put("user_lng", session_management.getLangPref());
+        params.put("centre_lat", Splash.configData.getCentre_lat());
+        params.put("centre_lng", Splash.configData.getCentre_lng());
+        params.put("delivery_range", Splash.configData.getDelivery_range());
         /*params.put("store_id", store_id);
         params.put("cat_id", cat_id);
         params.put("lat", session_management.getLatPref());
@@ -775,15 +780,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private boolean storeInDelRange(Store store) {
         DistanceCalculator distanceCalculator = new DistanceCalculator();
-        double delRange = Double.valueOf(store.getDel_range());
+        //double delRange = Double.valueOf(store.getDel_range());
+        double delRange = Double.parseDouble(Splash.configData.getDelivery_range());
 
-        double lat1 = Double.parseDouble(store.getLat());
-        double lng1 = Double.parseDouble(store.getLng());
+        /*double lat1 = Double.parseDouble(store.getLat());
+        double lng1 = Double.parseDouble(store.getLng());*/
+        double lat1 = Double.parseDouble(Splash.configData.getCentre_lat());
+        double lng1 = Double.parseDouble(Splash.configData.getCentre_lng());
         double lat2 = Double.parseDouble(session_management.getLatPref());
         double lng2 = Double.parseDouble(session_management.getLangPref());
 
-        double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
-        distance = distance * 2;
+        //double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
+        double distance = Utils.calculateMapDistance(lat1, lng1, lat2, lng2);
+       // distance = distance * 2;
         // Toast.makeText(contexts, "Distance : " + distance, Toast.LENGTH_LONG).show();
 
         return distance <= delRange;
