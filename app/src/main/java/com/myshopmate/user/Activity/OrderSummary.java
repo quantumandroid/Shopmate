@@ -36,6 +36,7 @@ import com.myshopmate.user.ModelClass.DeliveryModel;
 import com.myshopmate.user.ModelClass.MyCalendarData;
 import com.myshopmate.user.ModelClass.MyCalendarModel;
 import com.myshopmate.user.ModelClass.OrderStatus;
+import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.ModelClass.timing_model;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.AppController;
@@ -507,10 +508,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String, String> param = new HashMap<>();
-                    HashMap<String, String> map = getDelTime(
-                            Utils.stores.get(orderStatus1.getStoreId()).getOpening_time(),
-                            Utils.stores.get(orderStatus1.getStoreId()).getClosing_time()
-                    );
+                    HashMap<String, String> map = getDelTime(Utils.stores.get(orderStatus1.getStoreId()));
                     param.put("time_slot", map.get("time"));
                     param.put("user_id", user_id);
                     param.put("delivery_date", map.get("date"));
@@ -649,22 +647,29 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }
     }
 
-    private HashMap<String, String> getDelTime(String storeOpenTime, String storeCloseTime) {
+    private HashMap<String, String> getDelTime(Store store) {
         HashMap<String, String> hashMap = new HashMap<>();
         final Calendar calendar = Calendar.getInstance();
 
-        //storeOpenTime = Utils.formatDateTimeString(storeOpenTime,"hh:mm","HH");
-        storeCloseTime = Utils.formatDateTimeString(storeCloseTime,"hh:mm","HH");
-        int hr = calendar.get(Calendar.HOUR_OF_DAY);
-        if (storeCloseTime.isEmpty() && hr < 18) {
-            hr += 1;
-            hashMap.put("time", "" + hr + ":00 - " + Splash.configData.getEnd_time());
-        } else if (hr < Integer.parseInt(storeCloseTime) || hr < 18) {
-            hr += 1;
-            hashMap.put("time", "" + hr + ":00 - " + Splash.configData.getEnd_time());
-        } else {
+        //String storeOpenTime = Utils.formatDateTimeString(store.getOpening_time(),"hh:mm","HH");
+        String storeCloseTime = Utils.formatDateTimeString(store.getClosing_time(), "hh:mm", "HH");
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int cDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        while (cDay == store.getOff_day()) {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
-            hashMap.put("time", Splash.configData.getStart_time() + " - " + Splash.configData.getEnd_time());
+            cDay = calendar.get(Calendar.DAY_OF_WEEK);
+        }
+        if (cDay == currentDay) {
+            if (currentHour < Splash.configData.getOrder_before_time() && currentHour < Integer.parseInt(storeCloseTime)) {
+                currentHour += 1;
+                hashMap.put("time", "" + currentHour + ":00 - " + Splash.configData.getEnd_time());
+            } else {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime);
+            }
+        } else {
+            hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime);
         }
         hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));
         timeslot = hashMap.get("time");

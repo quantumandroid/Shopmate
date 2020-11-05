@@ -19,6 +19,7 @@ public class Store {
     private String opening_time = "";
     private String closing_time = "";
     private String store_image_url = "";
+    private int off_day;
 
     public Store() {
     }
@@ -178,5 +179,13 @@ public class Store {
 
     public void setStore_image_url(String store_image_url) {
         this.store_image_url = store_image_url;
+    }
+
+    public int getOff_day() {
+        return off_day;
+    }
+
+    public void setOff_day(int off_day) {
+        this.off_day = off_day;
     }
 }

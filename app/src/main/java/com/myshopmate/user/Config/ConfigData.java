@@ -4,6 +4,7 @@ public class ConfigData {
     private String phone_number = "";
     private String start_time = "09:00";
     private String end_time = "20:00";
+    private int order_before_time = 18; // hours
     private String app_update = "0";
     private int app_version = 1;
     // Centre Location: Maruti Mandir
@@ -83,5 +84,13 @@ public class ConfigData {
 
     public void setDelivery_range(String delivery_range) {
         this.delivery_range = delivery_range;
+    }
+
+    public int getOrder_before_time() {
+        return order_before_time;
+    }
+
+    public void setOrder_before_time(int order_before_time) {
+        this.order_before_time = order_before_time;
     }
 }
