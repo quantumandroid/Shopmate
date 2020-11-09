@@ -49,7 +49,11 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
+import com.shreyaspatil.easyupipayment.EasyUpiPayment;
+import com.shreyaspatil.easyupipayment.exception.AppNotFoundException;
+import com.shreyaspatil.easyupipayment.listener.PaymentStatusListener;
+import com.shreyaspatil.easyupipayment.model.PaymentApp;
+import com.shreyaspatil.easyupipayment.model.TransactionDetails;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,9 +67,10 @@ import java.util.Objects;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class PaymentDetails extends AppCompatActivity implements PaymentResultListener {
+//public class PaymentDetails extends AppCompatActivity implements PaymentResultListener {
+public class PaymentDetails extends AppCompatActivity implements PaymentStatusListener {
 
-    LinearLayout llwallet, llpromocode, llcards, llcod;
+    LinearLayout llwallet, llpromocode, llcards, llcod, llupi;
 
 
     String Prefrence_TotalAmmount;
@@ -78,7 +83,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
     SharedPreferences sharedPreferences12;
     SharedPreferences.Editor editor12;
     String code, cart_id;
-    TextView twallet, tcod, tcards, tpromocode;
+    TextView twallet, tcod, tcards, tpromocode,tvUPI;
     LinearLayout backcart;
     int status = 0;
     String payment_method;
@@ -88,7 +93,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
     String wallet_status = "no";
     String total_amt;
     TextView payble_ammount, my_wallet_ammount, used_wallet_ammount, used_coupon_ammount, order_ammount;
-    CheckBox rb_Store, rb_Cod, rb_card;
+    CheckBox rb_Store, rb_Cod, rb_card, use_upi;
     CheckBox checkBox_Wallet;
     CheckBox checkBox_coupon;
     CheckBox use_razorpay;
@@ -133,6 +138,8 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
     private ArrayList<OrderStatus> orderStatuses;
     private int orderCount;
 
+    EasyUpiPayment easyUpiPayment;
+
 
     @Override
     public void onBackPressed() {
@@ -157,6 +164,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         coupon_apply_t = findViewById(R.id.coupon_apply_t);
         llpromocode = findViewById(R.id.llpromocode);
         llcod = findViewById(R.id.llcod);
+        llupi = findViewById(R.id.llupi);
         llcards = findViewById(R.id.llcards);
 
         dropdown = findViewById(R.id.dropdown);
@@ -177,12 +185,14 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         reset_text = findViewById(R.id.reset_text);
         twallet = findViewById(R.id.walletext);
         tcod = findViewById(R.id.txtcod);
+        tvUPI = findViewById(R.id.tvUPI);
         tcards = findViewById(R.id.txtcards);
         tpromocode = findViewById(R.id.txtpromo);
         checkBox_Wallet = findViewById(R.id.use_wallet);
         rb_Store = findViewById(R.id.use_store_pickup);
         rb_Cod = findViewById(R.id.use_COD);
         rb_card = findViewById(R.id.use_card);
+        use_upi = findViewById(R.id.use_upi);
         checkBox_coupon = findViewById(R.id.use_coupon);
         et_Coupon = findViewById(R.id.et_coupon_code);
         Promo_code_layout = findViewById(R.id.prommocode_layout);
@@ -197,6 +207,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         checkBox_Wallet.setClickable(false);
         rb_card.setClickable(false);
         rb_Cod.setClickable(false);
+        use_upi.setClickable(false);
         checkBox_coupon.setClickable(false);
         use_paypal.setClickable(false);
         use_razorpay.setClickable(false);
@@ -205,6 +216,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             checkBox_Wallet.setClickable(false);
             rb_card.setClickable(false);
             rb_Cod.setClickable(false);
+            use_upi.setClickable(false);
             checkBox_coupon.setClickable(false);
             use_razorpay.setClickable(false);
             use_paypal.setClickable(false);
@@ -227,9 +239,15 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             checkBox_coupon.setChecked(false);
             llpromocode.setBackgroundResource(R.drawable.border_rounded1);
             tpromocode.setTextColor(getResources().getColor(R.color.black));
+
             rb_Cod.setChecked(false);
             llcod.setBackgroundResource(R.drawable.border_rounded1);
             tcod.setTextColor(getResources().getColor(R.color.black));
+
+            use_upi.setChecked(false);
+            llupi.setBackgroundResource(R.drawable.border_rounded1);
+            tvUPI.setTextColor(getResources().getColor(R.color.black));
+
             rb_card.setChecked(false);
             llcards.setBackgroundResource(R.drawable.border_rounded1);
             tcards.setTextColor(getResources().getColor(R.color.black));
@@ -239,6 +257,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             Promo_code_layout.setClickable(true);
             llcards.setClickable(true);
             llcod.setClickable(true);
+            llupi.setClickable(true);
             llpromocode.setClickable(true);
             razor_pay.setClickable(true);
             paypal_lay.setClickable(true);
@@ -342,14 +361,40 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             @Override
             public void onClick(View v) {
 
+                progressDialog.show();
+                wallet_status = "no";
                 if (rb_Cod.isChecked()) {
-                    progressDialog.show();
-                    wallet_status = "no";
                     payment_method = "COD";
                     makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
+                } else if (use_upi.isChecked()){
+                    payment_method = "UPI";
+                    double totalAmount = Double.parseDouble(total_amount);
+                    long currentTimeMilli = System.currentTimeMillis();
+                    EasyUpiPayment.Builder builder = new EasyUpiPayment.Builder(PaymentDetails.this)
+                            .with(PaymentApp.ALL)
+                            .setPayeeVpa(Splash.configData.getPayeeVPA())
+                            .setPayeeName(Splash.configData.getPayeeName())
+                            .setTransactionId("STID"+currentTimeMilli)
+                            .setTransactionRefId("STID"+currentTimeMilli)
+                            .setDescription(Splash.configData.getEasyUPITransactionDescription())
+                            .setAmount(String.valueOf(totalAmount));
+                    try {
+                        easyUpiPayment = builder.build();
+                        easyUpiPayment.setPaymentStatusListener(PaymentDetails.this);
+                        easyUpiPayment.startPayment();
+                    } catch (AppNotFoundException e) {
+                        e.printStackTrace();
+                        try {
+                            progressDialog.dismiss();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        Toast.makeText(PaymentDetails.this, "UPI app not found", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(PaymentDetails.this, "Please select payment method.", Toast.LENGTH_SHORT).show();
                 }
+               // makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
 
               /*
                 if (rb_Cod.isChecked() && checkBox_Wallet.isChecked()) {
@@ -596,39 +641,102 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             @Override
             public void onClick(View v) {
                 if (total_amount.equalsIgnoreCase("0") || total_amount.equalsIgnoreCase("0.0") || total_amount.equalsIgnoreCase("")) {
-
+                    Toast.makeText(PaymentDetails.this, "Something went wrong.", Toast.LENGTH_LONG).show();
                 } else {
                     if (!rb_Cod.isChecked()) {
                         rb_Cod.setChecked(true);
                         rb_card.setChecked(false);
+                        use_upi.setChecked(false);
                         llcod.setBackgroundResource(R.drawable.gradientbg);
                         tcod.setTextColor(getResources().getColor(R.color.white));
+                        tvUPI.setTextColor(getResources().getColor(R.color.black));
                         llcards.setBackgroundResource(R.drawable.border_rounded1);
+                        llupi.setBackgroundResource(R.drawable.border_rounded1);
                         tcards.setTextColor(getResources().getColor(R.color.black));
-                        if (checkBox_Wallet.isChecked()) {
+                        /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                         } else {
                             wallet_status = "no";
-                        }
+                        }*/
+                        wallet_status = "no";
                         payment_method = "COD";
                     } else {
                         rb_Cod.setChecked(false);
                         rb_card.setChecked(false);
+                        use_upi.setChecked(true);
                         llcod.setBackgroundResource(R.drawable.border_rounded1);
+                        llupi.setBackgroundResource(R.drawable.gradientbg);
                         tcod.setTextColor(getResources().getColor(R.color.black));
-                        if (checkBox_Wallet.isChecked()) {
+                        tvUPI.setTextColor(getResources().getColor(R.color.white));
+                        wallet_status = "no";
+                        payment_method = "UPI";
+                        /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                             payment_method = "wallet";
                         } else {
                             wallet_status = "no";
                             payment_method = "";
-                        }
+                        }*/
                     }
                 }
 
                 checkBox_Wallet.setClickable(false);
                 rb_card.setClickable(false);
                 rb_Cod.setClickable(false);
+                use_upi.setClickable(false);
+                checkBox_coupon.setClickable(false);
+                use_razorpay.setClickable(false);
+                use_paypal.setClickable(false);
+            }
+        });
+
+        llupi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (total_amount.equalsIgnoreCase("0") || total_amount.equalsIgnoreCase("0.0") || total_amount.equalsIgnoreCase("")) {
+                    Toast.makeText(PaymentDetails.this, "Something went wrong.", Toast.LENGTH_LONG).show();
+                } else {
+                    if (use_upi.isChecked()) {
+                        rb_Cod.setChecked(true);
+                        rb_card.setChecked(false);
+                        use_upi.setChecked(false);
+                        llcod.setBackgroundResource(R.drawable.gradientbg);
+                        tcod.setTextColor(getResources().getColor(R.color.white));
+                        tvUPI.setTextColor(getResources().getColor(R.color.black));
+                       // llcards.setBackgroundResource(R.drawable.border_rounded1);
+                        llupi.setBackgroundResource(R.drawable.border_rounded1);
+                       // tcards.setTextColor(getResources().getColor(R.color.black));
+                        /*if (checkBox_Wallet.isChecked()) {
+                            wallet_status = "yes";
+                        } else {
+                            wallet_status = "no";
+                        }*/
+                        wallet_status = "no";
+                        payment_method = "COD";
+                    } else {
+                        rb_Cod.setChecked(false);
+                        rb_card.setChecked(false);
+                        use_upi.setChecked(true);
+                        llcod.setBackgroundResource(R.drawable.border_rounded1);
+                        llupi.setBackgroundResource(R.drawable.gradientbg);
+                        tcod.setTextColor(getResources().getColor(R.color.black));
+                        tvUPI.setTextColor(getResources().getColor(R.color.white));
+                        wallet_status = "no";
+                        payment_method = "UPI";
+                        /*if (checkBox_Wallet.isChecked()) {
+                            wallet_status = "yes";
+                            payment_method = "wallet";
+                        } else {
+                            wallet_status = "no";
+                            payment_method = "";
+                        }*/
+                    }
+                }
+
+                checkBox_Wallet.setClickable(false);
+                rb_card.setClickable(false);
+                rb_Cod.setClickable(false);
+                use_upi.setClickable(false);
                 checkBox_coupon.setClickable(false);
                 use_razorpay.setClickable(false);
                 use_paypal.setClickable(false);
@@ -780,6 +888,8 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         rb_Cod.setChecked(true);
         llcod.setBackgroundResource(R.drawable.gradientbg);
         tcod.setTextColor(getResources().getColor(R.color.white));
+        llupi.setBackgroundResource(R.drawable.border_rounded1);
+        tvUPI.setTextColor(getResources().getColor(R.color.black));
     }
 
     private void startPaypal(String name, String total_amount, String email, String mobile) {
@@ -1400,7 +1510,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
     }
 
 
-    @Override
+    /*@Override
     public void onPaymentSuccess(String s) {
         makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
     }
@@ -1410,7 +1520,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         progressDialog.dismiss();
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -1486,4 +1596,104 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
             }
         }
     }
+
+    //EasyUPIPayment callbacks
+    final String paymentTAG = "EasyUPI";
+
+    @Override
+    public void onTransactionCancelled() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Transaction failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTransactionCompleted(TransactionDetails transactionDetails) {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switch (transactionDetails.getTransactionStatus()) {
+            case SUCCESS:
+                makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
+                break;
+            case FAILURE:
+                Toast.makeText(this, "Transaction failed", Toast.LENGTH_LONG).show();
+                break;
+            case SUBMITTED:
+                Log.d(paymentTAG,"Transaction submitted");
+                break;
+        }
+    }
+    /*@Override
+    public void onTransactionCompleted(TransactionDetails transactionDetails) {
+        Log.d(paymentTAG,transactionDetails.getStatus());
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onTransactionSuccess() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
+    }
+
+    @Override
+    public void onTransactionSubmitted() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d(paymentTAG,"Transaction submitted");
+    }
+
+    @Override
+    public void onTransactionFailed() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Transaction failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTransactionCancelled() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Transaction cancelled", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onAppNotFound() {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "UPI app not found", Toast.LENGTH_LONG).show();
+    }*/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (easyUpiPayment != null) {
+            easyUpiPayment.removePaymentStatusListener();
+        }
+    }
+
 }

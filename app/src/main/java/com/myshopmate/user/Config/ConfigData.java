@@ -14,9 +14,12 @@ public class ConfigData {
     private double delivery_charges_primary = 15.00;
     private double delivery_charges_secondary = 25.00;
     private double min_cart_value = 10000;
-    private String min_order_value = "100";
+    private String min_order_value = "1";
     private String max_order_value = "5000";
     private String pivot_delivery_range = "5";
+    private String payeeVPA = "";
+    private String payeeName = "";
+    private String easyUPITransactionDescription = "";
 
     public String getPhone_number() {
         return phone_number;
@@ -146,5 +149,29 @@ public class ConfigData {
 
     public void setMax_order_value(String max_order_value) {
         this.max_order_value = max_order_value;
+    }
+
+    public String getPayeeVPA() {
+        return payeeVPA;
+    }
+
+    public void setPayeeVPA(String payeeVPA) {
+        this.payeeVPA = payeeVPA;
+    }
+
+    public String getPayeeName() {
+        return payeeName;
+    }
+
+    public void setPayeeName(String payeeName) {
+        this.payeeName = payeeName;
+    }
+
+    public String getEasyUPITransactionDescription() {
+        return easyUPITransactionDescription;
+    }
+
+    public void setEasyUPITransactionDescription(String easyUPITransactionDescription) {
+        this.easyUPITransactionDescription = easyUPITransactionDescription;
     }
 }

@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height=".5dp"
         android:layout_below="@id/ll1"
-        android:background="@color/lightGrey"></View>
+        android:background="@color/lightGrey"/>
 
     <LinearLayout
         android:id="@+id/ll2"
@@ -212,11 +212,8 @@
 
                                 <CheckBox
                                     android:id="@+id/use_COD"
-                                    android:clickable="false"
                                     android:focusable="false"
-                                    android:contextClickable="false"
-                                    android:longClickable="false"
-                                    android:linksClickable="false"
+                                    android:clickable="false"
                                     android:gravity="center"
                                     style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="wrap_content"
@@ -228,7 +225,57 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
+                            android:visibility="gone"
                             android:background="@color/lightGrey" />
+
+                        <LinearLayout
+                            android:id="@+id/llupi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/border_rounded1"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:padding="10dp">
+
+                                <TextView
+                                    android:id="@+id/tvUPI"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:text="Use UPI"
+                                    android:textColor="@color/black"
+                                    tools:ignore="HardcodedText" />
+
+
+                                <CheckBox
+                                    android:id="@+id/use_store_pickup_"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    style="@android:style/Widget.CompoundButton.RadioButton"
+                                    android:layout_marginRight="4dp"
+                                    android:text="Store"
+                                    android:clickable="false"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                                <CheckBox
+                                    android:id="@+id/use_upi"
+                                    android:focusable="false"
+                                    android:clickable="false"
+                                    android:gravity="center"
+                                    style="@android:style/Widget.CompoundButton.RadioButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    tools:ignore="UnusedAttribute" />
+                            </RelativeLayout>
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/llcards"
@@ -326,6 +373,7 @@
                                 android:paddingBottom="10dp"
                                 android:layout_width="match_parent"
                                 android:orientation="horizontal"
+                                android:visibility="gone"
                                 android:layout_height="wrap_content">
                                 <TextView
                                     android:id="@+id/paypal_txt"
