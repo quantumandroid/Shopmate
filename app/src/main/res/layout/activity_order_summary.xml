@@ -580,7 +580,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center|left"
                     android:padding="5dp"
-                    android:text="Delivery Fees"
+                    android:text="Total Delivery Fees"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 

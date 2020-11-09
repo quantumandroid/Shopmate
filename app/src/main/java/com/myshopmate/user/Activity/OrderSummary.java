@@ -93,6 +93,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     private String pable_amont;
     private String todaydate;
     private List<MyCalendarModel> calendarModelList = new ArrayList<>();
+    private double totalDeliveryCharges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +190,22 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         ruppy.setText(session_management.getCurrency());
         List<String> storeIds = db.getStoreIds();
         carts = new ArrayList<>();
+        totalDeliveryCharges = 0;
+        double userStoreDistance, deliveryCharges, totalAmt;
         for (String storeId : storeIds) {
             JSONArray products = new JSONArray();
+            Store store = Utils.stores.get(storeId);
+            userStoreDistance = deliveryCharges = totalAmt = 0;
+            try {
+                userStoreDistance = Utils.calculateMapDistance(
+                        Double.parseDouble(session_management.getLangPref()),
+                        Double.parseDouble(session_management.getLangPref()),
+                        Double.parseDouble(store.getLat()),
+                        Double.parseDouble(store.getLng())
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try {
                 JSONArray object = new JSONArray(db.getCartAll(storeId));
                 for (int i = 0; i < object.length(); i++) {
@@ -207,14 +222,29 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
                     int qty = Integer.parseInt(object1.getString("qty"));
                     double price = Double.parseDouble(object1.getString("price"));
-                    product_object.put("total_price", price * qty);
+                    totalAmt += price * qty;
+                    product_object.put("total_price",price * qty);
+
                     Log.d("sdf", product_object.toString());
                     products.put(product_object);
                 }
+                if (totalAmt < Splash.configData.getMin_cart_value()) {
+                    try {
+                        if (userStoreDistance <= Double.parseDouble(Splash.configData.getPivot_delivery_range())) {
+                            deliveryCharges = Splash.configData.getDelivery_charges_primary();
+                        } else {
+                            deliveryCharges = Splash.configData.getDelivery_charges_secondary();
+                        }
+                    } catch (Exception e) {
+                        deliveryCharges = Splash.configData.getDelivery_charges_primary();
+                    }
+                }
+                products.getJSONObject(0).put("delivery_charges", deliveryCharges);
                 carts.add(products);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            totalDeliveryCharges += deliveryCharges;
         }
 
 
@@ -224,6 +254,8 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         recycler_itemsList.setLayoutManager(new LinearLayoutManager(OrderSummary.this, LinearLayoutManager.VERTICAL, false));
         recycler_itemsList.setAdapter(basketAdapter);
 //        adapter.notifyDataSetChanged();
+        minVAlue = Splash.configData.getMin_order_value();
+        maxValue = Splash.configData.getMax_order_value();
         showAdreesUrl();
 //        Toast.makeText(getApplicationContext(), "Please select a time slot on available date!", Toast.LENGTH_LONG).show();
         btn_Contine.setOnClickListener(new View.OnClickListener() {
@@ -270,6 +302,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             @Override
             public void onResponse(String response) {
                 Log.d("adresssHoww", response);
+                progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
@@ -335,7 +368,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                progressDialog.dismiss();
+                progressDialog.dismiss();
                 updateData();
                 // makeGetAddressRequests(todaydatee);
             }
@@ -472,7 +505,6 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                             orderStatus1.setCartId(cart_id);
                             orderStatuses.add(orderStatus1);
 
-
                             if (orderCount == carts.size()) {
                                 goToPayment(orderStatuses);
                             }
@@ -515,6 +547,13 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                     param.put("order_array", array.toString());
                     //param.put("store_id", session_management.getStoreId());
                     param.put("store_id", orderStatus1.getStoreId());
+                    double deliveryCharges = Splash.configData.getDelivery_charges_primary();
+                    try {
+                        deliveryCharges = Math.round(Double.parseDouble(array.getJSONObject(0).getString("delivery_charges")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    param.put("delivery_charges", String.valueOf(deliveryCharges));
                     return param;
                 }
             };
@@ -685,7 +724,9 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         txtTotalItems.setText("" + db.getCartCount());
         totalItms.setText("" + db.getCartCount() + " " + " Items");
 
-        deliverychrge();
+        // deliverychrge();
+        DeliveryCharge.setText(String.valueOf(Math.round(totalDeliveryCharges)));
+        txt_totalPrice.setText(String.valueOf(Integer.parseInt(String.valueOf(total_atm)) + Math.round(totalDeliveryCharges)));
 
     }
 
@@ -821,19 +862,17 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
                         String del_charge = jsonObject.getString("del_charge");
 
-                        if (Integer.parseInt(pPrice.getText().toString()) >= Integer.parseInt(min_cart_value)) {
+                        /*if (Integer.parseInt(pPrice.getText().toString()) >= Integer.parseInt(min_cart_value)) {
                             DeliveryCharge.setText("0");
                             txt_totalPrice.setText(String.valueOf(total_atm));
                         } else {
                             DeliveryCharge.setText(del_charge);
                             txt_totalPrice.setText(String.valueOf(Integer.parseInt(String.valueOf(total_atm)) + Integer.parseInt(del_charge)));
 
-                        }
-                    } else {
-
-//                        Toast.makeText(OrderSummary.this, ""+message, Toast.LENGTH_SHORT).show();
-
-                    }
+                        }*/
+                    } /*else {
+                        Toast.makeText(OrderSummary.this, ""+message, Toast.LENGTH_SHORT).show();
+                    }*/
 
                 } catch (JSONException e) {
                     e.printStackTrace();

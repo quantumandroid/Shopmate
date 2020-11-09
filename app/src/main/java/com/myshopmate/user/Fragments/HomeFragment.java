@@ -630,6 +630,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                newCategoryDataModel.clear();
+                categoryGridAdapter.notifyDataSetChanged();
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
@@ -668,8 +670,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void selectStores(String search_key) {
-        store_modelList.clear();
-        adapter1.notifyDataSetChanged();
+        //store_modelList.clear();
+        //adapter1.notifyDataSetChanged();
         if (!isUserInDelRange()) {
             Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
             return;
@@ -691,7 +693,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
                 try {
-                   // store_modelList.clear();
+                    store_modelList.clear();
                     //store_modelList = getStores(response.getString());
                     store_modelList.addAll(getStores(response.getString()));
                     for (Store store : store_modelList) {
@@ -712,6 +714,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(String error) {
                 store_modelList.clear();
+                adapter1.notifyDataSetChanged();
                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
                 try {
                     progressDialog.dismiss();
@@ -784,23 +787,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean isUserInDelRange() {
-       // DistanceCalculator distanceCalculator = new DistanceCalculator();
-        //double delRange = Double.valueOf(store.getDel_range());
-        double delRange = Double.parseDouble(Splash.configData.getDelivery_range());
+        try {
+            // DistanceCalculator distanceCalculator = new DistanceCalculator();
+            //double delRange = Double.valueOf(store.getDel_range());
+            double delRange = Double.parseDouble(Splash.configData.getDelivery_range());
 
         /*double lat1 = Double.parseDouble(store.getLat());
         double lng1 = Double.parseDouble(store.getLng());*/
-        double lat1 = Double.parseDouble(Splash.configData.getCentre_lat());
-        double lng1 = Double.parseDouble(Splash.configData.getCentre_lng());
-        double lat2 = Double.parseDouble(session_management.getLatPref());
-        double lng2 = Double.parseDouble(session_management.getLangPref());
+            double lat1 = Double.parseDouble(Splash.configData.getCentre_lat());
+            double lng1 = Double.parseDouble(Splash.configData.getCentre_lng());
+            double lat2 = Double.parseDouble(session_management.getLatPref());
+            double lng2 = Double.parseDouble(session_management.getLangPref());
 
-        //double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
-        double distance = Utils.calculateMapDistance(lat1, lng1, lat2, lng2);
-       // distance = distance * 2;
-        // Toast.makeText(contexts, "Distance : " + distance, Toast.LENGTH_LONG).show();
+            //double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
+            double distance = Utils.calculateMapDistance(lat1, lng1, lat2, lng2);
+            // distance = distance * 2;
+            // Toast.makeText(contexts, "Distance : " + distance, Toast.LENGTH_LONG).show();
 
-        return distance <= delRange;
+            return distance <= delRange;
+        } catch (NumberFormatException e) {
+            return false;
+        }
 
     }
 

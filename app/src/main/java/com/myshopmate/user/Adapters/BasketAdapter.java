@@ -63,10 +63,18 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ProductHol
                 totalPrice += basket.getJSONObject(i).getDouble("total_price");
             }
         } catch (JSONException e) {
-            totalPrice = 0;
             e.printStackTrace();
         }
         holder.tvTotalPrice.setText("₹" + totalPrice);
+
+        double deliveryCharges = 0;
+        try {
+            deliveryCharges = basket.getJSONObject(0).getDouble("delivery_charges");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        holder.tvDelCharges.setText("₹" + deliveryCharges);
+
         ImageAdapterData imageAdapterData = new ImageAdapterData(activity, basket);
         holder.rvBasket.setAdapter(imageAdapterData);
         holder.rvBasket.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
@@ -78,7 +86,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ProductHol
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
-        TextView tvStoreName, tvTotalPrice, tvItemsCount;
+        TextView tvStoreName, tvTotalPrice, tvItemsCount, tvDelCharges;
         RecyclerView rvBasket;
 
         public ProductHolder(View view) {
@@ -87,7 +95,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ProductHol
             rvBasket = view.findViewById(R.id.rv_basket);
             tvTotalPrice = view.findViewById(R.id.tv_total_price);
             tvItemsCount = view.findViewById(R.id.tv_items_count);
-
+            tvDelCharges = view.findViewById(R.id.tv_delivery_charges);
         }
     }
 

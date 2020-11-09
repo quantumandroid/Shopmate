@@ -11,6 +11,12 @@ public class ConfigData {
     private String centre_lat = "16.990785";
     private String centre_lng = "73.311970";
     private String delivery_range = "5"; // 5 km
+    private double delivery_charges_primary = 15.00;
+    private double delivery_charges_secondary = 25.00;
+    private double min_cart_value = 10000;
+    private String min_order_value = "100";
+    private String max_order_value = "5000";
+    private String pivot_delivery_range = "5";
 
     public String getPhone_number() {
         return phone_number;
@@ -92,5 +98,53 @@ public class ConfigData {
 
     public void setOrder_before_time(int order_before_time) {
         this.order_before_time = order_before_time;
+    }
+
+    public double getDelivery_charges_primary() {
+        return delivery_charges_primary;
+    }
+
+    public void setDelivery_charges_primary(double delivery_charges_primary) {
+        this.delivery_charges_primary = delivery_charges_primary;
+    }
+
+    public double getDelivery_charges_secondary() {
+        return delivery_charges_secondary;
+    }
+
+    public void setDelivery_charges_secondary(double delivery_charges_secondary) {
+        this.delivery_charges_secondary = delivery_charges_secondary;
+    }
+
+    public double getMin_cart_value() {
+        return min_cart_value;
+    }
+
+    public void setMin_cart_value(double min_cart_value) {
+        this.min_cart_value = min_cart_value;
+    }
+
+    public String getPivot_delivery_range() {
+        return pivot_delivery_range;
+    }
+
+    public void setPivot_delivery_range(String pivot_delivery_range) {
+        this.pivot_delivery_range = pivot_delivery_range;
+    }
+
+    public String getMin_order_value() {
+        return min_order_value;
+    }
+
+    public void setMin_order_value(String min_order_value) {
+        this.min_order_value = min_order_value;
+    }
+
+    public String getMax_order_value() {
+        return max_order_value;
+    }
+
+    public void setMax_order_value(String max_order_value) {
+        this.max_order_value = max_order_value;
     }
 }
