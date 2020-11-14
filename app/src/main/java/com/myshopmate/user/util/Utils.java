@@ -682,6 +682,12 @@ public class Utils {
         }
         return formattedDate;
     }
+
+    public static boolean isOnline(Activity context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }
 
 

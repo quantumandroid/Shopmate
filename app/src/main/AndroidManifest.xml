@@ -25,7 +25,7 @@
     <uses-permission android:name="com.tecmanic.gogrocer.permission.MAPS_RECEIVE" />
 
     <application
-        android:name="com.myshopmate.user.util.AppController"
+        android:name=".util.AppController"
         android:allowBackup="true"
         android:icon="@drawable/splashicon"
         android:label="@string/app_name"
@@ -34,10 +34,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.myshopmate.user.Activity.FlagActivity"
+        <activity android:name=".upipay.UPIPayActivity"></activity>
+        <activity
+            android:name=".Activity.FlagActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name="com.myshopmate.user.Activity.GameWebActivity"
+            android:name=".Activity.GameWebActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
         <uses-library
@@ -45,7 +47,7 @@
             android:required="false" />
 
         <activity
-            android:name="com.myshopmate.user.Activity.AddressLocationActivity"
+            android:name=".Activity.AddressLocationActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" /> <!-- <activity -->
         <!-- android:name="com.midtrans.sdk.uikit.activities.PaymentMethodsActivity" -->
         <!-- android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" /> -->
@@ -56,48 +58,50 @@
         <!-- android:name="com.midtrans.sdk.uikit.views.creditcard.register.CardRegistrationActivity" -->
         <!-- android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" /> -->
         <activity
-            android:name="com.myshopmate.user.Activity.DealActivity"
+            android:name=".Activity.DealActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name="com.myshopmate.user.Activity.MainActivityAgain" />
-        <activity android:name="com.myshopmate.user.Activity.add_address" />
-        <activity android:name="com.myshopmate.user.Activity.ViewAll_Whatsnew" />
-        <activity android:name="com.myshopmate.user.Activity.ViewAll_Deals" />
-        <activity android:name="com.myshopmate.user.Activity.ViewAll_Recent" />
+        <activity android:name=".Activity.MainActivityAgain" />
+        <activity android:name=".Activity.add_address" />
+        <activity android:name=".Activity.ViewAll_Whatsnew" />
+        <activity android:name=".Activity.ViewAll_Deals" />
+        <activity android:name=".Activity.ViewAll_Recent" />
         <activity
-            android:name="com.myshopmate.user.Activity.ViewAll_TopDeals"
+            android:name=".Activity.ViewAll_TopDeals"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name="com.myshopmate.user.Activity.Forget_otp_verify" />
-        <activity android:name="com.myshopmate.user.Activity.About_us"
-            android:parentActivityName=".Activity.MainActivity"/>
-        <activity android:name="com.myshopmate.user.Activity.Coupen" />
+        <activity android:name=".Activity.Forget_otp_verify" />
         <activity
-            android:name="com.myshopmate.user.Activity.Myorderdetails"
+            android:name=".Activity.About_us"
+            android:parentActivityName=".Activity.MainActivity" />
+        <activity android:name=".Activity.Coupen" />
+        <activity
+            android:name=".Activity.Myorderdetails"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
-        <activity android:name="com.myshopmate.user.Activity.Cancel_Order"
-            android:parentActivityName=".Activity.My_Order_activity"/>
         <activity
-            android:name="com.myshopmate.user.Activity.ForgotPassOtp"
+            android:name=".Activity.Cancel_Order"
+            android:parentActivityName=".Activity.My_Order_activity" />
+        <activity
+            android:name=".Activity.ForgotPassOtp"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.My_Order_activity"
+            android:name=".Activity.My_Order_activity"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.NewPassword"
+            android:name=".Activity.NewPassword"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.RechargeWallet"
+            android:name=".Activity.RechargeWallet"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.ForgotPAssword"
+            android:name=".Activity.ForgotPAssword"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.SelectAddress"
+            android:name=".Activity.SelectAddress"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.OrderSummary"
+            android:name=".Activity.OrderSummary"
             android:theme="@style/StatusBarOrange" />
 
-        <service android:name="com.myshopmate.user.Activity.MyFirebaseMessagingService">
+        <service android:name=".Activity.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -117,7 +121,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.myshopmate.user.Activity.PaymentGatWay"
+            android:name=".Activity.PaymentGatWay"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
   <activity
@@ -127,9 +131,9 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="LockedOrientationActivity" />
         -->
-        <activity android:name="com.myshopmate.user.Activity.Paytm" />
+        <activity android:name=".Activity.Paytm" />
         <activity
-            android:name="com.myshopmate.user.Activity.MainActivity"
+            android:name=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!--
@@ -141,7 +145,7 @@
             -->
         </activity>
         <activity
-            android:name="com.myshopmate.user.Activity.AddAddress"
+            android:name=".Activity.AddAddress"
             android:theme="@style/StatusBarOrange" /> <!-- <activity -->
         <!-- android:name=".Fragments.CartFragment" -->
         <!-- android:theme="@style/StatusBarGreen" /> -->
@@ -152,38 +156,38 @@
         <!-- android:name=".Fragments.CategoryFragment" -->
         <!-- android:theme="@style/StatusBarGreen" /> -->
         <activity
-            android:name="com.myshopmate.user.Activity.ChooseLocatioin"
+            android:name=".Activity.ChooseLocatioin"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.OtpVerification"
+            android:name=".Activity.OtpVerification"
             android:theme="@style/StatusBarGreen" />
         <activity
-            android:name="com.myshopmate.user.Activity.OrderSuccessful"
+            android:name=".Activity.OrderSuccessful"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.EmptyCart"
+            android:name=".Activity.EmptyCart"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.PaymentDetails"
+            android:name=".Activity.PaymentDetails"
             android:theme="@style/StatusBarOrange"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.myshopmate.user.Activity.InternetConnection"
+            android:name=".Activity.InternetConnection"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.CategoryPage"
+            android:name=".Activity.CategoryPage"
             android:theme="@style/StatusBarGreen" />
         <activity
-            android:name="com.myshopmate.user.Activity.ProductDetails"
+            android:name=".Activity.ProductDetails"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.SignUpActivity"
+            android:name=".Activity.SignUpActivity"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:theme="@style/StatusBarOrange" />
         <activity
-            android:name="com.myshopmate.user.Activity.Splash"
+            android:name=".Activity.Splash"
             android:theme="@style/StatusBarWhite">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

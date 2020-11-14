@@ -705,10 +705,10 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                 hashMap.put("time", "" + currentHour + ":00 - " + Splash.configData.getEnd_time());
             } else {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime);
+                hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime + ":00");
             }
         } else {
-            hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime);
+            hashMap.put("time", Splash.configData.getStart_time() + " - " + storeCloseTime + ":00");
         }
         hashMap.put("date", getCurrentTime(calendar.getTime(), "yyyy-MM-dd"));
         timeslot = hashMap.get("time");

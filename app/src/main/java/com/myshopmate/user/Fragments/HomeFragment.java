@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -1373,12 +1372,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
     /* private void makeGetSliderRequest() {
          imageString.clear();
          String tag_json_obj = "json_category_req";
@@ -1584,7 +1577,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        if (isOnline()) {
+        if (Utils.isOnline(getActivity())) {
             //makeGetSliderRequest();
             //second_banner();
             //makeGetCategoryRequest();

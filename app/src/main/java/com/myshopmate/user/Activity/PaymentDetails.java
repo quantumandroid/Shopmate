@@ -39,6 +39,9 @@ import com.myshopmate.user.Config.SharedPref;
 import com.myshopmate.user.ModelClass.CoupunModel;
 import com.myshopmate.user.ModelClass.OrderStatus;
 import com.myshopmate.user.R;
+import com.myshopmate.user.upipay.TransactionDetails;
+import com.myshopmate.user.upipay.UPIPay;
+import com.myshopmate.user.upipay.UPIPayListener;
 import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
@@ -49,12 +52,6 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.razorpay.Checkout;
-import com.shreyaspatil.easyupipayment.EasyUpiPayment;
-import com.shreyaspatil.easyupipayment.exception.AppNotFoundException;
-import com.shreyaspatil.easyupipayment.listener.PaymentStatusListener;
-import com.shreyaspatil.easyupipayment.model.PaymentApp;
-import com.shreyaspatil.easyupipayment.model.TransactionDetails;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,12 +64,10 @@ import java.util.Objects;
 
 import static com.android.volley.VolleyLog.TAG;
 
-//public class PaymentDetails extends AppCompatActivity implements PaymentResultListener {
-public class PaymentDetails extends AppCompatActivity implements PaymentStatusListener {
+public class PaymentDetails extends AppCompatActivity implements UPIPayListener {
 
     LinearLayout llwallet, llpromocode, llcards, llcod, llupi;
-
-
+    final String paymentTAG = "UPI payment";
     String Prefrence_TotalAmmount;
     String lat, lng;
     String getwallet;
@@ -83,7 +78,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
     SharedPreferences sharedPreferences12;
     SharedPreferences.Editor editor12;
     String code, cart_id;
-    TextView twallet, tcod, tcards, tpromocode,tvUPI;
+    TextView twallet, tcod, tcards, tpromocode, tvUPI;
     LinearLayout backcart;
     int status = 0;
     String payment_method;
@@ -137,9 +132,6 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
 
     private ArrayList<OrderStatus> orderStatuses;
     private int orderCount;
-
-    EasyUpiPayment easyUpiPayment;
-
 
     @Override
     public void onBackPressed() {
@@ -231,7 +223,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
             wallet_amount = getwallet;
             walletbalnce = 0;
             my_wallet_ammount.setText(sessionManagement.getCurrency() + "" + wallet_amount);
-            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
             my_wallet_ammount.setTextColor(getResources().getColor(R.color.black));
             checkBox_Wallet.setChecked(false);
             llwallet.setBackgroundResource(R.drawable.border_rounded1);
@@ -291,7 +283,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
 
         orderStatuses = (ArrayList<OrderStatus>) getIntent().getSerializableExtra("order_statuses");
 
-        order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+        order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
 
         if (sessionManagement.getPayPal().equalsIgnoreCase("1") && sessionManagement.getRazorPay().equalsIgnoreCase("1")) {
             paypal = true;
@@ -366,35 +358,32 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                 if (rb_Cod.isChecked()) {
                     payment_method = "COD";
                     makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
-                } else if (use_upi.isChecked()){
+                } else if (use_upi.isChecked()) {
                     payment_method = "UPI";
-                    double totalAmount = Double.parseDouble(total_amount);
-                    long currentTimeMilli = System.currentTimeMillis();
-                    EasyUpiPayment.Builder builder = new EasyUpiPayment.Builder(PaymentDetails.this)
-                            .with(PaymentApp.ALL)
-                            .setPayeeVpa(Splash.configData.getPayeeVPA())
-                            .setPayeeName(Splash.configData.getPayeeName())
-                            .setTransactionId("STID"+currentTimeMilli)
-                            .setTransactionRefId("STID"+currentTimeMilli)
-                            .setDescription(Splash.configData.getEasyUPITransactionDescription())
-                            .setAmount(String.valueOf(totalAmount));
                     try {
-                        easyUpiPayment = builder.build();
-                        easyUpiPayment.setPaymentStatusListener(PaymentDetails.this);
-                        easyUpiPayment.startPayment();
-                    } catch (AppNotFoundException e) {
-                        e.printStackTrace();
+                        long currentMillis = System.currentTimeMillis();
+                        TransactionDetails transactionDetails = new TransactionDetails();
+                        transactionDetails.setPayeeUPIAddress(Splash.configData.getPayeeVPA());
+                        transactionDetails.setPayeeName(Splash.configData.getPayeeName());
+                        transactionDetails.setTransactionID("SRID" + currentMillis);
+                        transactionDetails.setTransactionRefID("SRID" + currentMillis);
+                        transactionDetails.setMerchantCode(Splash.configData.getUpi_merchant_code());
+                        transactionDetails.setDescription(Splash.configData.getUpiTransactionDescription());
+                        transactionDetails.setAmount(total_amount);
+                        UPIPay upiPay = new UPIPay(PaymentDetails.this,transactionDetails,PaymentDetails.this);
+                        upiPay.startPayment();
+                    } catch (Exception e) {
                         try {
                             progressDialog.dismiss();
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
+                        } catch (Exception ignore) {
                         }
-                        Toast.makeText(PaymentDetails.this, "UPI app not found", Toast.LENGTH_LONG).show();
+                        Log.e(paymentTAG, e.getMessage());
+                        Toast.makeText(PaymentDetails.this, "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(PaymentDetails.this, "Please select payment method.", Toast.LENGTH_SHORT).show();
                 }
-               // makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
+                // makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
 
               /*
                 if (rb_Cod.isChecked() && checkBox_Wallet.isChecked()) {
@@ -703,9 +692,9 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                         llcod.setBackgroundResource(R.drawable.gradientbg);
                         tcod.setTextColor(getResources().getColor(R.color.white));
                         tvUPI.setTextColor(getResources().getColor(R.color.black));
-                       // llcards.setBackgroundResource(R.drawable.border_rounded1);
+                        // llcards.setBackgroundResource(R.drawable.border_rounded1);
                         llupi.setBackgroundResource(R.drawable.border_rounded1);
-                       // tcards.setTextColor(getResources().getColor(R.color.black));
+                        // tcards.setTextColor(getResources().getColor(R.color.black));
                         /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                         } else {
@@ -768,12 +757,12 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                             llcod.setClickable(false);
                             llpromocode.setClickable(false);
                             my_wallet_ammount.setText(sessionManagement.getCurrency() + "" + walletbalnce);
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                         } else {
                             walletbalnce = 0;
                             total_amount = String.valueOf((amt - wallet));
                             my_wallet_ammount.setText(sessionManagement.getCurrency() + "" + walletbalnce);
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
 //                        startActivity(new Intent(getApplicationContext(), RechargeWallet.class));
                         }
                         wallet_status = "yes";
@@ -789,7 +778,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                         my_wallet_ammount.setText(sessionManagement.getCurrency() + wallett);
                         total_amount = payable_amt;
                         walletbalnce = wallet;
-                        order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                        order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                         wallet_status = "no";
                         payment_method = "";
                         llcod.setClickable(true);
@@ -811,13 +800,13 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                             double amountd = Double.parseDouble(payable_amt) - Double.parseDouble(coupon_amount);
                             total_amount = String.valueOf(amountd);
                             walletbalnce = wallet;
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                             wallet_status = "no";
                             payment_method = "promocode";
                         } else {
                             total_amount = payable_amt;
                             walletbalnce = wallet;
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                             wallet_status = "no";
                             payment_method = "";
                         }
@@ -825,7 +814,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                     } else {
                         total_amount = payable_amt;
                         walletbalnce = wallet;
-                        order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                        order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                         wallet_status = "no";
                         payment_method = "";
                     }
@@ -902,7 +891,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);
-        getPayment(total_amount,config);
+        getPayment(total_amount, config);
     }
 
     private void getPayment(String total_rs, PayPalConfiguration config) {
@@ -1036,21 +1025,21 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                                 rb_Cod.setClickable(false);
                                 checkBox_coupon.setClickable(true);
                                 my_wallet_ammount.setText(sessionManagement.getCurrency() + walletbalnce);
-                                order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                                order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                             } else {
                                 if (wallet == 0.0) {
                                     total_amount = remaingprice;
-                                    order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                                    order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                                 } else {
                                     walletbalnce = 0;
                                     total_amount = String.valueOf((remInt - wallet));
-                                    order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                                    order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                                 }
                             }
 
                         } else {
                             total_amount = remaingprice;
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                         }
                         Toast.makeText(getApplicationContext(), "" + message, Toast.LENGTH_SHORT).show();
                     } else if (statuss.contains("2")) {
@@ -1068,17 +1057,17 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                                     rb_Cod.setClickable(false);
                                     checkBox_coupon.setClickable(false);
                                     my_wallet_ammount.setText(sessionManagement.getCurrency() + "" + walletbalnce);
-                                    order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                                    order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                                 } else {
                                     walletbalnce = 0;
                                     total_amount = String.valueOf((amt - wallet));
-                                    order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                                    order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
 //                        startActivity(new Intent(getApplicationContext(), RechargeWallet.class));
                                 }
                             }
                         } else {
                             total_amount = payable_amt;
-                            order_ammount.setText(total_amount + " " + sessionManagement.getCurrency());
+                            order_ammount.setText(sessionManagement.getCurrency() + " " + total_amount);
                         }
                     } else {
                         coupounApplied = false;
@@ -1168,7 +1157,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
 
     private void makeAddOrderRequest(String userid, String cart_id, String payment_method, String wallet_status, String payment_status) {
         orderCount = 0;
-        for(OrderStatus orderStatus: orderStatuses) {
+        for (OrderStatus orderStatus : orderStatuses) {
             if (orderStatus.isStatus()) {
                 String tag_json_obj = "json_add_order_req";
                 Map<String, String> params = new HashMap<String, String>();
@@ -1217,7 +1206,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                             } else {
                                 Toast.makeText(PaymentDetails.this, "" + message, Toast.LENGTH_SHORT).show();
                             }*/
-                           // progressDialog.dismiss();
+                        // progressDialog.dismiss();
                     }
                 }, new Response.ErrorListener() {
 
@@ -1273,7 +1262,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
             //showPopup("Some of your orders were not placed successfully.",false,failedStores,orderStatuses);
             showPopup();
         } else*/
-        if (successOrders.size() == orderCount){
+        if (successOrders.size() == orderCount) {
             Intent intent = new Intent(getApplicationContext(), OrderSuccessful.class);
             //intent.putExtra("msg", message);
             startActivity(intent);
@@ -1294,7 +1283,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
@@ -1559,15 +1548,13 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                     apply();
                 }
             }
-        }
-        else if (requestCode == 5) {
+        } else if (requestCode == 5) {
             if (data != null && data.getExtras() != null) {
                 if (Objects.requireNonNull(data.getStringExtra("recharge")).equalsIgnoreCase("success")) {
                     getRefresrh();
                 }
             }
-        }
-        else if (requestCode == PAYPAL_REQUEST_CODE) {
+        } else if (requestCode == PAYPAL_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirm != null) {
@@ -1575,7 +1562,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
 //                        String paymentDetails = confirm.toJSONObject().toString(5);
                         JSONObject jsonObject = confirm.toJSONObject();
                         JSONObject responseJs = jsonObject.getJSONObject("response");
-                        if (responseJs.getString("state").equalsIgnoreCase("approved")){
+                        if (responseJs.getString("state").equalsIgnoreCase("approved")) {
                             makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
                         }
                         Log.i("paymentExample", jsonObject.toString(5));
@@ -1585,62 +1572,29 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
                         Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
                     }
                 }
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
+            } else if (resultCode == Activity.RESULT_CANCELED) {
                 progressDialog.dismiss();
                 Log.i("paymentExample", "The user canceled.");
-            }
-            else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
                 progressDialog.dismiss();
-                Log.i("paymentExample", PaymentActivity.RESULT_EXTRAS_INVALID+"An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+                Log.i("paymentExample", PaymentActivity.RESULT_EXTRAS_INVALID + "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
             }
         }
     }
 
-    //EasyUPIPayment callbacks
-    final String paymentTAG = "EasyUPI";
-
+    //UPIPay callbacks
     @Override
-    public void onTransactionCancelled() {
+    public void onTransactionSubmitted(TransactionDetails transactionDetails) {
         try {
             progressDialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, "Transaction failed", Toast.LENGTH_LONG).show();
+        Log.d(paymentTAG, "Transaction submitted");
     }
 
     @Override
-    public void onTransactionCompleted(TransactionDetails transactionDetails) {
-        try {
-            progressDialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        switch (transactionDetails.getTransactionStatus()) {
-            case SUCCESS:
-                makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
-                break;
-            case FAILURE:
-                Toast.makeText(this, "Transaction failed", Toast.LENGTH_LONG).show();
-                break;
-            case SUBMITTED:
-                Log.d(paymentTAG,"Transaction submitted");
-                break;
-        }
-    }
-    /*@Override
-    public void onTransactionCompleted(TransactionDetails transactionDetails) {
-        Log.d(paymentTAG,transactionDetails.getStatus());
-        try {
-            progressDialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onTransactionSuccess() {
+    public void onTransactionSuccess(TransactionDetails transactionDetails) {
         try {
             progressDialog.dismiss();
         } catch (Exception e) {
@@ -1650,17 +1604,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
     }
 
     @Override
-    public void onTransactionSubmitted() {
-        try {
-            progressDialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d(paymentTAG,"Transaction submitted");
-    }
-
-    @Override
-    public void onTransactionFailed() {
+    public void onTransactionFailed(com.myshopmate.user.upipay.TransactionDetails transactionDetails) {
         try {
             progressDialog.dismiss();
         } catch (Exception e) {
@@ -1670,7 +1614,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
     }
 
     @Override
-    public void onTransactionCancelled() {
+    public void onCancelledByUser() {
         try {
             progressDialog.dismiss();
         } catch (Exception e) {
@@ -1680,20 +1624,22 @@ public class PaymentDetails extends AppCompatActivity implements PaymentStatusLi
     }
 
     @Override
-    public void onAppNotFound() {
+    public void onUPIAppNotFound() {
         try {
             progressDialog.dismiss();
         } catch (Exception e) {
             e.printStackTrace();
         }
         Toast.makeText(this, "UPI app not found", Toast.LENGTH_LONG).show();
-    }*/
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (easyUpiPayment != null) {
-            easyUpiPayment.removePaymentStatusListener();
-        }
     }
 
+    @Override
+    public void onError(String errorMsg) {
+        try {
+            progressDialog.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this,errorMsg, Toast.LENGTH_LONG).show();
+    }
 }

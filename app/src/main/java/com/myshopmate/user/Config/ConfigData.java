@@ -19,7 +19,8 @@ public class ConfigData {
     private String pivot_delivery_range = "5";
     private String payeeVPA = "";
     private String payeeName = "";
-    private String easyUPITransactionDescription = "";
+    private String upiTransactionDescription = "";
+    private String upi_merchant_code = "";
 
     public String getPhone_number() {
         return phone_number;
@@ -167,11 +168,19 @@ public class ConfigData {
         this.payeeName = payeeName;
     }
 
-    public String getEasyUPITransactionDescription() {
-        return easyUPITransactionDescription;
+    public String getUpiTransactionDescription() {
+        return upiTransactionDescription;
     }
 
-    public void setEasyUPITransactionDescription(String easyUPITransactionDescription) {
-        this.easyUPITransactionDescription = easyUPITransactionDescription;
+    public void setUpiTransactionDescription(String upiTransactionDescription) {
+        this.upiTransactionDescription = upiTransactionDescription;
+    }
+
+    public String getUpi_merchant_code() {
+        return upi_merchant_code;
+    }
+
+    public void setUpi_merchant_code(String upi_merchant_code) {
+        this.upi_merchant_code = upi_merchant_code;
     }
 }
