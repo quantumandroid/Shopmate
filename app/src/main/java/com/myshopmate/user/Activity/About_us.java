@@ -3,6 +3,7 @@ package com.myshopmate.user.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +35,15 @@ public class About_us extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("About us");
         setContentView(R.layout.activity_about_us);
-
         tv_info = (TextView) findViewById(R.id.tv_info);
+        findViewById(R.id.iv_back_about_us).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
 //        String geturl = getArguments().getString("url");
         //   String title = getArguments().getString("title");

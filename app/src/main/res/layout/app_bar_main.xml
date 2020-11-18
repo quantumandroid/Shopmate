@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -17,7 +18,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:contentDescription="@string/menu_icon"
-        android:background="@drawable/menu" />
+        android:tint="@color/white"
+        android:src="@drawable/menu" />
 
     <TextView
         android:textSize="13sp"
@@ -31,6 +33,7 @@
         app:layout_constraintEnd_toStartOf="@id/profile"
         android:lines="2"
         android:layout_width="0dp"
+        android:textColor="@color/white"
         android:layout_height="wrap_content"/>
 
     <ImageView
@@ -42,6 +45,7 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/menu_icon"
         android:layout_width="30dp"
+        android:tint="@color/white"
         android:layout_height="30dp"/>
     <ImageView
 

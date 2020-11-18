@@ -2,9 +2,9 @@
 <resources>
 
 
-    <color name="colorPrimary">#FE8100</color>
-    <color name="colorPrimaryDark">#FE8100</color>
-    <color name="colorAccent">#FE8100</color>
+    <color name="colorPrimary">@color/orange</color>
+    <color name="colorPrimaryDark">@color/orange</color>
+    <color name="colorAccent">@color/orange</color>
 
 
     <color name="white">#ffffff</color>
@@ -14,14 +14,20 @@
     <color name="lightGrey">#dcdcdc</color>
     <color name="very_lightGrey">#EAE6E6</color>
     <color name="darkGrey">#2F2929</color>
-    <color name="darkGrey_custom">#4C4848</color>
     <color name="mediumGrey">#B9B8B6</color>
 
-    <color name="green">#FE8100</color>
-<!--    <color name="green">#42B029</color>-->
-    <color name="orange">#FE8100</color>
-    <color name="color_1">#1bdc84</color>
+    <!--<color name="green">#FE8100</color>-->
+    <!--    <color name="green">#42B029</color>-->
+    <!--<color name="orange">#FE8100</color>-->
+    <color name="green">@color/orange</color>
+    <!--<color name="darkGrey_custom">#4C4848</color>-->
+    <color name="darkGrey_custom">#808080</color>
+    <color name="orange">#01377e</color>
+<!--        012C63</color>-->
 
+
+
+    <color name="color_1">#1bdc84</color>
 
     <color name="color_2">#1b4ddc</color>
     <color name="color_3">#ff0023</color>

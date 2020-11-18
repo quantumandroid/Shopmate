@@ -37,6 +37,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_title_products"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
@@ -44,8 +45,10 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center|left"
                 android:text="Products"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/orange"
-                android:textSize="20sp"></TextView>
+                android:textSize="20sp"/>
 
 
         </LinearLayout>

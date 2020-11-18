@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
@@ -151,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentClickListner fragmentClickListner;
     private Fragment homeFragment;
     private Geocoder geocoder;
+    public static boolean toCart = false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -158,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+       /* if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             getWindow().setStatusBarColor(Color.BLACK);
-        }
+        }*/
 
         homeFragment = new HomeFragment(fragmentClickListner,navigation);
 
@@ -388,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     transaction1.replace(R.id.contentPanel, favourite_fragment);
                     transaction1.addToBackStack(null);
                     transaction1.commit();
+                    drawer.closeDrawer(navigationView);
                 } else {
                     Toast.makeText(MainActivity.this, "No Item in Cart", Toast.LENGTH_SHORT).show();
                 }
@@ -1358,7 +1359,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        navigation.setSelectedItemId(R.id.navigation_home);
+        if (toCart) {
+            navigation.setSelectedItemId(R.id.navigation_notifications123);
+        } else {
+            navigation.setSelectedItemId(R.id.navigation_home);
+        }
+        toCart = false;
     }
 
     @Override

@@ -244,7 +244,7 @@
                                     android:paddingRight="5dp"
                                     android:text="ADD"
                                     android:textColor="@color/white"
-                                    android:textSize="15sp"></TextView>
+                                    android:textSize="15sp"/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -252,7 +252,7 @@
                                     android:layout_gravity="center"
                                     android:layout_marginRight="6dp"
                                     android:drawableRight="@drawable/ic_plus"
-                                    android:paddingLeft="10dp"></TextView>
+                                    android:paddingLeft="10dp"/>
 
 
                             </LinearLayout>
@@ -274,7 +274,7 @@
                                     android:layout_marginLeft="6dp"
                                     android:drawableRight="@drawable/ic_minus"
                                     android:drawableTint="@color/orange"
-                                    android:paddingRight="10dp"></TextView>
+                                    android:paddingRight="10dp"/>
                                 <!--
                                                         <TextView
                                                             android:layout_width="wrap_content"

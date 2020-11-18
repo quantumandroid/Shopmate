@@ -65,6 +65,7 @@ public class CategoryPage extends AppCompatActivity {
     private TextView continue_tocart;
     private Session_management session_management;
     private DatabaseHandler dbcart;
+    private TextView tv_title_products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +79,14 @@ public class CategoryPage extends AppCompatActivity {
         continue_tocart = findViewById(R.id.continue_tocart);
         image = Recent_Details_Fragment.product_image;
         bottom_sheet = findViewById(R.id.bottom_sheet);
+        tv_title_products = findViewById(R.id.tv_title_products);
         back = findViewById(R.id.back);
         behavior = BottomSheetBehavior.from(bottom_sheet);
         cat_id = getIntent().getStringExtra("cat_id");
         store_id = getIntent().getStringExtra("store_id");
         image = getIntent().getStringExtra("image");
         title = getIntent().getStringExtra("title");
+        tv_title_products.setText(title);
         dbcart = new DatabaseHandler(CategoryPage.this);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -151,6 +154,7 @@ public class CategoryPage extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("open", true);
             setResult(24, intent);
+            MainActivity.toCart = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 finishAndRemoveTask();
             } else {

@@ -71,7 +71,8 @@
         <activity android:name=".Activity.Forget_otp_verify" />
         <activity
             android:name=".Activity.About_us"
-            android:parentActivityName=".Activity.MainActivity" />
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/StatusBarGreen"/>
         <activity android:name=".Activity.Coupen" />
         <activity
             android:name=".Activity.Myorderdetails"
@@ -134,7 +135,8 @@
         <activity android:name=".Activity.Paytm" />
         <activity
             android:name=".Activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/StatusBarGreen">
+            <!--            android:theme="@style/AppTheme.NoActionBar">-->
 
             <!--
             <intent-filter>
