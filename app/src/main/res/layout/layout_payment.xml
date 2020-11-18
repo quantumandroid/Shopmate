@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height=".5dp"
         android:layout_below="@id/ll1"
-        android:background="@color/lightGrey"/>
+        android:background="@color/lightGrey" />
 
     <LinearLayout
         android:id="@+id/ll2"
@@ -175,6 +175,7 @@
                             android:layout_height="10dp"
                             android:background="@color/lightGrey"
                             android:visibility="gone" />
+
                         <LinearLayout
                             android:id="@+id/llcod"
                             android:layout_width="match_parent"
@@ -200,33 +201,34 @@
 
                                 <CheckBox
                                     android:id="@+id/use_store_pickup"
+                                    style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="4dp"
-                                    style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_marginRight="4dp"
-                                    android:text="Store"
                                     android:clickable="false"
+                                    android:text="Store"
                                     android:textSize="14sp"
                                     android:visibility="gone" />
 
                                 <CheckBox
                                     android:id="@+id/use_COD"
-                                    android:focusable="false"
-                                    android:clickable="false"
-                                    android:gravity="center"
                                     style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:gravity="center"
                                     tools:ignore="UnusedAttribute" />
                             </RelativeLayout>
                         </LinearLayout>
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="10dp"
-                            android:visibility="gone"
-                            android:background="@color/lightGrey" />
+                            android:background="@color/lightGrey"
+                            android:visibility="gone" />
 
                         <LinearLayout
                             android:id="@+id/llupi"
@@ -234,7 +236,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/border_rounded1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -254,25 +257,25 @@
 
                                 <CheckBox
                                     android:id="@+id/use_store_pickup_"
+                                    style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="4dp"
-                                    style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_marginRight="4dp"
-                                    android:text="Store"
                                     android:clickable="false"
+                                    android:text="Store"
                                     android:textSize="14sp"
                                     android:visibility="gone" />
 
                                 <CheckBox
                                     android:id="@+id/use_upi"
-                                    android:focusable="false"
-                                    android:clickable="false"
-                                    android:gravity="center"
                                     style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:gravity="center"
                                     tools:ignore="UnusedAttribute" />
                             </RelativeLayout>
                         </LinearLayout>
@@ -328,72 +331,72 @@
                         <LinearLayout
                             android:id="@+id/payment_opt"
                             android:layout_width="match_parent"
-                            android:visibility="gone"
-                            android:orientation="vertical"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:id="@+id/razor_pay"
-                            android:paddingStart="30dp"
-                            android:paddingEnd="25dp"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp"
-                            android:layout_width="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:id="@+id/raz_txt"
-                                android:layout_weight="1"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:text="RazorPay"
-                                android:textColor="@color/black" />
+                                android:orientation="horizontal"
+                                android:padding="15dp">
 
-                            <CheckBox
-                                android:id="@+id/use_razorpay"
-                                android:clickable="false"
-                                android:focusable="false"
-                                android:longClickable="false"
-                                android:linksClickable="false"
-                                android:gravity="center"
-                                style="@android:style/Widget.CompoundButton.RadioButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/raz_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_weight="1"
+                                    android:text="Pay online"
+                                    android:textColor="@color/black" />
+
+                                <CheckBox
+                                    android:id="@+id/use_razorpay"
+                                    style="@android:style/Widget.CompoundButton.RadioButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:linksClickable="false"
+                                    android:longClickable="false" />
+                            </LinearLayout>
+
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:background="@color/lightGrey" />
+
                             <LinearLayout
                                 android:id="@+id/paypal_lay"
-                                android:paddingStart="30dp"
-                                android:paddingEnd="25dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:visibility="gone"
-                                android:layout_height="wrap_content">
+                                android:paddingStart="30dp"
+                                android:paddingTop="10dp"
+                                android:paddingEnd="25dp"
+                                android:paddingBottom="10dp"
+                                android:visibility="gone">
+
                                 <TextView
                                     android:id="@+id/paypal_txt"
-                                    android:layout_weight="1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentLeft="true"
+                                    android:layout_weight="1"
                                     android:text="Paypal"
                                     android:textColor="@color/black" />
 
                                 <CheckBox
                                     android:id="@+id/use_paypal"
-                                    android:clickable="false"
-                                    android:focusable="false"
-                                    android:longClickable="false"
-                                    android:linksClickable="false"
-                                    android:gravity="center"
                                     style="@android:style/Widget.CompoundButton.RadioButton"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:gravity="center"
+                                    android:linksClickable="false"
+                                    android:longClickable="false" />
                             </LinearLayout>
 
 
@@ -613,7 +616,7 @@
                     android:gravity="center"
                     android:text="Proceed"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

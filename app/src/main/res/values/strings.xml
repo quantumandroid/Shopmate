@@ -30,7 +30,10 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="map_api_key">AIzaSyBvTaVufSFg8S4Buq1d0KzYZMDW_qd0L7Q</string>
+    <!--<string name="map_api_key">AIzaSyBvTaVufSFg8S4Buq1d0KzYZMDW_qd0L7Q</string>-->
+    <string name="map_api_key">AIzaSyDGBez6ZOe4W80UrtxOGYdfl5vgya7gTMI</string>
+    <string name="razor_pay_api_key_test">rzp_test_QMZ8wFFfUQssVP</string>
+    <string name="razor_pay_api_key">rzp_live_Oq6gr6ZfQS8h1W</string>
 
     <string name="home_second">Home Second</string>
     <string name="status_stop">Powered By <font color="#f7941e">MyShopmate</font></string>

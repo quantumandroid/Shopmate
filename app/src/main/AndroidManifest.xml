@@ -112,7 +112,7 @@
         <!-- </service> -->
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_7fnnn7WTaard4h" />
+            android:value="@string/razor_pay_api_key" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_api_key" />

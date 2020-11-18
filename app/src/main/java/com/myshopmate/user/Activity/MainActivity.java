@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean enterInFirst = false;
     private FragmentClickListner fragmentClickListner;
     private Fragment homeFragment;
+    private Geocoder geocoder;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -172,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bell = findViewById(R.id.bell);
         profile = findViewById(R.id.profile);
         addres = findViewById(R.id.address);
+
+        geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
 
         if (checkAndRequestPermissions()) {
             getLocationRequest();
@@ -567,9 +570,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void getAddress() {
-        Geocoder geocoder;
         List<Address> addresses = null;
-        geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
         DecimalFormat dFormat = new DecimalFormat("#.######");
 
 
@@ -593,7 +594,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             sessionManagement.setLocationCity(city);
             sessionManagement.setLocationPref(String.valueOf(latitude), String.valueOf(longitude));
-            runOnUiThread(() -> addres.setText(returnedAddress.getAddressLine(0)));
+            //runOnUiThread(() -> addres.setText(returnedAddress.getAddressLine(0)));
+            addres.setText(returnedAddress.getAddressLine(0));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -63,10 +62,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.maps.internal.LatLngAdapter;
-import com.google.maps.model.GeocodingResult;
 import com.myshopmate.user.Adapters.PlacePredictionAdapter;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.FetchAddressTask;
@@ -75,7 +70,7 @@ import com.myshopmate.user.util.Session_management;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -114,10 +109,11 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     private LinearLayout address_lay;
     private TextView address_text;
     private TextView save_loc;
+    private LatLngBounds INDIA;
 
-    private Handler handler = new Handler();
+   /* private Handler handler = new Handler();
     private Gson gson = new GsonBuilder().registerTypeAdapter(LatLng.class, new LatLngAdapter())
-            .create();
+            .create();*/
 
     private RequestQueue queue;
     private PlacesClient placesClient;
@@ -128,6 +124,11 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     private ProgressBar progressBar;
     private String address = "";
     private boolean inPlacePredection = false;
+
+    private Geocoder geocoder;
+    private DecimalFormat dFormat;
+    private LocationBias bias;
+    private List<Place.Field> placeFields;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,14 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         queue = Volley.newRequestQueue(this);
         back_btn.setOnClickListener(v -> onBackPressed());
         session_management = new Session_management(AddressLocationActivity.this);
+        geocoder = new Geocoder(AddressLocationActivity.this, Locale.getDefault());
+        dFormat = new DecimalFormat("#.######");
+        bias = RectangularBounds.newInstance(
+                new LatLng(7.2, 67.8), // SW lat, lng
+                new LatLng(36.5, 93.8) // NE lat, lng
+        );
+        INDIA = new LatLngBounds(new LatLng(7.2, 67.8), new LatLng(36.5, 93.8));
+        placeFields = Collections.singletonList(Place.Field.LAT_LNG);
 //        geoDataClient = com.google.android.libraries.places.compat.Places.getGeoDataClient(AddressLocationActivity.this);
 //        geoDataClient = Places.getGeoDataClient(AddressLocationActivity.this);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(AddressLocationActivity.this);
@@ -158,7 +167,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         if (checkAndRequestPermissions()) {
             getLocationRequest();
         }
-        LatLngBounds bounds = new LatLngBounds(new LatLng(7.2, 67.8), new LatLng(36.5, 93.8));
+       // LatLngBounds bounds = new LatLngBounds(new LatLng(7.2, 67.8), new LatLng(36.5, 93.8));
 //        nAdapter = new PlaceAutocompleteAdapter(AddressLocationActivity.this, R.layout.search_place,
 //                null, bounds, null, this, geoDataClient);
 //        search_view_recy.setAdapter(nAdapter);
@@ -167,9 +176,9 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         search_view_recy.setLayoutManager(layoutManager);
+        search_view_recy.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
         adapter = new PlacePredictionAdapter(this::geocodePlaceAndDisplay);
         search_view_recy.setAdapter(adapter);
-        search_view_recy.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
 //        adapter.setPlaceClickListener(this::geocodePlaceAndDisplay);
         search_text.setOnClickListener(v -> sessionToken = AutocompleteSessionToken.newInstance());
 
@@ -186,12 +195,12 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (search_text.getText().toString() != null && search_text.getText().toString().length() > 0) {
-                    search_lay.setVisibility(View.VISIBLE);
-                    getPlacePredictions(search_text.getText().toString());
-//                    nAdapter.getFilter().filter(search_text.getText().toString());
-                } else {
+                if (search_text.getText().toString() == null || search_text.getText().toString().isEmpty()) {
                     search_lay.setVisibility(View.GONE);
+                } else {
+                    search_lay.setVisibility(View.VISIBLE);
+                    getPlacePredictions(search_text.getText().toString().trim());
+//                    nAdapter.getFilter().filter(search_text.getText().toString());
                 }
 
             }
@@ -204,10 +213,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         // (currently Kolkata). Modify these values to get results for another area. Make sure to
         // pass in the appropriate value/s for .setCountries() in the
         // FindAutocompletePredictionsRequest.Builder object as well.
-        final LocationBias bias = RectangularBounds.newInstance(
-                new LatLng(7.2, 67.8), // SW lat, lng
-                new LatLng(36.5, 93.8) // NE lat, lng
-        );
+
 
 //        LatLngBounds bounds = new LatLngBounds(new LatLng(7.2, 67.8), new LatLng(36.5, 93.8));
 
@@ -223,8 +229,8 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
 
         // Perform autocomplete predictions request
         placesClient.findAutocompletePredictions(newRequest).addOnSuccessListener((response) -> {
-            List<AutocompletePrediction> predictions = response.getAutocompletePredictions();
-            adapter.setPredictions(predictions);
+            //List<AutocompletePrediction> predictions = response.getAutocompletePredictions();
+            adapter.setPredictions(response.getAutocompletePredictions());
 
 //            progressBar.setIndeterminate(false);
 //            viewAnimator.setDisplayedChild(predictions.isEmpty() ? 0 : 1);
@@ -243,13 +249,12 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), 0);
         search_lay.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+       // progressBar.setVisibility(View.VISIBLE);
 
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
-        FetchPlaceRequest requestq = FetchPlaceRequest.builder(placePrediction.getPlaceId(), placeFields)
+        FetchPlaceRequest requestQue = FetchPlaceRequest.builder(placePrediction.getPlaceId(), placeFields)
                 .build();
 
-        placesClient.fetchPlace(requestq).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
+        placesClient.fetchPlace(requestQue).addOnCompleteListener(new OnCompleteListener<FetchPlaceResponse>() {
             @Override
             public void onComplete(@NonNull Task<FetchPlaceResponse> task) {
 
@@ -265,7 +270,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                     mMap.clear();
                     session_management.setLocationPref(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                     mMap.addMarker(new MarkerOptions().position(latLng));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     getAddress();
@@ -275,10 +280,10 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
                 if (exception instanceof ApiException) {
-                    ApiException apiException = (ApiException) exception;
-                    int statusCode = apiException.getStatusCode();
+                    //ApiException apiException = (ApiException) exception;
+                    //int statusCode = apiException.getStatusCode();
                     // Handle error with given status code.
                     Log.e("TAG", "Place not found: " + exception.getMessage());
                 }
@@ -327,7 +332,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
 //        queue.add(request);
     }
 
-    private void displayDialog(AutocompletePrediction place, GeocodingResult result) {
+    /*private void displayDialog(AutocompletePrediction place, GeocodingResult result) {
         new AlertDialog.Builder(this)
                 .setTitle(place.getPrimaryText(null))
                 .setMessage("Geocoding result:\n" + result.geometry.location + "\n" + place.getSecondaryText(null) + "\n" + result.formattedAddress + "\n" + result.types)
@@ -349,7 +354,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                     }
                 })
                 .show();
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -368,7 +373,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                     session_management.setLocationPref(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                     mMap.clear();
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                     mMap.addMarker(new MarkerOptions().position(latLng));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //                    new FetchAddressTask(AddressLocationActivity.this, AddressLocationActivity.this).execute(location);
@@ -387,16 +392,15 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setBuildingsEnabled(false);
         mapFragment.mTouchView.setGoogleMap(mMap);
-        if (!session_management.getLatPref().equalsIgnoreCase("") && !session_management.getLangPref().equalsIgnoreCase("")) {
+        if (session_management.getLatPref().isEmpty() || session_management.getLangPref().isEmpty()) {
+            mMap.addMarker(new MarkerOptions().position(INDIA.getCenter()));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(INDIA.getCenter()));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(INDIA.getCenter(), 16));
+        } else {
             LatLng latLng = new LatLng(Double.parseDouble(session_management.getLatPref()), Double.parseDouble(session_management.getLangPref()));
             mMap.addMarker(new MarkerOptions().position(latLng));
 //            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
-        } else {
-            LatLngBounds INDIA = new LatLngBounds(new LatLng(7.2, 67.8), new LatLng(36.5, 93.8));
-            mMap.addMarker(new MarkerOptions().position(INDIA.getCenter()));
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(INDIA.getCenter()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(INDIA.getCenter(), 11));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -437,8 +441,8 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                         if (!session_management.getLatPref().equalsIgnoreCase("") && !session_management.getLangPref().equalsIgnoreCase("")) {
                             DecimalFormat dFormat = new DecimalFormat("##.#######");
                             LatLng latLng = new LatLng(Double.parseDouble(session_management.getLatPref()), Double.parseDouble(session_management.getLangPref()));
-                            double latitude = Double.valueOf(dFormat.format(latLng.latitude));
-                            double longitude = Double.valueOf(dFormat.format(latLng.longitude));
+                            double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
+                            double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
                             Log.i("TAG", latitude + "\n" + longitude);
                             Location locationA = new Location("cal 1");
 //                        Location locationB = new Location("cal 2");
@@ -456,7 +460,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                             }
                         } else {
                             mMap.clear();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.getLatitude(), locations.getLongitude()), 11));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(locations.getLatitude(), locations.getLongitude()), 16));
                             location = locations;
                             getAddress();
                         }
@@ -466,7 +470,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                 if (location == null) {
                     location = locations;
                     mMap.clear();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16));
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(latLng));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -522,7 +526,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                 session_management.setLocationPref(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 mMap.clear();
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                 mMap.addMarker(new MarkerOptions().position(latLng));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 getAddress();
@@ -591,7 +595,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                             session_management.setLocationPref(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                             mMap.clear();
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                             mMap.addMarker(new MarkerOptions().position(latLng));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             getAddress();
@@ -618,10 +622,10 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                     }
                     //permission is denied (and never ask again is  checked)
                     //shouldShowRequestPermissionRationale will return false
-                    else {
+                    /*else {
 
                         //proceed with logic by disabling the related features or quit the app.
-                    }
+                    }*/
                 }
             }
         } else {
@@ -650,13 +654,9 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     private void getAddress() {
         new Thread(() -> {
             try {
-                Geocoder geocoder;
-                List<Address> addresses = null;
-                geocoder = new Geocoder(AddressLocationActivity.this, Locale.getDefault());
-                DecimalFormat dFormat = new DecimalFormat("#.######");
                 double latitude = Double.parseDouble(dFormat.format(location.getLatitude()));
                 double longitude = Double.parseDouble(dFormat.format(location.getLongitude()));
-                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
                 for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
@@ -669,9 +669,9 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
                 Log.i("TAG", "" + returnedAddress.toString());
                 address = returnedAddress.getAddressLine(0);
                 runOnUiThread(() -> {
-                    progressBar.setVisibility(View.GONE);
+                    //progressBar.setVisibility(View.GONE);
                     if (inPlacePredection) {
-                        if (!address.equalsIgnoreCase("")) {
+                        if (!address.isEmpty()) {
                             address_lay.setVisibility(View.VISIBLE);
                             address_text.setText(address);
                         }

@@ -39,9 +39,6 @@ import com.myshopmate.user.Config.SharedPref;
 import com.myshopmate.user.ModelClass.CoupunModel;
 import com.myshopmate.user.ModelClass.OrderStatus;
 import com.myshopmate.user.R;
-import com.myshopmate.user.upipay.TransactionDetails;
-import com.myshopmate.user.upipay.UPIPay;
-import com.myshopmate.user.upipay.UPIPayListener;
 import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
@@ -52,6 +49,8 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,9 +63,9 @@ import java.util.Objects;
 
 import static com.android.volley.VolleyLog.TAG;
 
-public class PaymentDetails extends AppCompatActivity implements UPIPayListener {
+public class PaymentDetails extends AppCompatActivity implements PaymentResultListener {
 
-    LinearLayout llwallet, llpromocode, llcards, llcod, llupi;
+    LinearLayout llwallet, llpromocode, llcards, llcod;//, llupi;
     final String paymentTAG = "UPI payment";
     String Prefrence_TotalAmmount;
     String lat, lng;
@@ -156,7 +155,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
         coupon_apply_t = findViewById(R.id.coupon_apply_t);
         llpromocode = findViewById(R.id.llpromocode);
         llcod = findViewById(R.id.llcod);
-        llupi = findViewById(R.id.llupi);
+       // llupi = findViewById(R.id.llupi);
         llcards = findViewById(R.id.llcards);
 
         dropdown = findViewById(R.id.dropdown);
@@ -237,7 +236,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
             tcod.setTextColor(getResources().getColor(R.color.black));
 
             use_upi.setChecked(false);
-            llupi.setBackgroundResource(R.drawable.border_rounded1);
+           // llupi.setBackgroundResource(R.drawable.border_rounded1);
             tvUPI.setTextColor(getResources().getColor(R.color.black));
 
             rb_card.setChecked(false);
@@ -249,7 +248,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
             Promo_code_layout.setClickable(true);
             llcards.setClickable(true);
             llcod.setClickable(true);
-            llupi.setClickable(true);
+           // llupi.setClickable(true);
             llpromocode.setClickable(true);
             razor_pay.setClickable(true);
             paypal_lay.setClickable(true);
@@ -358,7 +357,14 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                 if (rb_Cod.isChecked()) {
                     payment_method = "COD";
                     makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
-                } else if (use_upi.isChecked()) {
+                } else if (use_razorpay.isChecked()) {
+                    startPayment(
+                            Splash.configData.getPayeeName(),
+                            total_amount,
+                            "shindemandar82@gmail.com",
+                            "7350119381"
+                    );
+                }/*else if (use_upi.isChecked()) {
                     payment_method = "UPI";
                     try {
                         long currentMillis = System.currentTimeMillis();
@@ -380,7 +386,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                         Log.e(paymentTAG, e.getMessage());
                         Toast.makeText(PaymentDetails.this, "Something went wrong", Toast.LENGTH_LONG).show();
                     }
-                } else {
+                }*/ else {
                     Toast.makeText(PaymentDetails.this, "Please select payment method.", Toast.LENGTH_SHORT).show();
                 }
                 // makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
@@ -536,11 +542,11 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
             @Override
             public void onClick(View v) {
                 if (total_amount.equalsIgnoreCase("0") || total_amount.equalsIgnoreCase("0.0") || total_amount.equalsIgnoreCase("")) {
-
+                    Toast.makeText(PaymentDetails.this, "Something went wrong.", Toast.LENGTH_LONG).show();
                 } else {
                     if (!use_razorpay.isChecked()) {
                         use_razorpay.setChecked(true);
-                        use_paypal.setChecked(false);
+                       // use_paypal.setChecked(false);
                         rb_Cod.setChecked(false);
                         razor_pay.setBackgroundResource(R.drawable.gradientbg);
                         raz_txt.setTextColor(getResources().getColor(R.color.white));
@@ -548,25 +554,30 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                         tcod.setTextColor(getResources().getColor(R.color.black));
                         paypal_lay.setBackgroundResource(R.drawable.border_rounded1);
                         paypal_txt.setTextColor(getResources().getColor(R.color.black));
-                        if (checkBox_Wallet.isChecked()) {
+                        /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                         } else {
                             wallet_status = "no";
-                        }
-                        payment_method = "cards";
+                        }*/
+                        wallet_status = "no";
+                        payment_method = "RazorPay";
                     } else {
                         use_razorpay.setChecked(false);
 //                        use_paypal.setChecked(false);
-//                        rb_Cod.setChecked(false);
+                        rb_Cod.setChecked(true);
+                        llcod.setBackgroundResource(R.drawable.gradientbg);
                         razor_pay.setBackgroundResource(R.drawable.border_rounded1);
                         raz_txt.setTextColor(getResources().getColor(R.color.black));
-                        if (checkBox_Wallet.isChecked()) {
+                        tcod.setTextColor(getResources().getColor(R.color.white));
+                        /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                             payment_method = "wallet";
                         } else {
                             payment_method = "";
                             wallet_status = "no";
-                        }
+                        }*/
+                        payment_method = "COD";
+                        wallet_status = "no";
                     }
                 }
 
@@ -635,13 +646,16 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                     if (!rb_Cod.isChecked()) {
                         rb_Cod.setChecked(true);
                         rb_card.setChecked(false);
-                        use_upi.setChecked(false);
+                       // use_upi.setChecked(false);
+                        use_razorpay.setChecked(false);
                         llcod.setBackgroundResource(R.drawable.gradientbg);
                         tcod.setTextColor(getResources().getColor(R.color.white));
                         tvUPI.setTextColor(getResources().getColor(R.color.black));
                         llcards.setBackgroundResource(R.drawable.border_rounded1);
-                        llupi.setBackgroundResource(R.drawable.border_rounded1);
                         tcards.setTextColor(getResources().getColor(R.color.black));
+                        // llupi.setBackgroundResource(R.drawable.border_rounded1);
+                        razor_pay.setBackgroundResource(R.drawable.border_rounded1);
+                        raz_txt.setTextColor(getResources().getColor(R.color.black));
                         /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                         } else {
@@ -652,13 +666,16 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                     } else {
                         rb_Cod.setChecked(false);
                         rb_card.setChecked(false);
-                        use_upi.setChecked(true);
+                        //use_upi.setChecked(true);
+                        use_razorpay.setChecked(true);
                         llcod.setBackgroundResource(R.drawable.border_rounded1);
-                        llupi.setBackgroundResource(R.drawable.gradientbg);
+                       // llupi.setBackgroundResource(R.drawable.gradientbg);
+                        razor_pay.setBackgroundResource(R.drawable.gradientbg);
                         tcod.setTextColor(getResources().getColor(R.color.black));
-                        tvUPI.setTextColor(getResources().getColor(R.color.white));
+                        //tvUPI.setTextColor(getResources().getColor(R.color.white));
+                        raz_txt.setTextColor(getResources().getColor(R.color.white));
                         wallet_status = "no";
-                        payment_method = "UPI";
+                        payment_method = "RazorPay";
                         /*if (checkBox_Wallet.isChecked()) {
                             wallet_status = "yes";
                             payment_method = "wallet";
@@ -672,14 +689,14 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                 checkBox_Wallet.setClickable(false);
                 rb_card.setClickable(false);
                 rb_Cod.setClickable(false);
-                use_upi.setClickable(false);
+                //use_upi.setClickable(false);
                 checkBox_coupon.setClickable(false);
                 use_razorpay.setClickable(false);
                 use_paypal.setClickable(false);
             }
         });
 
-        llupi.setOnClickListener(new View.OnClickListener() {
+        /*llupi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (total_amount.equalsIgnoreCase("0") || total_amount.equalsIgnoreCase("0.0") || total_amount.equalsIgnoreCase("")) {
@@ -695,11 +712,11 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                         // llcards.setBackgroundResource(R.drawable.border_rounded1);
                         llupi.setBackgroundResource(R.drawable.border_rounded1);
                         // tcards.setTextColor(getResources().getColor(R.color.black));
-                        /*if (checkBox_Wallet.isChecked()) {
-                            wallet_status = "yes";
-                        } else {
-                            wallet_status = "no";
-                        }*/
+//                        if (checkBox_Wallet.isChecked()) {
+//                            wallet_status = "yes";
+//                        } else {
+//                            wallet_status = "no";
+//                        }
                         wallet_status = "no";
                         payment_method = "COD";
                     } else {
@@ -712,13 +729,13 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                         tvUPI.setTextColor(getResources().getColor(R.color.white));
                         wallet_status = "no";
                         payment_method = "UPI";
-                        /*if (checkBox_Wallet.isChecked()) {
-                            wallet_status = "yes";
-                            payment_method = "wallet";
-                        } else {
-                            wallet_status = "no";
-                            payment_method = "";
-                        }*/
+//                        if (checkBox_Wallet.isChecked()) {
+//                            wallet_status = "yes";
+//                            payment_method = "wallet";
+//                        } else {
+//                            wallet_status = "no";
+//                            payment_method = "";
+//                        }
                     }
                 }
 
@@ -730,7 +747,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
                 use_razorpay.setClickable(false);
                 use_paypal.setClickable(false);
             }
-        });
+        });*/
 
 //        checkBox_Wallet.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
@@ -877,7 +894,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
         rb_Cod.setChecked(true);
         llcod.setBackgroundResource(R.drawable.gradientbg);
         tcod.setTextColor(getResources().getColor(R.color.white));
-        llupi.setBackgroundResource(R.drawable.border_rounded1);
+       // llupi.setBackgroundResource(R.drawable.border_rounded1);
         tvUPI.setTextColor(getResources().getColor(R.color.black));
     }
 
@@ -1499,7 +1516,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
     }
 
 
-    /*@Override
+    @Override
     public void onPaymentSuccess(String s) {
         makeAddOrderRequest(getuser_id, cart_id, payment_method, wallet_status, "success");
     }
@@ -1509,7 +1526,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
         progressDialog.dismiss();
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 
-    }*/
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -1583,7 +1600,7 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
     }
 
     //UPIPay callbacks
-    @Override
+    /*@Override
     public void onTransactionSubmitted(TransactionDetails transactionDetails) {
         try {
             progressDialog.dismiss();
@@ -1641,5 +1658,5 @@ public class PaymentDetails extends AppCompatActivity implements UPIPayListener 
             e.printStackTrace();
         }
         Toast.makeText(this,errorMsg, Toast.LENGTH_LONG).show();
-    }
+    }*/
 }
