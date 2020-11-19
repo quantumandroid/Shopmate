@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/white"
+            android:background="@color/very_very_lightGrey"
             android:orientation="horizontal">
 
             <ImageView
@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_loupe"
-                android:tint="@color/lightGrey" />
+                android:tint="@color/colorAccent" />
 
             <EditText
                 android:id="@+id/et_search"
@@ -48,6 +48,7 @@
                 android:hint="Find stores"
                 android:inputType="textPersonName"
                 android:textSize="12sp"
+                android:textColor="@color/colorAccent"
                 android:imeOptions="actionDone"/>
 
             <ImageView
@@ -283,6 +284,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"
                     android:scrollbars="none"
+
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                 <androidx.recyclerview.widget.RecyclerView

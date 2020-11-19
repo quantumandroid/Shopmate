@@ -35,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -217,6 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // loc.setText(address+", "+city+", "+postalCode);
         rv_items = view.findViewById(R.id.rv_home);
+
         rvProducts = view.findViewById(R.id.rv_home_products);
         change_loc_lay = view.findViewById(R.id.change_loc_lay);
         viewpager_layout = view.findViewById(R.id.viewpager_layout);
@@ -272,6 +274,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rv_items.setLayoutManager(linearLayoutManager);
         rv_items.setItemAnimator(new DefaultItemAnimator());
         rv_items.setNestedScrollingEnabled(false);
+        rv_items.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
