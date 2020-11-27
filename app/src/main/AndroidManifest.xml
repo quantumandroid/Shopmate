@@ -34,7 +34,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".upipay.UPIPayActivity"/>
+        <activity android:name=".Activity.FireOtpPageAuthentication"></activity>
+        <activity android:name=".upipay.UPIPayActivity" />
         <activity
             android:name=".Activity.FlagActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
@@ -72,7 +73,7 @@
         <activity
             android:name=".Activity.About_us"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/StatusBarGreen"/>
+            android:theme="@style/StatusBarGreen" />
         <activity android:name=".Activity.Coupen" />
         <activity
             android:name=".Activity.Myorderdetails"
@@ -136,7 +137,9 @@
         <activity
             android:name=".Activity.MainActivity"
             android:theme="@style/StatusBarGreen">
-            <!--            android:theme="@style/AppTheme.NoActionBar">-->
+
+            <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+
 
             <!--
             <intent-filter>

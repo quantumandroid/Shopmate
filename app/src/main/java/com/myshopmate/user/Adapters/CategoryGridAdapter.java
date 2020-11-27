@@ -165,7 +165,9 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         holder.pMrp.setText(cc.getMrp());
         session_management.setStoreId(cc.getStore_id());
 
-        if (Integer.parseInt(cc.getStock())>0){
+       // if (Integer.parseInt(cc.getStock())>0){
+        String inStock = cc.getIn_stock();
+        if (inStock != null && inStock.equals("1")){
             holder.outofs.setVisibility(View.GONE);
             holder.outofs_in.setVisibility(View.VISIBLE);
         }else {
@@ -215,6 +217,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
                 intent.putExtra("image", cc.getVarient_image());
                 intent.putExtra("sVariant_id", cc.getVarient_id());
                 intent.putExtra("variants", cc.getVarients());
+                intent.putExtra("in_stock", cc.getIn_stock());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

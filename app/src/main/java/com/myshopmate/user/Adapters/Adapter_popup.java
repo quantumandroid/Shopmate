@@ -75,7 +75,9 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
         final NewCategoryVarientList selectAreaModel = varientProductList.get(i);
 
 
-        if (Integer.parseInt(selectAreaModel.getStock()) > 0) {
+       // if (Integer.parseInt(selectAreaModel.getStock()) > 0) {
+        String inStock = selectAreaModel.getIn_stock();
+        if (inStock != null && inStock.equals("1")) {
             holder.outofs.setVisibility(View.GONE);
             holder.outofs_in.setVisibility(View.VISIBLE);
         } else {

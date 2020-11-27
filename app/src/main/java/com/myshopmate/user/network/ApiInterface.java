@@ -1,8 +1,11 @@
 package com.myshopmate.user.network;
 
+import com.myshopmate.user.ModelClass.CountryCodeModel;
+import com.myshopmate.user.ModelClass.FirebaseStatusModel;
 import com.myshopmate.user.ModelClass.ForgotEmailModel;
 import com.myshopmate.user.ModelClass.NotifyModelUser;
 import com.myshopmate.user.ModelClass.PaymentVia;
+import com.myshopmate.user.ModelClass.VerifyOtp;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -25,5 +28,19 @@ public interface ApiInterface {
     @POST("notifyby")
     @FormUrlEncoded
     Call<NotifyModelUser> getNotifyUser(@Field("user_id") String user_id);
+
+    @GET("firebase")
+    Call<FirebaseStatusModel> getFirebaseOtpStatus();
+
+    @GET("countrycode")
+    Call<CountryCodeModel> getCountryCode();
+
+    @POST("firebase_otp_ver")
+    @FormUrlEncoded
+    Call<VerifyOtp> getVerifyOtpStatus(@Field("status") String status , @Field("user_phone") String userPhone);
+
+    @POST("checknum")
+    @FormUrlEncoded
+    Call<VerifyOtp> checkNumIsRegisterOrNot(@Field("user_phone") String userPhone);
 
 }

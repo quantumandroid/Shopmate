@@ -1,5 +1,6 @@
 package com.myshopmate.user.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -69,7 +70,7 @@ public class ProductDetails extends AppCompatActivity {
     private TextView continue_tocart;
 
     private RecyclerView recyclerUnit;
-    private String stock = "0";
+    private String stock = "0", inStock = "0";
     private Adapter_popup selectCityAdapter, pVariantsAdapter;
     private TextView tv_store_name;
     private RecyclerView rvPVariants;
@@ -86,6 +87,7 @@ public class ProductDetails extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
@@ -106,6 +108,7 @@ public class ProductDetails extends AppCompatActivity {
         varient_id = getIntent().getStringExtra("sVariant_id");
         newCategoryVarientLists = (ArrayList<NewCategoryVarientList>) getIntent().getSerializableExtra("variants");
         stock = getIntent().getStringExtra("stock");
+        inStock = getIntent().getStringExtra("in_stock");
 
         ll_details = findViewById(R.id.ll3);
         back = findViewById(R.id.back);
@@ -141,7 +144,8 @@ public class ProductDetails extends AppCompatActivity {
         back.setOnClickListener(v -> finish());
         prodDesc.setText(discription12);
 
-        if (Integer.parseInt(stock) > 0) {
+       // if (Integer.parseInt(stock) > 0) {
+        if (inStock.equals("1")) {
             outofs.setVisibility(View.GONE);
             outofs_in.setVisibility(View.VISIBLE);
         } else {
@@ -230,7 +234,7 @@ public class ProductDetails extends AppCompatActivity {
             ll_addQuan.setVisibility(View.GONE);
             ProdPrice.setText(price12);
             prodMrp.setText(mrp12);
-            txtQuan.setText("" + 0);
+            txtQuan.setText("0");
         }
 
 
@@ -243,10 +247,10 @@ public class ProductDetails extends AppCompatActivity {
         });
 
         plus.setOnClickListener(v -> {
-            if (Integer.parseInt(txt_qty.getText().toString()) < Integer.parseInt(stock)) {
+           // if (Integer.parseInt(txt_qty.getText().toString()) < Integer.parseInt(stock)) {
                 increaseInteger();
                 updateMultiply();
-            }
+           // }
 
         });
 

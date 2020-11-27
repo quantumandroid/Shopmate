@@ -21,6 +21,8 @@ public class NewCategoryDataModel implements Serializable {
     private String p_id;
     private ArrayList<NewCategoryVarientList> varients;
 
+    private String in_stock;
+
     public String getProduct_id() {
         return product_id;
     }
@@ -139,5 +141,13 @@ public class NewCategoryDataModel implements Serializable {
 
     public void setP_id(String p_id) {
         this.p_id = p_id;
+    }
+
+    public String getIn_stock() {
+        return in_stock;
+    }
+
+    public void setIn_stock(String in_stock) {
+        this.in_stock = in_stock;
     }
 }

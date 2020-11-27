@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +25,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.myshopmate.user.Config.BaseURL;
+import com.myshopmate.user.ModelClass.FirebaseStatusModel;
 import com.myshopmate.user.R;
+import com.myshopmate.user.network.ApiInterface;
 import com.myshopmate.user.util.Session_management;
 
 import org.json.JSONException;
@@ -31,6 +36,11 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import static com.myshopmate.user.Config.BaseURL.SignUp;
 
@@ -47,6 +57,8 @@ public class SignUpActivity extends AppCompatActivity {
     private Session_management session_management;
     private String countryCode = "";
     private int countryFlag = -1;
+    private boolean fireBaseOtpOn = false;
+    private LinearLayout progressBar;
 
 //    @Override
 //    protected void attachBaseContext(Context newBase) {
@@ -60,11 +72,12 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         session_management = new Session_management(SignUpActivity.this);
         init();
-
+       // getFirebaseOtpStatus();
     }
 
     private void init() {
 
+        progressBar = findViewById(R.id.progress_bar);
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         progressDialog = new ProgressDialog(SignUpActivity.this);
         progressDialog.setMessage("Loading...");
@@ -138,6 +151,47 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    private void show() {
+        if (progressBar.getVisibility() == View.VISIBLE) {
+            progressBar.setVisibility(View.GONE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void getFirebaseOtpStatus() {
+        Retrofit emailOtp = new Retrofit.Builder()
+                .baseUrl(BaseURL.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build();
+
+        ApiInterface apiInterface = emailOtp.create(ApiInterface.class);
+
+        Call<FirebaseStatusModel> checkOtpStatus = apiInterface.getFirebaseOtpStatus();
+        checkOtpStatus.enqueue(new Callback<FirebaseStatusModel>() {
+            @Override
+            public void onResponse(@NonNull Call<FirebaseStatusModel> call, @NonNull retrofit2.Response<FirebaseStatusModel> response) {
+                if (response.isSuccessful()) {
+                    FirebaseStatusModel model = response.body();
+                    if (model != null) {
+                        fireBaseOtpOn = model.getData().getStatus().equalsIgnoreCase("1");
+                    }
+
+                }
+                //show();
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FirebaseStatusModel> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                //show();
+                progressDialog.dismiss();
+            }
+        });
+
+    }
+
     private void signUpUrl() {
 
         if (token != null && !token.equalsIgnoreCase("")) {
@@ -171,7 +225,12 @@ public class SignUpActivity extends AppCompatActivity {
                             session_management.setUserBlockStatus(block);
 
                             //  Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), OtpVerification.class);
+                            Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+                            /*if (fireBaseOtpOn) {
+                                intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+                            } else {
+                                intent = new Intent(getApplicationContext(), OtpVerification.class);
+                            }*/
                             intent.putExtra("MobNo", etPhone.getText().toString());
                             startActivity(intent);
                             finish();

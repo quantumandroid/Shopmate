@@ -610,7 +610,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         Type listType = new TypeToken<List<NewCategoryDataModel>>() {
                         }.getType();
                         List<NewCategoryDataModel> listorl = gson.fromJson(response.getString("data"), listType);
-                        newCategoryDataModel.addAll(listorl);
+                        for (NewCategoryDataModel categoryDataModel : listorl) {
+
+                            if (categoryDataModel.getIn_stock().equals("1")){
+
+                                newCategoryDataModel.add(categoryDataModel);
+                            }
+                        }
+//                        newCategoryDataModel.addAll(listorl);
 
 //                        for (int i = 0; i < listorl.size(); i++) {
 //                            List<NewCategoryVarientList> listddd = listorl.get(i).getVarients();

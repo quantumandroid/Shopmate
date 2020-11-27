@@ -17,6 +17,7 @@ public class NewCategoryVarientList implements Serializable {
     private String store_id;
     private String stock;
 
+    private String in_stock;
 
     public String getVarient_id() {
         return varient_id;
@@ -112,5 +113,13 @@ public class NewCategoryVarientList implements Serializable {
 
     public void setStock(String stock) {
         this.stock = stock;
+    }
+
+    public String getIn_stock() {
+        return in_stock;
+    }
+
+    public void setIn_stock(String in_stock) {
+        this.in_stock = in_stock;
     }
 }

@@ -36,6 +36,7 @@ public class BaseURL {
     public static final String PAYMENT_RAZORPZY = "payment_razorpay";
     public static final String APP_OTP_STATUS = "user_otp_search";
     public static final String ADDRESS = "address";
+    public static final String COUNTRY_CODE = "country_code";
 
 
     //adreeessss

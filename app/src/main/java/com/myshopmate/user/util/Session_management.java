@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import static com.myshopmate.user.Config.BaseURL.APP_OTP_STATUS;
 import static com.myshopmate.user.Config.BaseURL.CART_ID_FINAL;
+import static com.myshopmate.user.Config.BaseURL.COUNTRY_CODE;
 import static com.myshopmate.user.Config.BaseURL.IS_LOGIN;
 import static com.myshopmate.user.Config.BaseURL.KEY_EMAIL;
 import static com.myshopmate.user.Config.BaseURL.KEY_HOUSE;
@@ -72,6 +73,14 @@ public class Session_management {
 //        prefs2 = context.getSharedPreferences(PREFS_NAME2, PRIVATE_MODE);
 //        editor2 = prefs2.edit();
 
+    }
+
+    public String getCountryCode() {
+        return pref.getString(COUNTRY_CODE, "");
+    }
+
+    public void setCountryCode(String value) {
+        pref.setString(COUNTRY_CODE, value);
     }
 
     public void createLoginSession(String id, String email, String name
