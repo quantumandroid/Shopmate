@@ -52,10 +52,18 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AddressComponents;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -86,6 +94,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -108,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_LOCATION_PERMISSION = 100;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     private static final long MIN_TIME_BW_UPDATES = 3000;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 222;
     public BottomNavigationView navigation;
     int padding = 0;
     LinearLayout My_Order, My_Reward, My_Walllet, My_Cart;
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment homeFragment;
     private Geocoder geocoder;
     public static boolean toCart = false;
-
+    private PlacesClient placesClient;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -163,8 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }*/
 
         homeFragment = new HomeFragment(fragmentClickListner,navigation);
-
-
         sessionManagement = new Session_management(MainActivity.this);
         dbcart = new DatabaseHandler(this);
         pref = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
@@ -239,7 +247,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
+//        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
+        addres.setOnClickListener(v -> onAddressSearchCalled());
 
 //        bell.setOnClickListener(v -> {
 //            navigation.setSelectedItemId(R.id.navigation_notifications123);
@@ -485,8 +494,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         initComponent();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), getResources().getString(R.string.map_api_key));
+        }
+        placesClient = Places.createClient(this);
     }
 
+    public void onAddressSearchCalled() {
+        // Set the fields to specify which types of place data to return.
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS_COMPONENTS
+        );
+        // Start the autocomplete intent.
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields)
+                .setCountry("IN")
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
 
 
     private void showBloackDialog() {
@@ -1283,6 +1313,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (navigation.getSelectedItemId() == R.id.navigation_home) {
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
                 loadFragment(homeFragment);
+            }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                AddressComponents addressComponents = place.getAddressComponents();
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+//                Toast.makeText(MainActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
+//                String address = place.getAddress();
+                // do query with address
+                addres.setText(place.getAddress());
+                LatLng latLng = place.getLatLng();
+                location.setLatitude(latLng.latitude);
+                location.setLongitude(latLng.longitude);
+                sessionManagement.setLocationCity(addressComponents.asList().get(1).getName());
+                sessionManagement.setLocationPref(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Toast.makeText(MainActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                Log.i(TAG, status.getStatusMessage());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
