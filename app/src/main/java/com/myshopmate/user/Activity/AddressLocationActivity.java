@@ -38,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -62,14 +63,16 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.myshopmate.user.Adapters.PlacePredictionAdapter;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.FetchAddressTask;
-import com.myshopmate.user.util.MultiTouchMapFragment;
 import com.myshopmate.user.util.Session_management;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +97,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     private boolean isGPSEnabled = false;
     private boolean isNetworkEnabled = false;
     private GoogleMap mMap;
-    private MultiTouchMapFragment mapFragment;
+//    private MultiTouchMapFragment mapFragment;
     private ImageView back_btn;
     private FusedLocationProviderClient mFusedLocationClient;
     private Session_management session_management;
@@ -159,10 +162,10 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
 //        geoDataClient = com.google.android.libraries.places.compat.Places.getGeoDataClient(AddressLocationActivity.this);
 //        geoDataClient = Places.getGeoDataClient(AddressLocationActivity.this);
 //        mPlaceDetectionClient = Places.getPlaceDetectionClient(AddressLocationActivity.this);
-        mapFragment = (MultiTouchMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        /*mapFragment = (MultiTouchMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
-        }
+        }*/
         configureCameraIdle();
         if (checkAndRequestPermissions()) {
             getLocationRequest();
@@ -359,6 +362,25 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     @Override
     protected void onResume() {
         super.onResume();
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.map1);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i("Places Autocomplete", "Place: " + place.getName() + ", " + place.getId());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i("Places Autocomplete", "An error occurred: " + status);
+            }
+        });
     }
 
     private void setSupLocation() {
@@ -391,7 +413,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setBuildingsEnabled(false);
-        mapFragment.mTouchView.setGoogleMap(mMap);
+//        mapFragment.mTouchView.setGoogleMap(mMap);
         if (session_management.getLatPref().isEmpty() || session_management.getLangPref().isEmpty()) {
             mMap.addMarker(new MarkerOptions().position(INDIA.getCenter()));
 //            mMap.moveCamera(CameraUpdateFactory.newLatLng(INDIA.getCenter()));
