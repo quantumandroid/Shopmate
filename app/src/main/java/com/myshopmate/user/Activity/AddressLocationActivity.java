@@ -137,7 +137,7 @@ public class AddressLocationActivity extends AppCompatActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_location);
-        Places.initialize(getApplicationContext(), getResources().getString(R.string.map_api_key));
+        Places.initialize(getApplicationContext(), "AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs");
         back_btn = findViewById(R.id.back_btn);
         search_view_recy = findViewById(R.id.search_view_recy);
         search_text = findViewById(R.id.search_txt);

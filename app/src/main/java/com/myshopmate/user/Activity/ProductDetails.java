@@ -268,7 +268,7 @@ public class ProductDetails extends AppCompatActivity {
             txt_unit.setText(unit12);
             txt_qty.setText(qty);
 //            varientUrl(varientId);
-            Picasso.with(this).load(BaseURL.IMG_URL + varientimage).into(pImage);
+            Picasso.get().load(BaseURL.IMG_URL + varientimage).into(pImage);
         }
 
         /////////////////////////////////

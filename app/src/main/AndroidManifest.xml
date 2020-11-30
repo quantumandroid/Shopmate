@@ -117,7 +117,7 @@
             android:value="@string/razor_pay_api_key" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_api_key" />
+            android:value="AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

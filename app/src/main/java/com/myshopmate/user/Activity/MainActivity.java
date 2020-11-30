@@ -52,7 +52,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -60,9 +59,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -88,6 +87,7 @@ import com.myshopmate.user.util.FetchAddressTask;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.Utils;
+import com.rtchagas.pingplacepicker.PingPlacePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -236,8 +236,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onChangeHome(boolean open) {
                 DecimalFormat dFormat = new DecimalFormat("##.#######");
                 LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
-                double latitude = Double.valueOf(dFormat.format(latLng.latitude));
-                double longitude = Double.valueOf(dFormat.format(latLng.longitude));
+                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
+                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
                 location.setLatitude(latitude);
                 location.setLongitude(longitude);
                 getAddress();
@@ -248,7 +248,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
 //        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
-        addres.setOnClickListener(v -> onAddressSearchCalled());
+//        addres.setOnClickListener(v -> onAddressSearchCalled());
+        addres.setOnClickListener(v -> showPlacePicker());
 
 //        bell.setOnClickListener(v -> {
 //            navigation.setSelectedItemId(R.id.navigation_notifications123);
@@ -370,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         transaction.replace(R.id.contentPanel, fm);
                         transaction.commit();
                     } else {
-                        showBloackDialog();
+                        showBlockDialog();
                     }
 
 
@@ -496,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getResources().getString(R.string.map_api_key));
+            Places.initialize(getApplicationContext(), "AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs");
         }
         placesClient = Places.createClient(this);
     }
@@ -510,16 +511,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Place.Field.LAT_LNG,
                 Place.Field.ADDRESS_COMPONENTS
         );
+
+        RectangularBounds ratnagiri = RectangularBounds.newInstance(
+                // Ratnagiri approx.
+                new LatLng(16.865514, 73.256588), // SW lat, lng
+                new LatLng(17.068452, 73.449536) // NE lat, lng
+        );
         // Start the autocomplete intent.
-        Intent intent = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.FULLSCREEN, fields)
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .setCountry("IN")
+               // .setLocationBias(ratnagiri)
+                .setLocationRestriction(ratnagiri)
+//                .setTypeFilter(TypeFilter.CITIES)
                 .build(this);
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
+    private void showPlacePicker() {
+        PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
+        builder.setAndroidApiKey("AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs")
+                .setMapsApiKey("AIzaSyDGBez6ZOe4W80UrtxOGYdfl5vgya7gTMI");
 
-    private void showBloackDialog() {
+        try {
+            Intent placeIntent = builder.build(this);
+            startActivityForResult(placeIntent, AUTOCOMPLETE_REQUEST_CODE);
+        }
+        catch (Exception ex) {
+            // Google Play services is not available...
+        }
+    }
+
+
+    private void showBlockDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setCancelable(true);
         alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
@@ -1315,25 +1338,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 loadFragment(homeFragment);
             }
         } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                AddressComponents addressComponents = place.getAddressComponents();
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-//                Toast.makeText(MainActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
-//                String address = place.getAddress();
-                // do query with address
-                addres.setText(place.getAddress());
-                LatLng latLng = place.getLatLng();
-                location.setLatitude(latLng.latitude);
-                location.setLongitude(latLng.longitude);
-                sessionManagement.setLocationCity(addressComponents.asList().get(1).getName());
-                sessionManagement.setLocationPref(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            if (resultCode == RESULT_OK && data != null) {
+//                Place place = Autocomplete.getPlaceFromIntent(data);
+                Place place = PingPlacePicker.getPlace(data);
+                if (place != null) {
+                    AddressComponents addressComponents = place.getAddressComponents();
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                    addres.setText(place.getAddress());
+                    LatLng latLng = place.getLatLng();
+                    if (latLng != null) {
+                        location.setLatitude(latLng.latitude);
+                        location.setLongitude(latLng.longitude);
+                        sessionManagement.setLocationPref(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
+                    }
+                    if (addressComponents != null) {
+                        sessionManagement.setLocationCity(addressComponents.asList().get(1).getName());
+                    }
+                }
+            } /*else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Toast.makeText(MainActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
                 Log.i(TAG, status.getStatusMessage());
-            }
+            }*/
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -104,7 +104,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
       //  holder.linearLayout.setBackgroundColor(clr1);
 
         if (store.getStore_image_url() != null && !store.getStore_image_url().isEmpty()) {
-            Picasso.with(context)
+            Picasso.get()
                     .load(store.getStore_image_url())
                     .into(holder.image);
         }

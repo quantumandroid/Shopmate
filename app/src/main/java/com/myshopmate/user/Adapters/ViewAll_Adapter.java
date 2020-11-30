@@ -104,7 +104,7 @@ public class ViewAll_Adapter extends RecyclerView.Adapter<ViewAll_Adapter.MyView
             holder.txtQuan.setText("" + 0);
         }
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(IMG_URL + cc.getProduct_image())
                 .into(holder.image);
 //        holder.image.setOnClickListener(v -> {
