@@ -80,6 +80,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'com.paypal.sdk:paypal-android-sdk:2.14.2'
-    implementation "androidx.browser:browser:1.2.0"
 }
 apply plugin: 'com.google.gms.google-services'
