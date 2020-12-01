@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "564890787609-i648tghvsqsjiog3kihe2k03l1h6l0rh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.myshopmate.user",
-            "certificate_hash": "306c666c5a1546d1988a9d0461a5d3b1711c3730"
-          }
-        },
-        {
-          "client_id": "564890787609-b7cq0tnrlahfjl11e4vbslj4tshqin9q.apps.googleusercontent.com",
+          "client_id": "564890787609-bugucpkrne6hjp04j9k4n2lt97euljr4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.myshopmate.user",
             "certificate_hash": "16b518d035568c2be4a6e98f92015f86a8dc8863"
+          }
+        },
+        {
+          "client_id": "564890787609-tjl9qdbhsf8vful4lof9d5t4a3aicik0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myshopmate.user",
+            "certificate_hash": "87a6678c01eaa37df54f9aa6292cb79b8de35692"
           }
         },
         {

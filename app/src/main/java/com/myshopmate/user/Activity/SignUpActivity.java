@@ -122,6 +122,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         btnSignUP.setOnClickListener(v -> {
+            /*Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+            intent.putExtra("MobNo", etPhone.getText().toString());
+            startActivity(intent);*/
             if (etName.getText().toString().trim().equalsIgnoreCase("")) {
                 Toast.makeText(getApplicationContext(), "Full name required!", Toast.LENGTH_SHORT).show();
             } else if (etEmail.getText().toString().trim().equalsIgnoreCase("")) {
@@ -137,15 +140,8 @@ public class SignUpActivity extends AppCompatActivity {
             } else if (!isOnline()) {
                 Toast.makeText(getApplicationContext(), "Please check your Internet Connection!", Toast.LENGTH_SHORT).show();
             } else {
-
-//                if (country_c.getText().toString() != null && !country_c.getText().toString().equalsIgnoreCase("")) {
-//
-//                } else {
-//                    Toast.makeText(SignUpActivity.this, "Please select a country code!..", Toast.LENGTH_SHORT).show();
-//                }
                 progressDialog.show();
                 signUpUrl();
-
             }
         });
 

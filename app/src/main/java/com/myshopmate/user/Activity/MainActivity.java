@@ -57,7 +57,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -1341,8 +1340,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (resultCode == RESULT_OK && data != null) {
 //                Place place = Autocomplete.getPlaceFromIntent(data);
                 Place place = PingPlacePicker.getPlace(data);
-                if (place != null) {
-                    AddressComponents addressComponents = place.getAddressComponents();
+                if (place != null && place.getAddress() != null) {
+//                    AddressComponents addressComponents = place.getAddressComponents();
+                    String[] addressArray = place.getAddress().split(",");
+                    int addressIndex = addressArray.length - 3;
+                    if (addressIndex > -1 && addressIndex < addressArray.length) {
+                        sessionManagement.setLocationCity(addressArray[addressIndex]);
+                    }
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
                     addres.setText(place.getAddress());
                     LatLng latLng = place.getLatLng();
@@ -1351,9 +1355,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         location.setLongitude(latLng.longitude);
                         sessionManagement.setLocationPref(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
                     }
-                    if (addressComponents != null) {
+                    /*if (addressComponents != null) {
                         sessionManagement.setLocationCity(addressComponents.asList().get(1).getName());
-                    }
+                    }*/
                 }
             } /*else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

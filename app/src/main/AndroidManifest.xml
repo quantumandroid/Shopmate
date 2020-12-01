@@ -34,7 +34,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.FireOtpPageAuthentication"></activity>
+        <activity android:name=".Activity.FireOtpPageAuthentication"
+            android:parentActivityName=".Activity.SignUpActivity"/>
         <activity android:name=".upipay.UPIPayActivity" />
         <activity
             android:name=".Activity.FlagActivity"
