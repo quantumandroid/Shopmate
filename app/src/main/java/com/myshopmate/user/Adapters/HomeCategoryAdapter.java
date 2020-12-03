@@ -73,7 +73,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         holder.prodNAme.setText(cc.getName());
         holder.pdetails.setText(cc.getDetail());
         holder.image.setImageResource(R.drawable.splashicon);
-        Picasso.with(context)
+        Picasso.get()
                 .load(IMG_URL + cc.getImages())
                 .placeholder(R.drawable.splashicon)
                 .into(holder.image);

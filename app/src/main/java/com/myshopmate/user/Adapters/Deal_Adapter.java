@@ -146,7 +146,7 @@ public class Deal_Adapter extends RecyclerView.Adapter<Deal_Adapter.MyViewHolder
         }.start();
 
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(IMG_URL + cc.getProduct_image())
                 .into(holder.image);
 

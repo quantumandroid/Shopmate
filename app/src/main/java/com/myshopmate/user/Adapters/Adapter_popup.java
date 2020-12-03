@@ -89,7 +89,7 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
         holder.unitvalue.setText(selectAreaModel.getUnit());
 //        holder.mrp.setText("" + selectAreaModel.getVariant_mrp());
-        Picasso.with(context).load(IMG_URL + selectAreaModel.getVarient_image()).into(holder.prodImage);
+        Picasso.get().load(IMG_URL + selectAreaModel.getVarient_image()).into(holder.prodImage);
 
         double price = Double.parseDouble(varientProductList.get(i).getPrice());
         double mrp = Double.parseDouble(varientProductList.get(i).getMrp());

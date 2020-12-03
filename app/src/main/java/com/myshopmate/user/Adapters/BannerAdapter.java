@@ -35,7 +35,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerImag
     @Override
     public void onBindViewHolder(@NonNull BannerAdapter.BannerImage holder, int position) {
 //        Log.e("tag", "onBindViewHolder: " + images.get(position));
-        Picasso.with(context).load(images.get(position)).error(R.mipmap.ic_launcher).into(holder.img);
+        Picasso.get().load(images.get(position)).error(R.mipmap.ic_launcher).into(holder.img);
     }
 
     @Override

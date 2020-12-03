@@ -82,7 +82,7 @@ public class NewCartAdapter extends RecyclerView.Adapter<NewCartAdapter.MyNewCar
             holder.txtQuan.setText("" + 0);
         }
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(IMG_URL + cc.getpImage())
                 .into(holder.image);
 

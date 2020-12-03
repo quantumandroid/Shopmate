@@ -54,7 +54,7 @@ public class ImageAdapterData extends RecyclerView.Adapter<ImageAdapterData.Prod
         JSONObject map = null;
         try {
             map = list.getJSONObject(position);
-            Picasso.with(activity)
+            Picasso.get()
                     .load(IMG_URL+ map.getString("product_image"))
                     .into(holder.image_data);
             holder.tvPName.setText(map.getString("p_name"));

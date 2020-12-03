@@ -115,7 +115,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             holder.txtQuan.setText("" + 0);
         }
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(IMG_URL + cc.getProduct_image())
                 .into(holder.image);
 

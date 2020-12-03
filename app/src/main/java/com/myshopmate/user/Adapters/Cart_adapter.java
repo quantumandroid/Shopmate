@@ -67,7 +67,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
     public void onBindViewHolder(final ProductHolder holder, final int position) {
         HashMap<String, String> map = list.get(position);
         holder.currency_indicator.setText(session_management.getCurrency());
-        Picasso.with(activity)
+        Picasso.get()
                 .load(IMG_URL + map.get("product_image"))
                 .into(holder.iv_logo);
 

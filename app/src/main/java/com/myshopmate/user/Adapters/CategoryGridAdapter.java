@@ -192,7 +192,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.txtQuan.setText("x" + 0);
         }
         if (cc.getVarient_image() != null && !cc.getVarient_image().isEmpty()) {
-            Picasso.with(context)
+            Picasso.get()
                     .load(IMG_URL + cc.getVarient_image())
                     .into(holder.image);
         }

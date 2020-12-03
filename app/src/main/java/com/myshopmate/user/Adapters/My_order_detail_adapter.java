@@ -46,7 +46,7 @@ public class My_order_detail_adapter extends RecyclerView.Adapter<My_order_detai
     public void onBindViewHolder(My_order_detail_adapter.MyViewHolder holder, int position) {
         NewPendingDataModel mList = modelList.get(position);
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(BaseURL.IMG_URL + mList.getVarient_image())
                 .placeholder(R.drawable.splashicon)
                 .into(holder.iv_img);

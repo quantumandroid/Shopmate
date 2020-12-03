@@ -56,6 +56,12 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -80,12 +86,14 @@ import com.myshopmate.user.util.FetchAddressTask;
 import com.myshopmate.user.util.FragmentClickListner;
 import com.myshopmate.user.util.Session_management;
 import com.myshopmate.user.util.Utils;
+import com.rtchagas.pingplacepicker.PingPlacePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_LOCATION_PERMISSION = 100;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     private static final long MIN_TIME_BW_UPDATES = 3000;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 222;
     public BottomNavigationView navigation;
     int padding = 0;
     LinearLayout My_Order, My_Reward, My_Walllet, My_Cart;
@@ -151,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment homeFragment;
     private Geocoder geocoder;
     public static boolean toCart = false;
-
+    private PlacesClient placesClient;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -163,8 +172,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }*/
 
         homeFragment = new HomeFragment(fragmentClickListner,navigation);
-
-
         sessionManagement = new Session_management(MainActivity.this);
         dbcart = new DatabaseHandler(this);
         pref = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
@@ -228,8 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onChangeHome(boolean open) {
                 DecimalFormat dFormat = new DecimalFormat("##.#######");
                 LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
-                double latitude = Double.valueOf(dFormat.format(latLng.latitude));
-                double longitude = Double.valueOf(dFormat.format(latLng.longitude));
+                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
+                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
                 location.setLatitude(latitude);
                 location.setLongitude(longitude);
                 getAddress();
@@ -239,7 +246,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
+//        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
+//        addres.setOnClickListener(v -> onAddressSearchCalled());
+        addres.setOnClickListener(v -> showPlacePicker());
 
 //        bell.setOnClickListener(v -> {
 //            navigation.setSelectedItemId(R.id.navigation_notifications123);
@@ -361,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         transaction.replace(R.id.contentPanel, fm);
                         transaction.commit();
                     } else {
-                        showBloackDialog();
+                        showBlockDialog();
                     }
 
 
@@ -485,11 +494,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         initComponent();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs");
+        }
+        placesClient = Places.createClient(this);
+    }
+
+    public void onAddressSearchCalled() {
+        // Set the fields to specify which types of place data to return.
+        List<Place.Field> fields = Arrays.asList(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.ADDRESS,
+                Place.Field.LAT_LNG,
+                Place.Field.ADDRESS_COMPONENTS
+        );
+
+        RectangularBounds ratnagiri = RectangularBounds.newInstance(
+                // Ratnagiri approx.
+                new LatLng(16.865514, 73.256588), // SW lat, lng
+                new LatLng(17.068452, 73.449536) // NE lat, lng
+        );
+        // Start the autocomplete intent.
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                .setCountry("IN")
+               // .setLocationBias(ratnagiri)
+                .setLocationRestriction(ratnagiri)
+//                .setTypeFilter(TypeFilter.CITIES)
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
+    private void showPlacePicker() {
+        PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
+        builder.setAndroidApiKey("AIzaSyCF36ce_XG_VegyZJyIp-tIW0l4d15Hhrs")
+                .setMapsApiKey("AIzaSyDGBez6ZOe4W80UrtxOGYdfl5vgya7gTMI");
+
+        try {
+            Intent placeIntent = builder.build(this);
+            startActivityForResult(placeIntent, AUTOCOMPLETE_REQUEST_CODE);
+        }
+        catch (Exception ex) {
+            // Google Play services is not available...
+        }
     }
 
 
-
-    private void showBloackDialog() {
+    private void showBlockDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setCancelable(true);
         alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
@@ -1284,6 +1336,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //loadFragment(new HomeeeFragment(fragmentClickListner));
                 loadFragment(homeFragment);
             }
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+//                Place place = Autocomplete.getPlaceFromIntent(data);
+                Place place = PingPlacePicker.getPlace(data);
+                if (place != null && place.getAddress() != null) {
+//                    AddressComponents addressComponents = place.getAddressComponents();
+                    String[] addressArray = place.getAddress().split(",");
+                    int addressIndex = addressArray.length - 3;
+                    if (addressIndex > -1 && addressIndex < addressArray.length) {
+                        sessionManagement.setLocationCity(addressArray[addressIndex]);
+                    }
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                    addres.setText(place.getAddress());
+                    LatLng latLng = place.getLatLng();
+                    if (latLng != null) {
+                        location.setLatitude(latLng.latitude);
+                        location.setLongitude(latLng.longitude);
+                        sessionManagement.setLocationPref(String.valueOf(latLng.latitude), String.valueOf(latLng.longitude));
+                    }
+                    /*if (addressComponents != null) {
+                        sessionManagement.setLocationCity(addressComponents.asList().get(1).getName());
+                    }*/
+                }
+            } /*else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Toast.makeText(MainActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                Log.i(TAG, status.getStatusMessage());
+            }*/
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

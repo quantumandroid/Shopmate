@@ -41,7 +41,7 @@ public class MyPendingOrderDetails extends RecyclerView.Adapter<MyPendingOrderDe
     @Override
     public void onBindViewHolder(@NonNull MyDataViewHolder holder, int position) {
         NewPastOrderSubModel mList = modelList.get(position);
-        Picasso.with(context)
+        Picasso.get()
                 .load(BaseURL.IMG_URL + mList.getVarient_image())
                 .placeholder(R.drawable.splashicon)
                 .into(holder.iv_img);

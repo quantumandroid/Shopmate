@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.ForgotEmailModel;
+import com.myshopmate.user.ModelClass.VerifyOtp;
 import com.myshopmate.user.R;
 import com.myshopmate.user.network.ApiInterface;
 import com.myshopmate.user.util.AppController;
@@ -73,14 +74,14 @@ public class ForgotPassOtp extends AppCompatActivity {
         checkOtpStatus();
         if (session_management.getOtpSatus().equalsIgnoreCase("0")) {
             cv_email.setVisibility(View.VISIBLE);
-            cvverify.setVisibility(View.VISIBLE);
         } else {
             cv_email.setVisibility(View.GONE);
-            cvverify.setVisibility(View.VISIBLE);
         }
+        cvverify.setVisibility(View.VISIBLE);
 
         cvverify.setEnabled(true);
-        cvverify.setOnClickListener(v -> {
+        cvverify.setOnClickListener(v -> checkNumber(et_req_mobile.getText().toString().trim()));
+        /*cvverify.setOnClickListener(v -> {
             cvverify.setEnabled(true);
 
             if (session_management.getOtpSatus().equalsIgnoreCase("0")) {
@@ -103,6 +104,51 @@ public class ForgotPassOtp extends AppCompatActivity {
                     makeRegisterRequest();
 
                 }
+            }
+        });*/
+    }
+
+    private void checkNumber(String phoneNumber) {
+        progressDialog.show();
+        Retrofit emailOtp = new Retrofit.Builder()
+                .baseUrl(BaseURL.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build();
+
+        ApiInterface apiInterface = emailOtp.create(ApiInterface.class);
+
+        Call<VerifyOtp> checkOtpStatus = apiInterface.checkNumIsRegisterOrNot(phoneNumber);
+        checkOtpStatus.enqueue(new Callback<VerifyOtp>() {
+            @Override
+            public void onResponse(@NonNull Call<VerifyOtp> call, @NonNull retrofit2.Response<VerifyOtp> response) {
+                if (response.isSuccessful()) {
+                    VerifyOtp model = response.body();
+                    if (model != null) {
+                        boolean otpOn = model.getStatus().equalsIgnoreCase("1");
+                        if (otpOn) {
+                            if (phoneNumber.length() != 10 || phoneNumber.contains("+")) {
+                                et_req_mobile.setError("Enter valid mobile number");
+                            } else {
+                                Intent intent = new Intent(ForgotPassOtp.this, Forget_otp_verify.class);
+                                intent.putExtra("user_phone", phoneNumber);
+                                intent.putExtra("firebase", true);
+                                startActivity(intent);
+                            }
+                        } else {
+                            Toast.makeText(ForgotPassOtp.this, "Number not Register!..", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+                cvverify.setEnabled(true);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<VerifyOtp> call, @NonNull Throwable t) {
+                cvverify.setEnabled(true);
+                progressDialog.dismiss();
+                t.printStackTrace();
             }
         });
     }

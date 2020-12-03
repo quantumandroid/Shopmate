@@ -80,7 +80,7 @@ public class Home_adapter extends RecyclerView.Adapter<Home_adapter.MyViewHolder
         int clr1 = Color.rgb(red, green, blue);                                 //pastel colors
         holder.linearLayout.setBackgroundColor(clr1);
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(BaseURL.IMG_URL + mList.getImage())
                 .into(holder.image);
         preferences = context.getSharedPreferences("lan", MODE_PRIVATE);

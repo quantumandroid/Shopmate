@@ -1,5 +1,6 @@
 package com.myshopmate.user.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -30,7 +31,6 @@ import com.myshopmate.user.R;
 import com.myshopmate.user.network.ApiInterface;
 import com.myshopmate.user.util.Session_management;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -104,11 +104,12 @@ public class FireOtpPageAuthentication extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void getCountryCode() {
         sessionManagement.setCountryCode("91");
         countryCode.setText("+" + sessionManagement.getCountryCode());
         PhoneAuthOptions phoneAuthOptions = PhoneAuthOptions.newBuilder()
-                .setPhoneNumber("+917350119381")
+                .setPhoneNumber("+91"+mobileNO)
                 .setCallbacks(changedCallbacks)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setActivity(this)
@@ -120,47 +121,7 @@ public class FireOtpPageAuthentication extends AppCompatActivity {
                 TimeUnit.SECONDS,
                 FireOtpPageAuthentication.this,
                 changedCallbacks);*/
-        firebaseAuth.setLanguageCode(Locale.getDefault().getLanguage());
-
-        /*Retrofit emailOtp = new Retrofit.Builder()
-                .baseUrl(BaseURL.BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build();*/
-        /*ApiInterface apiInterface = emailOtp.create(ApiInterface.class);
-
-        Call<CountryCodeModel> checkOtpStatus = apiInterface.getCountryCode();
-        checkOtpStatus.enqueue(new Callback<CountryCodeModel>() {
-            @Override
-            public void onResponse(@NonNull Call<CountryCodeModel> call, @NonNull retrofit2.Response<CountryCodeModel> response) {
-                if (response.isSuccessful()) {
-                    CountryCodeModel model = response.body();
-                    if (model != null) {
-                        if (model.getStatus().equalsIgnoreCase("1")) {
-                            sessionManagement.setCountryCode(model.getData().getCountryCode());
-                            countryCode.setText("+" + sessionManagement.getCountryCode());
-                            PhoneAuthProvider.getInstance(firebaseAuth).verifyPhoneNumber(
-                                    "+" + sessionManagement.getCountryCode() + mobileNO,
-                                    60,
-                                    TimeUnit.SECONDS,
-                                    FireOtpPageAuthentication.this,
-                                    changedCallbacks);
-                            firebaseAuth.setLanguageCode(Locale.getDefault().getLanguage());
-
-                        } else {
-                            sessionManagement.setCountryCode("");
-                        }
-                    }
-
-                }
-                show();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<CountryCodeModel> call, @NonNull Throwable t) {
-                t.printStackTrace();
-                show();
-            }
-        });*/
+//        firebaseAuth.setLanguageCode(Locale.getDefault().getLanguage());
 
     }
 
