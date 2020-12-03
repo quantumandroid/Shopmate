@@ -50,6 +50,7 @@ import java.util.Map;
 
 import static com.myshopmate.user.Config.BaseURL.MY_BASE_URL;
 import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
+//import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
 
 public class Splash extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 500;
