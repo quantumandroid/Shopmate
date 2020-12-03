@@ -1,5 +1,6 @@
 package com.myshopmate.user.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,9 +20,11 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.VerifyOtp;
@@ -35,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +61,8 @@ public class Forget_otp_verify extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_otp_verify);
 
+        FirebaseApp.initializeApp(Forget_otp_verify.this);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Login");
@@ -82,6 +88,26 @@ public class Forget_otp_verify extends AppCompatActivity {
                 }
             }
         });
+        getCountryCode();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void getCountryCode() {
+        PhoneAuthOptions phoneAuthOptions = PhoneAuthOptions.newBuilder()
+                .setPhoneNumber("+91"+number.getText().toString().trim())
+                .setCallbacks(changedCallbacks)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .build();
+        PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions);
+      /*  PhoneAuthProvider.getInstance(firebaseAuth).verifyPhoneNumber(
+                "+" + sessionManagement.getCountryCode() + mobileNO,
+                60,
+                TimeUnit.SECONDS,
+                FireOtpPageAuthentication.this,
+                changedCallbacks);*/
+//        firebaseAuth.setLanguageCode(Locale.getDefault().getLanguage());
+
     }
 
     private void setCallback() {

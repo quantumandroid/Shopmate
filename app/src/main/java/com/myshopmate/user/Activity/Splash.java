@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,11 +61,13 @@ public class Splash extends AppCompatActivity {
     Session_management session_management;
     public static ConfigData configData = new ConfigData();
     private LocationManager manager;
+    private ProgressBar progress_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        progress_bar = findViewById(R.id.progress_bar);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Config.SIMPLE_REQUEST_URL = MY_BASE_URL;
@@ -83,8 +87,17 @@ public class Splash extends AppCompatActivity {
                 enableLoc();
             }
         }*/
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    progress_bar.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        },1500);
         getConfigData();
-
     }
 
     private void getConfigData() {

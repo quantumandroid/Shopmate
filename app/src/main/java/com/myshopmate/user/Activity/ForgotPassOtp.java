@@ -109,6 +109,7 @@ public class ForgotPassOtp extends AppCompatActivity {
     }
 
     private void checkNumber(String phoneNumber) {
+        progressDialog.show();
         Retrofit emailOtp = new Retrofit.Builder()
                 .baseUrl(BaseURL.BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
