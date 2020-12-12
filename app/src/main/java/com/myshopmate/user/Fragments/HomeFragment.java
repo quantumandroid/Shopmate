@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,7 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,6 +74,7 @@ import com.myshopmate.user.Adapters.HomeCategoryAdapter;
 import com.myshopmate.user.Adapters.Home_adapter;
 import com.myshopmate.user.Adapters.MainScreenAdapter;
 import com.myshopmate.user.Adapters.PageAdapter;
+import com.myshopmate.user.Adapters.PopularCatsAdapter;
 import com.myshopmate.user.Adapters.StoreProductsPagerAdapter;
 import com.myshopmate.user.Categorygridquantity;
 import com.myshopmate.user.Config.BaseURL;
@@ -84,8 +85,11 @@ import com.myshopmate.user.ModelClass.MainScreenList;
 import com.myshopmate.user.ModelClass.NewCartModel;
 import com.myshopmate.user.ModelClass.NewCategoryDataModel;
 import com.myshopmate.user.ModelClass.NewCategoryVarientList;
+import com.myshopmate.user.ModelClass.PopularCategoryModel;
+import com.myshopmate.user.ModelClass.PopularCategoryResponse;
 import com.myshopmate.user.ModelClass.Store;
 import com.myshopmate.user.R;
+import com.myshopmate.user.network.ApiInterface;
 import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
@@ -104,6 +108,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.android.volley.VolleyLog.TAG;
@@ -131,7 +140,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     // CardView Search_layout;
     //    ScrollView scrollView;
     //NestedScrollView scrollView;
-    RecyclerView rv_items;
+    RecyclerView rv_items, rv_stores;
     SliderLayout banner_slider, featuredslider;
     OvershootInterpolator interpolator = new OvershootInterpolator();
     Boolean isMenuOpen = false;
@@ -187,6 +196,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     DatabaseHandler dbcart;
 
     ImageView iv_search_clear, iv_search;
+    private RecyclerView rv_home_cat_products;
+    private ArrayList<PopularCategoryModel> popularCategoryModels;
+    private PopularCatsAdapter popularCatsAdapter;
+
+    private LinearLayout layoutAll, layoutSearch;
+    private Button cancelSearch;
+
+    private boolean isSearchOpen = false;
 
     public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
@@ -215,9 +232,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         stores_products_tab_layout = view.findViewById(R.id.stores_products_tab_layout);
         iv_search_clear = view.findViewById(R.id.iv_search_clear);
         iv_search = view.findViewById(R.id.iv_search);
+        rv_home_cat_products = view.findViewById(R.id.rv_home_cat_products);
+        layoutSearch = view.findViewById(R.id.layout_search);
+        layoutAll = view.findViewById(R.id.layout_all);
+        cancelSearch = view.findViewById(R.id.cancel_search);
 
         // loc.setText(address+", "+city+", "+postalCode);
-        rv_items = view.findViewById(R.id.rv_home);
+//        rv_items = view.findViewById(R.id.rv_home);
 
         rvProducts = view.findViewById(R.id.rv_home_products);
         change_loc_lay = view.findViewById(R.id.change_loc_lay);
@@ -238,6 +259,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         banner_slider = view.findViewById(R.id.relative_banner);
         featuredslider = view.findViewById(R.id.featured_img_slider);
         rv_items = view.findViewById(R.id.rv_home);
+        rv_stores = view.findViewById(R.id.rv_stores);
         fabMain = view.findViewById(R.id.fabMain);
         fabOne = view.findViewById(R.id.fabOne);
         fabTwo = view.findViewById(R.id.fabTwo);
@@ -274,7 +296,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rv_items.setLayoutManager(linearLayoutManager);
         rv_items.setItemAnimator(new DefaultItemAnimator());
         rv_items.setNestedScrollingEnabled(false);
-        rv_items.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+//        rv_items.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -291,9 +313,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("cat_id", "47");
                 intent.putExtra("title", store_modelList.get(position).getStore_name());
                 intent.putExtra("store_id", store_modelList.get(position).getStore_id());
+                intent.putExtra("is_from_category", false);
                // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
                // intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
-                //  intent.putExtra("image", store_modelList.get(position).ge());
+//                  intent.putExtra("image", store_modelList.get(position).getStore_image_url());
                 startActivityForResult(intent, 24);
 
             }
@@ -305,7 +328,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }));
 
         store_modelList = new ArrayList<>();
-        adapter1 = new HomeAdapter(store_modelList, getActivity());
+        adapter1 = new HomeAdapter(store_modelList, getActivity(),R.layout.row_home_rv1);
         rv_items.setAdapter(adapter1);
 
         LinearLayoutManager layoutManagerProducts = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -325,23 +348,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollView.setSmoothScrollingEnabled(true);*/
 
 
-        /*etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    if (viewPagerStoresProducts.getCurrentItem() == 1) {
-                       // bottomNavigationView.setSelectedItemId(R.id.navigation_notifications1);
-                        bottomNavigationView.setSelectedItemId(R.id.navigation_my_orders);
-                        *//*SearchFragment trending_fragment = new SearchFragment();
-                        FragmentManager manager = getParentFragmentManager();
-                        // FragmentManager m = getSu();
-                        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                        fragmentTransaction.replace(R.id.contentPanel, trending_fragment);
-                        fragmentTransaction.commit();*//*
-                    }
+                    openSearch();
                 }
             }
-        });*/
+        });
 
         etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -382,6 +396,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     iv_search_clear.setVisibility(View.VISIBLE);
                     iv_search.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        cancelSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeSearch();
             }
         });
 
@@ -540,6 +561,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         categoryGridAdapter = new CategoryGridAdapter(newCategoryDataModel, context, categorygridquantity);
         rvProducts.setAdapter(categoryGridAdapter);
 
+
+        popularCategoryModels = new ArrayList<>();
+        popularCatsAdapter = new PopularCatsAdapter(context,popularCategoryModels);
+        rv_home_cat_products.setAdapter(popularCatsAdapter);
+
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 //            @Override
 //            public void onTabSelected(TabLayout.Tab tab) {
@@ -557,6 +583,90 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //            }
 //        });
         return view;
+    }
+
+    private void setUpPopularStores(ArrayList<Store> stores) {
+        /*LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rv_stores.setLayoutManager(linearLayoutManager);*/
+        rv_stores.setItemAnimator(new DefaultItemAnimator());
+        rv_stores.setNestedScrollingEnabled(false);
+//        rv_stores.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+        rv_stores.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_stores, new RecyclerTouchListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                /*String getid = category_modelList.get(position).getCat_id();
+                Intent intent = new Intent(getActivity(), CategoryPage.class);
+                intent.putExtra("cat_id", getid);
+                intent.putExtra("title", category_modelList.get(position).getTitle());
+                intent.putExtra("image", category_modelList.get(position).getImage());
+                startActivityForResult(intent, 24);
+*/
+
+                // String getid = store_modelList.get(position).getStore_id();
+                Intent intent = new Intent(getActivity(), CategoryPage.class);
+                intent.putExtra("cat_id", "47");
+                intent.putExtra("title", stores.get(position).getStore_name());
+                intent.putExtra("store_id", stores.get(position).getStore_id());
+                intent.putExtra("is_from_category", false);
+                // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
+                // intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
+//                  intent.putExtra("image", store_modelList.get(position).getStore_image_url());
+                startActivityForResult(intent, 24);
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
+//        List<Store> store_modelList = new ArrayList<>();
+        HomeAdapter adapter1 = new HomeAdapter(stores, getActivity(), R.layout.row_home_popular_stores);
+        rv_stores.setAdapter(adapter1);
+    }
+
+    public void closeSearch() {
+        if (isSearchOpen) {
+            isSearchOpen = false;
+            layoutSearch.setVisibility(View.GONE);
+            layoutAll.setVisibility(View.VISIBLE);
+            Utils.hideKeyboard(getActivity());
+            etSearch.clearFocus();
+            cancelSearch.setVisibility(View.GONE);
+        }
+    }
+
+    private void openSearch() {
+        if (!isSearchOpen) {
+            isSearchOpen = true;
+            layoutAll.setVisibility(View.GONE);
+            layoutSearch.setVisibility(View.VISIBLE);
+            cancelSearch.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setUpPopularCategories() {
+        Retrofit emailOtp = new Retrofit.Builder()
+                .baseUrl(BaseURL.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiInterface apiInterface = emailOtp.create(ApiInterface.class);
+        apiInterface.getPopularCategoryProducts().enqueue(new Callback<PopularCategoryResponse>() {
+            @Override
+            public void onResponse(Call<PopularCategoryResponse> call, retrofit2.Response<PopularCategoryResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    popularCategoryModels.clear();
+                    popularCategoryModels.addAll(response.body().getData());
+                    popularCatsAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PopularCategoryResponse> call, Throwable t) {
+                Log.e(TAG1,t.getMessage());
+            }
+        });
     }
 
     private void product(String store_id, String search) {
@@ -676,6 +786,55 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void setSearch() {
         etSearch.requestFocus();
+    }
+
+    private void popularStores() {
+        //store_modelList.clear();
+        //adapter1.notifyDataSetChanged();
+        if (!isUserInDelRange()) {
+            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            return;
+        }
+        try {
+            progressDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        String sql = "select * from store where is_popular='1'" ;
+        String sql = "select * from store" ;
+        //String sql = "select * from store";
+        SimpleRequest simpleRequest = new SimpleRequest(context);
+        simpleRequest.get(sql, new OnResponseListener() {
+            @Override
+            public void onSuccess(com.volley.response.Response response) {
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    setUpPopularStores(getStores(response.getString()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // showAlert(e.getMessage());
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+                store_modelList.clear();
+                adapter1.notifyDataSetChanged();
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                try {
+                    progressDialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void selectStores(String search_key) {
@@ -1587,6 +1746,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        loadData();
+    }
+
+    private void loadData() {
         if (Utils.isOnline(getActivity())) {
             //makeGetSliderRequest();
             //second_banner();
@@ -1594,6 +1757,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             //topSelling();
             selectStores("");
             product("", "");
+            popularStores();
+            setUpPopularCategories();
         }
     }
 

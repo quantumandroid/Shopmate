@@ -121,6 +121,7 @@ public class CategoryFragment extends Fragment {
                             cateAdapter = new HomeCategoryAdapter(cateList, getContext(), cat_id -> {
                                 Intent intent = new Intent(requireActivity(), CategoryPage.class);
                                 intent.putExtra("cat_id", cat_id);
+                                intent.putExtra("is_from_category", true);
                                 startActivityForResult(intent, 24);
                             });
                             recyclerView.setAdapter(cateAdapter);

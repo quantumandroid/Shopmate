@@ -34,51 +34,36 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
 
-    private List<Store> modelList;
-  //  private ArrayList<Store> modelListSearch;
-    private Context context;
     String language;
     SharedPreferences preferences;
-    private Session_management session_management;
     DistanceCalculator distanceCalculator;
     DecimalFormat decimalFormat;
- //   private ValueFilter valueFilter;
- //   private String mSearchText;
+    private List<Store> modelList;
+    //  private ArrayList<Store> modelListSearch;
+    private Context context;
+    private Session_management session_management;
+    //   private ValueFilter valueFilter;
+    //   private String mSearchText;
+    private int rowLayout;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title,category;
-        public ImageView image;
-        LinearLayout linearLayout ;
-        CardView cardview1;
-        TextView tvTime;
-        TextView tv_home_status, tv_home_distance;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.tv_home_name);
-            category = (TextView) view.findViewById(R.id.tv_home_cat);
-            image = (ImageView) view.findViewById(R.id.iv_home_icon);
-            linearLayout =  view.findViewById(R.id.ll1);
-            cardview1 =  view.findViewById(R.id.cardview1);
-            tvTime = view.findViewById(R.id.tv_home_time);
-            tv_home_status = view.findViewById(R.id.tv_home_status);
-            tv_home_distance = view.findViewById(R.id.tv_home_distance);
-        }
-    }
-
-    public HomeAdapter(List<Store> modelList, FragmentActivity activity) {
+    public HomeAdapter(List<Store> modelList, FragmentActivity activity, int rowLayout) {
         this.modelList = modelList;
-       //  this.modelListSearch = new ArrayList<>();
+        //  this.modelListSearch = new ArrayList<>();
         // modelListSearch.addAll(modelList);
         session_management = new Session_management(activity);
-         distanceCalculator = new DistanceCalculator();
+        distanceCalculator = new DistanceCalculator();
         decimalFormat = new DecimalFormat("0.00");
+        this.rowLayout = rowLayout;
     }
 
     @Override
     public HomeAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_home_rv1, parent, false);
+        View itemView;
+        try {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        } catch (Exception e) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_home_rv1, parent, false);
+        }
 
         context = parent.getContext();
 
@@ -100,8 +85,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         final int red = (baseRed + rnd.nextInt(256)) / 2;
         final int green = (baseGreen + rnd.nextInt(256)) / 2;
         final int blue = (baseBlue + rnd.nextInt(256)) / 2;
-       // int clr1 = Color.rgb(red, green, blue);                                 //pastel colors
-      //  holder.linearLayout.setBackgroundColor(clr1);
+        // int clr1 = Color.rgb(red, green, blue);                                 //pastel colors
+        //  holder.linearLayout.setBackgroundColor(clr1);
 
         if (store.getStore_image_url() != null && !store.getStore_image_url().isEmpty()) {
             Picasso.get()
@@ -109,22 +94,22 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
                     .into(holder.image);
         }
         preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
-        language=preferences.getString("language","");
-            holder.title.setText(store.getStore_name());
-            holder.category.setText(store.getCategory());
-            holder.tvTime.setText(getTimeStr(store.getOpening_time(),store.getClosing_time()));
+        language = preferences.getString("language", "");
+        holder.title.setText(store.getStore_name());
+        holder.category.setText(store.getCategory());
+        holder.tvTime.setText(getTimeStr(store.getOpening_time(), store.getClosing_time()));
 
-            if (isStoreOpen(store.getOpening_time(), store.getClosing_time())){
-                holder.tv_home_status.setText("open");
-                holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.green_orl));
-                holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_green));
-            }else {
-                holder.tv_home_status.setText("closed");
-                holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.quantum_error_light));
-                holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_red));
-            }
+        if (isStoreOpen(store.getOpening_time(), store.getClosing_time())) {
+            holder.tv_home_status.setText("open");
+            holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.green_orl));
+            holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_green));
+        } else {
+            holder.tv_home_status.setText("closed");
+            holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.quantum_error_light));
+            holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_red));
+        }
 
-            holder.tv_home_distance.setText("around "+getDistance(store.getLat(),store.getLng())+" km");
+        holder.tv_home_distance.setText("around " + getDistance(store.getLat(), store.getLng()) + " km");
 
     }
 
@@ -135,7 +120,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         double lat2 = Double.parseDouble(session_management.getLatPref());
         double lng2 = Double.parseDouble(session_management.getLangPref());
 
-       // double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
+        // double distance = distanceCalculator.distance(lat1, lng1, lat2, lng2);
         double distance = Utils.calculateMapDistance(lat1, lng1, lat2, lng2);
         // distance *= 2;
 
@@ -147,8 +132,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         int currentHr = calendar.get(Calendar.HOUR_OF_DAY);
 
-       String ot = Utils.formatDateTimeString(opening_time,"hh:mm","HH");
-       String ct = Utils.formatDateTimeString(closing_time,"hh:mm","HH");
+        String ot = Utils.formatDateTimeString(opening_time, "hh:mm", "HH");
+        String ct = Utils.formatDateTimeString(closing_time, "hh:mm", "HH");
 
         try {
             return Integer.parseInt(ot) <= currentHr && currentHr < Integer.parseInt(ct);
@@ -160,14 +145,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     private String getTimeStr(String opening_time, String closing_time) {
         String timeStr = "";
-        timeStr = Utils.formatDateTimeString(opening_time,"hh:mm","hh:mm a");
-        timeStr += "  to  " + Utils.formatDateTimeString(closing_time,"hh:mm","hh:mm a");
+        timeStr = Utils.formatDateTimeString(opening_time, "hh:mm", "hh:mm a");
+        timeStr += "  to  " + Utils.formatDateTimeString(closing_time, "hh:mm", "hh:mm a");
         return timeStr;
     }
 
     @Override
     public int getItemCount() {
         return modelList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, category;
+        public ImageView image;
+        LinearLayout linearLayout;
+        CardView cardview1;
+        TextView tvTime;
+        TextView tv_home_status, tv_home_distance;
+
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.tv_home_name);
+            category = (TextView) view.findViewById(R.id.tv_home_cat);
+            image = (ImageView) view.findViewById(R.id.iv_home_icon);
+            linearLayout = view.findViewById(R.id.ll1);
+            cardview1 = view.findViewById(R.id.cardview1);
+            tvTime = view.findViewById(R.id.tv_home_time);
+            tv_home_status = view.findViewById(R.id.tv_home_status);
+            tv_home_distance = view.findViewById(R.id.tv_home_distance);
+        }
     }
 
 

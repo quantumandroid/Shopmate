@@ -55,6 +55,7 @@ public class CategoryPage extends AppCompatActivity {
     List<NewCategoryShowList> newModelList = new ArrayList<>();
     List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
     String cat_id, image, title,store_id;
+    boolean isFromCategory = false;
     BottomSheetBehavior behavior;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
     private LinearLayout bottom_sheet;
@@ -86,6 +87,8 @@ public class CategoryPage extends AppCompatActivity {
         store_id = getIntent().getStringExtra("store_id");
         image = getIntent().getStringExtra("image");
         title = getIntent().getStringExtra("title");
+        isFromCategory = getIntent().getBooleanExtra("is_from_category", false);
+
         tv_title_products.setText(title);
         dbcart = new DatabaseHandler(CategoryPage.this);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -269,6 +272,7 @@ public class CategoryPage extends AppCompatActivity {
         params.put("lat", session_management.getLatPref());
         params.put("lng", session_management.getLangPref());
         params.put("city", session_management.getLocationCity());
+        params.put("is_from_category", String.valueOf(isFromCategory));
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
                 BaseURL.cat_product, params, new Response.Listener<JSONObject>() {

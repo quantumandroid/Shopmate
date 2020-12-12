@@ -1,5 +1,6 @@
 package com.myshopmate.user.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,95 +51,6 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 
     }
 
-//    public CategoryGridAdapter(List<NewCategoryDataModel> newCategoryDataModel, Context context, Categorygridquantity categorygridquantity) {
-//
-//
-//    }
-//    private void updateMultiply() {
-//        int position = getAdapterPosition();
-//        HashMap<String, String> map = new HashMap<>();
-////            map.put("varient_id",CategoryGridList.get(position).getpId());
-//        map.put("varient_id", CategoryGridList.get(position).getVarient_id());
-//        Log.d("dfass", CategoryGridList.get(position).getVarient_id());
-//        map.put("product_name", CategoryGridList.get(position).getName());
-////            map.put("category_id",CategoryGridList.get(position).get());
-//        map.put("title", CategoryGridList.get(position).getDescription());
-//        map.put("price", CategoryGridList.get(position).getPrice());
-//        Log.d("dsfa", CategoryGridList.get(position).getPrice());
-//        map.put("mrp", CategoryGridList.get(position).getMrp());
-//        Log.d("fd", CategoryGridList.get(position).getImage());
-//        map.put("product_image", CategoryGridList.get(position).getImage());
-////            map.put("status",CategoryGridList.get(position).get());
-////            map.put("in_stock",CategoryGridList.get(position).getIn_stock());
-//        map.put("unit_value", CategoryGridList.get(position).getQuantity());
-//        map.put("unit", CategoryGridList.get(position).getUnit());
-//        map.put("increament", "0");
-//        map.put("rewards", "0");
-//        map.put("stock", "0");
-//        map.put("product_description", "0");
-//
-//        Log.d("fgh", txtQuan.getText().toString());
-////            Log.d("fghfgh",CategoryGridList.get(position).getpPrice());
-//             /*   map.put("start_date", CategoryGridList.get(position).getStart_date());
-//                map.put("start_time", CategoryGridList.get(position).getStart_time());
-//                map.put("end_date", CategoryGridList.get(position).getEnd_date());
-//                map.put("end_time", CategoryGridList.get(position).getEnd_time());*/
-//        if (!txtQuan.getText().toString().equalsIgnoreCase("0")) {
-//            if (dbcart.isInCart(map.get("varient_id"))) {
-//                dbcart.setCart(map, Integer.valueOf(txtQuan.getText().toString()));
-//                Log.d("sdf", "update");
-//                //  Toast.makeText(context, "Product quantity is updated in your cart", Toast.LENGTH_SHORT).show();
-//
-//            } else {
-//                dbcart.setCart(map, Integer.valueOf(txtQuan.getText().toString()));
-//                //   Toast.makeText(context, "Product quantity is added in your cart", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        } else {
-//            dbcart.removeItemFromCart(map.get("varient_id"));
-//        }
-//        try {
-//            int items = (int) Double.parseDouble(dbcart.getInCartItemQty(map.get("varient_id")));
-//            Double price = Double.parseDouble(map.get("price").trim());
-//            Double mrp = Double.parseDouble(map.get("mrp").trim());
-//            //  Double reward = Double.parseDouble(map.get("rewards"));
-//            // tv_reward.setText("" + reward * items);
-////                pDescrptn.setText(""+CategoryGridList.get(position).getpDes());
-//            pPrice.setText("" + price * items);
-//            txtQuan.setText("" + items);
-//            pMrp.setText("" + mrp * items);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                //  ((MainActivity) context).setCartCounter(""  + dbcart.getCartCount());
-//            }
-//        } catch (IndexOutOfBoundsException e) {
-//            e.toString();
-//            Log.d("qwer", e.toString());
-//        }
-//    }
-//
-//    public void increaseInteger() {
-//        minteger = minteger + 1;
-//        display(minteger);
-//    }
-//
-//    public void decreaseInteger() {
-//        if (minteger == 1) {
-//            minteger = 1;
-//            display(minteger);
-//            ll_addQuan.setVisibility(View.GONE);
-//            btn_Add.setVisibility(View.VISIBLE);
-//        } else {
-//            minteger = minteger - 1;
-//            display(minteger);
-//
-//        }
-//    }
-//
-//    private void display(Integer number) {
-//
-//        txtQuan.setText("" + number);
-//    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -152,6 +64,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NewCategoryDataModel cc = CategoryGridList.get(position);
@@ -189,7 +102,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             holder.ll_addQuan.setVisibility(View.GONE);
             holder.pPrice.setText(cc.getPrice());
             holder.pMrp.setText(cc.getMrp());
-            holder.txtQuan.setText("x" + 0);
+            holder.txtQuan.setText("x0");
         }
         if (cc.getVarient_image() != null && !cc.getVarient_image().isEmpty()) {
             Picasso.get()
