@@ -14,11 +14,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.ModelClass.HomeCate;
-import com.myshopmate.user.ModelClass.SubCatModel;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.CategoryFragmentClick;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +33,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
 
     private List<HomeCate> homeCateList;
     private Context context;
-    private List<SubCatModel> subCatModels = new ArrayList<>();
+    private List<HomeCate> subCatModels = new ArrayList<>();
     private CategoryFragmentClick categoryFragmentClick;
 
     public HomeCategoryAdapter(List<HomeCate> homeCateList, Context context, CategoryFragmentClick categoryFragmentClick) {
@@ -97,7 +96,8 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
                         holder.recyclerSubCate.setVisibility(View.VISIBLE);
                         holder.pimage.setVisibility(View.GONE);
                         holder.image1.setVisibility(View.VISIBLE);
-                        get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc.getId());
+//                        get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc.getId());
+                        get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc);
                     }
                 } else {
                     holder.mines = true;
@@ -116,7 +116,8 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
         return homeCateList.size();
     }
 
-    private void get_subcateory(JSONArray response, RecyclerView recyclerView, String cat_id) {
+//    private void get_subcateory(JSONArray response, RecyclerView recyclerView, String cat_id) {
+    private void get_subcateory(JSONArray response, RecyclerView recyclerView, HomeCate category) {
 
         subCatModels.clear();
 
@@ -127,7 +128,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
 //            intent.putExtra("cat_id", cat_id);
 //            context.startActivity(intent);
             if (categoryFragmentClick != null) {
-                categoryFragmentClick.onClick(cat_id);
+                categoryFragmentClick.onClick(category);
             }
         } else {
 
@@ -140,7 +141,7 @@ public class HomeCategoryAdapter extends RecyclerView.Adapter<HomeCategoryAdapte
                     Log.d("sdf", response.toString());
                     object = array.getJSONObject(i);
 
-                    SubCatModel model = new SubCatModel();
+                    HomeCate model = new HomeCate();
 
 
                     model.setDetail(object.getString("description"));

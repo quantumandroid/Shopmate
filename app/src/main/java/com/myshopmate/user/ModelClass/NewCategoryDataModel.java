@@ -1,26 +1,59 @@
 package com.myshopmate.user.ModelClass;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NewCategoryDataModel implements Serializable {
 
+    @SerializedName("product_id")
+    @Expose
     private String product_id;
+    @SerializedName("cat_id")
+    @Expose
     private String cat_id;
+    @SerializedName("product_name")
+    @Expose
     private String product_name;
+    @SerializedName("product_image")
+    @Expose
     private String product_image;
+    @SerializedName("varient_image")
+    @Expose
     private String varient_image;
+    @SerializedName("description")
+    @Expose
     private String description;
+    @SerializedName("price")
+    @Expose
     private String price;
+    @SerializedName("mrp")
+    @Expose
     private String mrp;
+    @SerializedName("unit")
+    @Expose
     private String unit;
+    @SerializedName("quantity")
+    @Expose
     private String quantity;
+    @SerializedName("store_id")
+    @Expose
     private String store_id;
+    @SerializedName("stock")
+    @Expose
     private String stock;
+    @SerializedName("varient_id")
+    @Expose
     private String varient_id;
+    @SerializedName("p_id")
+    @Expose
     private String p_id;
+    @SerializedName("varients")
+    @Expose
     private ArrayList<NewCategoryVarientList> varients;
-
+    @SerializedName("in_stock") @Expose
     private String in_stock;
 
     public String getProduct_id() {

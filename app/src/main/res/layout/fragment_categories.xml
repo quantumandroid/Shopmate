@@ -64,11 +64,11 @@
                             android:text="Categories"
                             android:textSize="22sp"
                             android:textColor="@color/darkGrey"
-                            android:fontFamily="@font/opensans_bold"></TextView>
+                            android:fontFamily="@font/opensans_bold"/>
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/lightGrey"></View>
+                            android:background="@color/lightGrey"/>
                     </LinearLayout>
                     <LinearLayout
                         android:visibility="gone"
@@ -89,7 +89,7 @@
                             android:background="@drawable/ic_loupe"
                             android:backgroundTint="@color/hintColor"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"></ImageView>
+                            android:layout_marginLeft="10dp"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -100,7 +100,7 @@
                             android:text="Search Products"
                             android:textSize="15sp"
                             android:textColor="@color/hintColor"
-                            android:fontFamily="@font/opensans_semibold"></TextView>
+                            android:fontFamily="@font/opensans_semibold"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_below="@+id/ll3"

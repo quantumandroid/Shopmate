@@ -1,15 +1,19 @@
 package com.myshopmate.user.ModelClass;
 
-import com.squareup.moshi.Json;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
 public class PopularCategoryModel {
-    @Json(name = "category_name")
+    @SerializedName("category_name")
+    @Expose
     private String categoryName;
-    @Json(name = "category_id")
+    @SerializedName("category_id")
+    @Expose
     private String categoryID;
-    @Json(name = "products")
+    @SerializedName("products")
+    @Expose
     private ArrayList<NewCategoryDataModel> products;
 
     public String getCategoryName() {

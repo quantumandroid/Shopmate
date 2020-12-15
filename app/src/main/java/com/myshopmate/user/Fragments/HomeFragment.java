@@ -62,6 +62,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.myshopmate.user.Activity.AddressLocationActivity;
+import com.myshopmate.user.Activity.AllStoresActivity;
 import com.myshopmate.user.Activity.CategoryPage;
 import com.myshopmate.user.Activity.DealActivity;
 import com.myshopmate.user.Activity.Splash;
@@ -205,6 +206,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private boolean isSearchOpen = false;
 
+    private TextView tv_all_categories,tv_all_stores;
+
     public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
         this.bottomNavigationView = bottomNavigationView;
@@ -236,6 +239,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         layoutSearch = view.findViewById(R.id.layout_search);
         layoutAll = view.findViewById(R.id.layout_all);
         cancelSearch = view.findViewById(R.id.cancel_search);
+        tv_all_categories = view.findViewById(R.id.tv_all_categories);
+        tv_all_categories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new CategoryFragment());
+            }
+        });
+        tv_all_stores = view.findViewById(R.id.tv_all_stores);
+        tv_all_stores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, AllStoresActivity.class));
+            }
+        });
 
         // loc.setText(address+", "+city+", "+postalCode);
 //        rv_items = view.findViewById(R.id.rv_home);
@@ -585,6 +602,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    private void loadFragment(Fragment fragment) {
+        if (getActivity() != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contentPanel, fragment)
+                    .commitAllowingStateLoss();
+        }
+    }
+
     private void setUpPopularStores(ArrayList<Store> stores) {
         /*LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         rv_stores.setLayoutManager(linearLayoutManager);*/
@@ -656,9 +681,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<PopularCategoryResponse> call, retrofit2.Response<PopularCategoryResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    popularCategoryModels.clear();
-                    popularCategoryModels.addAll(response.body().getData());
-                    popularCatsAdapter.notifyDataSetChanged();
+                    if (response.body().getData() != null) {
+                        popularCategoryModels.clear();
+                        popularCategoryModels.addAll(response.body().getData());
+                        popularCatsAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -686,6 +713,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("search_key", search);
+        params.put("is_from_category", "false");
+        params.put("cat_id", "");
         /*params.put("user_lat", session_management.getLatPref());
         params.put("user_lng", session_management.getLangPref());
         params.put("centre_lat", Splash.configData.getCentre_lat());

@@ -22,20 +22,20 @@
             android:textSize="16sp"
             tools:ignore="HardcodedText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_view_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:layout_gravity="end"
-            android:layout_marginEnd="10dp"
-            android:text="View All"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText"
+            android:src="@drawable/ic_arrow_right"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ContentDescription"
+            android:tint="@color/black"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

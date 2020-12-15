@@ -172,7 +172,11 @@ public class CategoryPage extends AppCompatActivity {
             bottom_lay_total.setVisibility(View.GONE);
         }
 
-        product(store_id);
+        if (isFromCategory) {
+            productAll("");
+        } else {
+            product(store_id);
+        }
 
 
     }
@@ -260,6 +264,93 @@ public class CategoryPage extends AppCompatActivity {
 //        requestQueue.getCache().clear();
 //        requestQueue.add(stringRequest);
 //    }
+
+    private void productAll(String search) {
+        newCategoryDataModel.clear();
+
+        // Tag used to cancel the request
+        String tag_json_obj = "json_order_detail_req";
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("search_key", search);
+        params.put("is_from_category", "true");
+        params.put("cat_id", cat_id);
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.cat_product_all, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("CheckApi", response.toString());
+                try {
+                    String status = response.getString("status");
+
+//                    String message = response.getString("message");
+
+                    if (status.contains("1")) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<NewCategoryDataModel>>() {
+                        }.getType();
+                        List<NewCategoryDataModel> listorl = gson.fromJson(response.getString("data"), listType);
+                        for (NewCategoryDataModel categoryDataModel : listorl) {
+
+                            if (categoryDataModel.getIn_stock().equals("1")){
+
+                                newCategoryDataModel.add(categoryDataModel);
+                            }
+                        }
+//                        newCategoryDataModel.addAll(listorl);
+
+//                        for (int i = 0; i < listorl.size(); i++) {
+//                            List<NewCategoryVarientList> listddd = listorl.get(i).getVarients();
+//                            for (int j = 0; j < listddd.size(); j++) {
+//                                NewCategoryShowList newCategoryShowList = new NewCategoryShowList(listorl.get(i).getProduct_id(), listorl.get(i).getProduct_name(), listorl.get(i).getProduct_image(), listddd.get(j));
+//                                newModelList.add(newCategoryShowList);
+//                            }
+//                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                newCategoryDataModel.clear();
+                adapter.notifyDataSetChanged();
+
+                error.printStackTrace();
+                VolleyLog.d("", "Error: " + error.getMessage());
+
+            }
+        });
+
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 60000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 0;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+
+    }
 
     private void product(String store_id) {
         newCategoryDataModel.clear();

@@ -1,6 +1,8 @@
 package com.myshopmate.user.util;
 
+import com.myshopmate.user.ModelClass.HomeCate;
+
 public interface CategoryFragmentClick {
 
-    void onClick(String cat_id);
+    void onClick(HomeCate category);
 }

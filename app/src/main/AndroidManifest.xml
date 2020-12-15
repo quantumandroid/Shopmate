@@ -33,9 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.FireOtpPageAuthentication"
-            android:parentActivityName=".Activity.SignUpActivity"/>
+        android:usesCleartextTraffic="true"
+        tools:targetApi="n">
+        <activity android:name=".Activity.AllStoresActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:label="All Stores"/>
+        <activity
+            android:name=".Activity.FireOtpPageAuthentication"
+            android:parentActivityName=".Activity.SignUpActivity" />
         <activity android:name=".upipay.UPIPayActivity" />
         <activity
             android:name=".Activity.FlagActivity"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,7 @@ import com.myshopmate.user.R;
 
 import java.util.ArrayList;
 
-public class PopularCatsAdapter extends RecyclerView.Adapter<PopularCatsAdapter.ViewHlder> {
+public class PopularCatsAdapter extends RecyclerView.Adapter<PopularCatsAdapter.ViewHolder> {
     private Context context;
     private ArrayList<PopularCategoryModel> popularCategoryModels;
     public PopularCatsAdapter(Context context, ArrayList<PopularCategoryModel> popularCategoryModels) {
@@ -26,12 +27,13 @@ public class PopularCatsAdapter extends RecyclerView.Adapter<PopularCatsAdapter.
     }
     @NonNull
     @Override
-    public ViewHlder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHlder(LayoutInflater.from(context).inflate(R.layout.row_layout_popular_cats,parent));
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.row_layout_popular_cats,parent,false));
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHlder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PopularCategoryModel popularCategoryModel = popularCategoryModels.get(position);
         holder.tvCatName.setText(popularCategoryModel.getCategoryName());
         holder.rvProductsAdapter.setAdapter(new ProductListAdapter(context,popularCategoryModel.getProducts()));
@@ -56,11 +58,11 @@ public class PopularCatsAdapter extends RecyclerView.Adapter<PopularCatsAdapter.
         return popularCategoryModels.size();
     }
 
-    public class ViewHlder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCatName;
         RecyclerView rvProductsAdapter;
-        TextView tvViewAll;
-        public ViewHlder(@NonNull View itemView) {
+        ImageView tvViewAll;
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvCatName = itemView.findViewById(R.id.tv_name_category);
             rvProductsAdapter = itemView.findViewById(R.id.rv_product_list);
