@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     private static final long MIN_TIME_BW_UPDATES = 3000;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 222;
+    public static boolean toCart = false;
     public BottomNavigationView navigation;
     int padding = 0;
     LinearLayout My_Order, My_Reward, My_Walllet, My_Cart;
@@ -159,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentClickListner fragmentClickListner;
     private Fragment homeFragment;
     private Geocoder geocoder;
-    public static boolean toCart = false;
     private PlacesClient placesClient;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getWindow().setStatusBarColor(Color.BLACK);
         }*/
 
-        homeFragment = new HomeFragment(fragmentClickListner,navigation);
+        homeFragment = new HomeFragment(fragmentClickListner, navigation);
         sessionManagement = new Session_management(MainActivity.this);
         dbcart = new DatabaseHandler(this);
         pref = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
@@ -461,8 +461,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                               // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
-                               // HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
+                                // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
+                                // HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contentPanel, homeFragment)
                                         .addToBackStack(null).commit();
@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Start the autocomplete intent.
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .setCountry("IN")
-               // .setLocationBias(ratnagiri)
+                // .setLocationBias(ratnagiri)
                 .setLocationRestriction(ratnagiri)
 //                .setTypeFilter(TypeFilter.CITIES)
                 .build(this);
@@ -534,8 +534,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             Intent placeIntent = builder.build(this);
             startActivityForResult(placeIntent, AUTOCOMPLETE_REQUEST_CODE);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // Google Play services is not available...
         }
     }
@@ -869,9 +868,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void loadFragment(Fragment fragment) {
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contentPanel, fragment)
-                .commitAllowingStateLoss();
+        try {
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contentPanel, fragment)
+                    .commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initComponent() {
@@ -879,8 +882,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                   // loadFragment(new HomeeeFragment(fragmentClickListner));
-                    loadFragment(homeFragment);
+                    // loadFragment(new HomeeeFragment(fragmentClickListner));
+                    if (homeFragment != null) {
+                        HomeFragment home = (HomeFragment) homeFragment;
+                        if (home.isSearchOpen()) {
+                            home.closeSearch();
+                        } else {
+                            loadFragment(homeFragment);
+                        }
+                    }
+//                    loadFragment(homeFragment);
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
 //                        FragmentTransaction transaction = manager.beginTransaction();
@@ -1303,7 +1314,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (!odModel.getQty().equalsIgnoreCase("0")) {
                                 dbcart.setCart(map, Integer.parseInt(odModel.getQty()));
                             } else {
-                                dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
+                                dbcart.removeItemFromCart(map.get("varient_id"), map.get("store_id"));
                             }
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1454,12 +1465,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             Fragment fr = getSupportFragmentManager().findFragmentById(R.id.contentPanel);
             final String fm_name = fr.getClass().getSimpleName();
+            HomeFragment home = (HomeFragment) homeFragment;
             if (drawer.isDrawerOpen(navigationView)) {
                 drawer.closeDrawer(navigationView);
+            } else if (home != null && home.isSearchOpen()) {
+                home.closeSearch();
             } else if (!fm_name.contentEquals("HomeFragment")) {
                 navigation.setSelectedItemId(R.id.navigation_home);
             } else {
-                Utils.doubleBackExit(this,navigation);
+                Utils.doubleBackExit(this, navigation);
             }
         } catch (Exception e) {
             super.onBackPressed();

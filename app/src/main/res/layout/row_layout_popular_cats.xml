@@ -16,10 +16,10 @@
             android:id="@+id/tv_name_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="12dp"
             android:text="Category Name"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             tools:ignore="HardcodedText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,6 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="6dp"
             tools:ignore="ContentDescription"
             android:tint="@color/black"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

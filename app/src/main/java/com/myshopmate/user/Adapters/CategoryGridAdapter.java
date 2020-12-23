@@ -76,6 +76,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         holder.txt_unitvalue.setText(cc.getUnit());
         holder.pQuan.setText(cc.getQuantity());
         holder.pMrp.setText(cc.getMrp());
+        holder.pDescrptn.setText(cc.getDescription());
         session_management.setStoreId(cc.getStore_id());
 
        // if (Integer.parseInt(cc.getStock())>0){

@@ -36,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -581,6 +582,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         popularCategoryModels = new ArrayList<>();
         popularCatsAdapter = new PopularCatsAdapter(context,popularCategoryModels);
+        rv_home_cat_products.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         rv_home_cat_products.setAdapter(popularCatsAdapter);
 
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -608,6 +610,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     .replace(R.id.contentPanel, fragment)
                     .commitAllowingStateLoss();
         }
+    }
+
+    public boolean isSearchOpen() {
+        return isSearchOpen;
     }
 
     private void setUpPopularStores(ArrayList<Store> stores) {

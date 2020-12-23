@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
@@ -16,9 +16,9 @@
 
         <ImageView
             android:id="@+id/iv_photo"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerInside"
             android:src="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
 
@@ -28,11 +28,11 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:ellipsize="end"
+        android:gravity="center"
         android:text="Product Name"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="10sp"
         android:layout_marginTop="8dp"
         tools:ignore="HardcodedText" />
 

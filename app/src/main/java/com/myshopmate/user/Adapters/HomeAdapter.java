@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.myshopmate.user.Config.BaseURL.IMG_URL;
 
 /**
  * Created by Rajesh Dabhi on 22/6/2017.
@@ -90,7 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         if (store.getStore_image_url() != null && !store.getStore_image_url().isEmpty()) {
             Picasso.get()
-                    .load(store.getStore_image_url())
+                    .load(IMG_URL+store.getStore_image_url())
                     .into(holder.image);
         }
         preferences = context.getSharedPreferences("lan", MODE_PRIVATE);
