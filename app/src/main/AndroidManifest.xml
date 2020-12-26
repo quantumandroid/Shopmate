@@ -35,9 +35,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
-        <activity android:name=".Activity.AllStoresActivity"
-            android:parentActivityName=".Activity.MainActivity"
-            android:label="All Stores"/>
+        <activity android:name=".Activity.SearchActivity"
+            android:label="Search Shopmate"
+            android:parentActivityName=".Activity.MainActivity"/>
+        <activity
+            android:name=".Activity.AllStoresActivity"
+            android:label="All Stores"
+            android:parentActivityName=".Activity.MainActivity" />
         <activity
             android:name=".Activity.FireOtpPageAuthentication"
             android:parentActivityName=".Activity.SignUpActivity" />

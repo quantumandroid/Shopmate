@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myshopmate.user.ModelClass.Store;
@@ -47,7 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     //   private String mSearchText;
     private int rowLayout;
 
-    public HomeAdapter(List<Store> modelList, FragmentActivity activity, int rowLayout) {
+    public HomeAdapter(List<Store> modelList, Context activity, int rowLayout) {
         this.modelList = modelList;
         //  this.modelListSearch = new ArrayList<>();
         // modelListSearch.addAll(modelList);

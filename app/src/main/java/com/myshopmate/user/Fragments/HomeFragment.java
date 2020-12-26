@@ -66,6 +66,7 @@ import com.myshopmate.user.Activity.AddressLocationActivity;
 import com.myshopmate.user.Activity.AllStoresActivity;
 import com.myshopmate.user.Activity.CategoryPage;
 import com.myshopmate.user.Activity.DealActivity;
+import com.myshopmate.user.Activity.SearchActivity;
 import com.myshopmate.user.Activity.Splash;
 import com.myshopmate.user.Activity.ViewAll_TopDeals;
 import com.myshopmate.user.Adapters.BannerAdapter;
@@ -202,7 +203,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ArrayList<PopularCategoryModel> popularCategoryModels;
     private PopularCatsAdapter popularCatsAdapter;
 
-    private LinearLayout layoutAll, layoutSearch;
+    private LinearLayout layoutAll, layoutSearch, search_activity;
     private Button cancelSearch;
 
     private boolean isSearchOpen = false;
@@ -238,6 +239,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         iv_search = view.findViewById(R.id.iv_search);
         rv_home_cat_products = view.findViewById(R.id.rv_home_cat_products);
         layoutSearch = view.findViewById(R.id.layout_search);
+        search_activity = view.findViewById(R.id.search_activity);
         layoutAll = view.findViewById(R.id.layout_all);
         cancelSearch = view.findViewById(R.id.cancel_search);
         tv_all_categories = view.findViewById(R.id.tv_all_categories);
@@ -314,7 +316,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rv_items.setLayoutManager(linearLayoutManager);
         rv_items.setItemAnimator(new DefaultItemAnimator());
         rv_items.setNestedScrollingEnabled(false);
-//        rv_items.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         rv_items.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), rv_items, new RecyclerTouchListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -366,12 +367,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollView.setSmoothScrollingEnabled(true);*/
 
 
-        etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        /*etSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     openSearch();
                 }
+            }
+        });*/
+
+        search_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, SearchActivity.class));
             }
         });
 
@@ -678,6 +686,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setUpPopularCategories() {
+        if (!isUserInDelRange()) {
+            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            return;
+        }
         Retrofit emailOtp = new Retrofit.Builder()
                 .baseUrl(BaseURL.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

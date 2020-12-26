@@ -40,7 +40,7 @@ public class CartFragment extends Fragment {
     NewCartAdapter cartAdapter;
     RelativeLayout noData,viewCart;
     TextView totalItems;
-  public static   TextView tv_total ;
+  public TextView tv_total ;
     private List<CartModel> cartList = new ArrayList<>();
     private DatabaseHandler db;
     private Session_management sessionManagement;
@@ -117,11 +117,12 @@ public class CartFragment extends Fragment {
         ArrayList<HashMap<String, String>> map = db.getCartAll();
 
         Cart_adapter adapter = new Cart_adapter(getActivity(), map, () -> {
+            updateData();
             if (db.getCartCount() == 0) {
                 noData.setVisibility(View.VISIBLE);
                 viewCart.setVisibility(View.GONE);
             }
-        });
+        }, tv_total, totalItems);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

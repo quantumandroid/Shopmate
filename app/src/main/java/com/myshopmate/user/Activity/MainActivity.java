@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        itemView.addView(cart_badge);
 //        totalBudgetCount = (TextView) cart_badge.findViewById(R.id.totalBudgetCount);
 
-        int badgeCount = pref.getInt("cardqnty", 0);
+//        int badgeCount = pref.getInt("cardqnty", 0);
+        /*int badgeCount = dbcart.getCartCount();
         if (badgeCount > 0) {
             navigation.getOrCreateBadge(R.id.navigation_notifications123).setNumber(badgeCount);
 //            totalBudgetCount.setVisibility(View.VISIBLE);
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             navigation.removeBadge(R.id.navigation_notifications123);
 //            totalBudgetCount.setVisibility(View.GONE);
-        }
+        }*/
 
         profile.setOnClickListener(v -> {
             if (sessionManagement.isLoggedIn()) {
@@ -1029,6 +1030,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_share) {
             shareApp();
         } else if (id == R.id.nav_logout) {
+//            dbcart.clearCart();
             sessionManagement.logoutSession();
 //            login.setVisibility(View.VISIBLE);
             finish();
@@ -1206,7 +1208,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equalsIgnoreCase("cardqnty")) {
 //            totalBudgetCount.setText(pref.getInt("cardqnty",0));
-            int badgeCount = pref.getInt("cardqnty", 0);
+//            int badgeCount = pref.getInt("cardqnty", 0);
+            int badgeCount = dbcart.getCartCount();
             if (badgeCount > 0) {
 //                totalBudgetCount.setVisibility(View.VISIBLE);
 //                totalBudgetCount.setText(""+badgeCount);
@@ -1457,6 +1460,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation.setSelectedItemId(R.id.navigation_home);
         }
         toCart = false;
+        int badgeCount = dbcart.getCartCount();
+        if (badgeCount > 0) {
+//                totalBudgetCount.setVisibility(View.VISIBLE);
+//                totalBudgetCount.setText(""+badgeCount);
+            navigation.getOrCreateBadge(R.id.navigation_notifications123).setNumber(badgeCount);
+        } else {
+//                totalBudgetCount.setVisibility(View.GONE);
+            navigation.removeBadge(R.id.navigation_notifications123);
+        }
     }
 
     @Override
