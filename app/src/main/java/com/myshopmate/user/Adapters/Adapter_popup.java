@@ -93,7 +93,9 @@ public class Adapter_popup extends RecyclerView.Adapter<Adapter_popup.holder> {
 
         double price = Double.parseDouble(varientProductList.get(i).getPrice());
         double mrp = Double.parseDouble(varientProductList.get(i).getMrp());
-
+        if ((mrp - price) < 1) {
+            holder.mrp.setVisibility(View.INVISIBLE);
+        }
         int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(selectAreaModel.getVarient_id(),selectAreaModel.getStore_id()));
         if (qtyd > 0) {
             holder.btn_Add.setVisibility(View.GONE);

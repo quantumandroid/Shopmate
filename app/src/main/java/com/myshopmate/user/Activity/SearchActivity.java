@@ -134,6 +134,7 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = new Intent(context, CategoryPage.class);
                 intent.putExtra("cat_id", "47");
                 intent.putExtra("title", store_modelList.get(position).getStore_name());
+                intent.putExtra("sub_title", store_modelList.get(position).getAddress());
                 intent.putExtra("store_id", store_modelList.get(position).getStore_id());
                 intent.putExtra("is_from_category", false);
                 // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());

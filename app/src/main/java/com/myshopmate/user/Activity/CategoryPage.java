@@ -54,7 +54,7 @@ public class CategoryPage extends AppCompatActivity {
     //    List<CategoryGrid> model = new ArrayList<>();
     List<NewCategoryShowList> newModelList = new ArrayList<>();
     List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
-    String cat_id, image, title,store_id;
+    String cat_id, image, title, subTitle, store_id;
     boolean isFromCategory = false;
     BottomSheetBehavior behavior;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
@@ -67,6 +67,7 @@ public class CategoryPage extends AppCompatActivity {
     private Session_management session_management;
     private DatabaseHandler dbcart;
     private TextView tv_title_products;
+    private TextView tv_sub_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +82,22 @@ public class CategoryPage extends AppCompatActivity {
         image = Recent_Details_Fragment.product_image;
         bottom_sheet = findViewById(R.id.bottom_sheet);
         tv_title_products = findViewById(R.id.tv_title_products);
+        tv_sub_title = findViewById(R.id.tv_sub_title);
         back = findViewById(R.id.back);
         behavior = BottomSheetBehavior.from(bottom_sheet);
         cat_id = getIntent().getStringExtra("cat_id");
         store_id = getIntent().getStringExtra("store_id");
         image = getIntent().getStringExtra("image");
         title = getIntent().getStringExtra("title");
+        subTitle = getIntent().getStringExtra("sub_title");
         isFromCategory = getIntent().getBooleanExtra("is_from_category", false);
 
         tv_title_products.setText(title);
+        if (subTitle == null || subTitle.isEmpty()) {
+            tv_sub_title.setVisibility(View.GONE);
+        } else {
+            tv_sub_title.setText(subTitle);
+        }
         dbcart = new DatabaseHandler(CategoryPage.this);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override

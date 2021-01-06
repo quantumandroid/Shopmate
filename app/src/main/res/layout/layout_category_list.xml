@@ -199,7 +199,8 @@
                                     android:gravity="center|left"
                                     android:paddingRight="2dp"
                                     android:textColor="@color/hintColor"
-                                    android:textSize="11sp" />
+                                    android:textSize="11sp"
+                                    android:visibility="gone"/>
 
                                 <TextView
                                     android:id="@+id/txt_Mrp"

@@ -70,7 +70,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
         NewCategoryDataModel cc = CategoryGridList.get(position);
 
         holder.currency_indicator.setText(session_management.getCurrency());
-        holder.currency_indicator_2.setText(session_management.getCurrency());
+//        holder.currency_indicator_2.setText(session_management.getCurrency());
         holder.prodNAme.setText(cc.getProduct_name());
         holder.pPrice.setText(cc.getPrice());
         holder.txt_unitvalue.setText(cc.getUnit());
@@ -111,9 +111,15 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
                     .into(holder.image);
         }
 
-
-        holder.pdiscountOff.setText(session_management.getCurrency() + "" + ((int) (mrpd - priced)) + " " + "Off");
-        holder.pMrp.setPaintFlags(holder.pMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        double discount = Math.round(mrpd - priced);
+//        holder.pdiscountOff.setText(session_management.getCurrency() + "" + ((int) (mrpd - priced)) + " " + "Off");
+        if (discount > 0) {
+            holder.pdiscountOff.setText(session_management.getCurrency() + "" + discount + " " + "Off");
+            holder.pMrp.setPaintFlags(holder.pMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.pdiscountOff.setVisibility(View.INVISIBLE);
+            holder.pMrp.setVisibility(View.INVISIBLE);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,7 +213,6 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 //
 //
 //                dialog.show();
-
             }
         });
 
@@ -397,7 +402,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
 //
 //
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView prodNAme, pDescrptn, pQuan, pPrice, pdiscountOff, pMrp, minus, plus, txtQuan, txt_unitvalue, currency_indicator, currency_indicator_2;
+        public TextView prodNAme, pDescrptn, pQuan, pPrice, pdiscountOff, pMrp, minus, plus, txtQuan, txt_unitvalue, currency_indicator; //, currency_indicator_2;
         ImageView image;
         LinearLayout btn_Add, ll_addQuan,outofs_in,outofs;
         int minteger = 0;
@@ -409,7 +414,7 @@ public class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapte
             super(view);
             prodNAme = view.findViewById(R.id.txt_pName);
             currency_indicator = view.findViewById(R.id.currency_indicator);
-            currency_indicator_2 = view.findViewById(R.id.currency_indicator_2);
+//            currency_indicator_2 = view.findViewById(R.id.currency_indicator_2);
             pDescrptn = view.findViewById(R.id.txt_pInfo);
             pQuan = view.findViewById(R.id.txt_unit);
             pPrice = view.findViewById(R.id.txt_Pprice);

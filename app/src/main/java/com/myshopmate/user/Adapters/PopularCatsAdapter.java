@@ -43,6 +43,7 @@ public class PopularCatsAdapter extends RecyclerView.Adapter<PopularCatsAdapter.
                 Intent intent = new Intent(context, CategoryPage.class);
                 intent.putExtra("cat_id", popularCategoryModel.getCategoryID());
                 intent.putExtra("title", popularCategoryModel.getCategoryName());
+                intent.putExtra("sub_title", "");
                 intent.putExtra("store_id", "");
                 intent.putExtra("is_from_category", true);
                 // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());

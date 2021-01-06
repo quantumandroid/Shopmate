@@ -128,6 +128,7 @@ public class CategoryFragment extends Fragment {
                                 intent.putExtra("store_id", "");
                                 intent.putExtra("is_from_category", true);
                                 intent.putExtra("title", category.getName());
+                                intent.putExtra("sub_title", "");
                                 startActivityForResult(intent, 24);
                             });
 

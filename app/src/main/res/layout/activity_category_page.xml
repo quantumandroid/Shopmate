@@ -16,7 +16,9 @@
         <LinearLayout
             android:id="@+id/ll1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
+            android:background="@color/orange"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -33,23 +35,42 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:background="@drawable/ic_left_arrow"
-                    android:backgroundTint="@color/orange" />
+                    android:backgroundTint="@color/white" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_title_products"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:layout_marginRight="10dp"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center|left"
-                android:text="Products"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@color/orange"
-                android:textSize="20sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv_title_products"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center|left"
+                    android:maxLines="1"
+                    android:text="Products"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center|left"
+                    android:maxLines="1"
+                    android:textColor="@color/very_lightGrey"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -58,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height=".5dp"
             android:layout_below="@+id/ll1"
-            android:background="@color/lightGrey"/>
+            android:background="@color/lightGrey" />
 
         <RelativeLayout
             android:layout_width="match_parent"

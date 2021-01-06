@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -133,6 +134,7 @@ import static com.myshopmate.user.Config.BaseURL.whatsnew;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private static final String TAG1 = "MainActivity";
+    private SwipeRefreshLayout swipe_to;
     ViewPager viewPager;
     TabLayout tabLayout;
     PageAdapter pageAdapter;
@@ -227,6 +229,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         progressDialog = new ProgressDialog(container.getContext());
         progressDialog.setMessage("Please wait while loading..");
         progressDialog.setCancelable(false);
+        swipe_to = view.findViewById(R.id.swipe_to);
         latitude = sharedPreferences.getString(LAT, null);
         longitude = sharedPreferences.getString(LONG, null);
         address = sharedPreferences.getString(ADDRESS, null);
@@ -331,6 +334,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), CategoryPage.class);
                 intent.putExtra("cat_id", "47");
                 intent.putExtra("title", store_modelList.get(position).getStore_name());
+                intent.putExtra("sub_title", store_modelList.get(position).getAddress());
                 intent.putExtra("store_id", store_modelList.get(position).getStore_id());
                 intent.putExtra("is_from_category", false);
                // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
@@ -593,6 +597,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rv_home_cat_products.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         rv_home_cat_products.setAdapter(popularCatsAdapter);
 
+        swipe_to.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
+
 //        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 //            @Override
 //            public void onTabSelected(TabLayout.Tab tab) {
@@ -645,6 +656,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), CategoryPage.class);
                 intent.putExtra("cat_id", "47");
                 intent.putExtra("title", stores.get(position).getStore_name());
+                intent.putExtra("sub_title", stores.get(position).getAddress());
                 intent.putExtra("store_id", stores.get(position).getStore_id());
                 intent.putExtra("is_from_category", false);
                 // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
@@ -698,6 +710,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         apiInterface.getPopularCategoryProducts().enqueue(new Callback<PopularCategoryResponse>() {
             @Override
             public void onResponse(Call<PopularCategoryResponse> call, retrofit2.Response<PopularCategoryResponse> response) {
+                if (swipe_to.isRefreshing()) {
+                    swipe_to.setRefreshing(false);
+                }
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getData() != null) {
                         popularCategoryModels.clear();
@@ -709,6 +724,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<PopularCategoryResponse> call, Throwable t) {
+                if (swipe_to.isRefreshing()) {
+                    swipe_to.setRefreshing(false);
+                }
                 Log.e(TAG1,t.getMessage());
             }
         });
