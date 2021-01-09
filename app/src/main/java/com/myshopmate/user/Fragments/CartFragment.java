@@ -34,13 +34,13 @@ import java.util.List;
 
 public class CartFragment extends Fragment {
 
+    public TextView tv_total;
     Button btn_ShopNOw;
     RecyclerView recyclerView;
     LinearLayout ll_Checkout;
     NewCartAdapter cartAdapter;
-    RelativeLayout noData,viewCart;
+    RelativeLayout noData, viewCart;
     TextView totalItems;
-  public TextView tv_total ;
     private List<CartModel> cartList = new ArrayList<>();
     private DatabaseHandler db;
     private Session_management sessionManagement;
@@ -54,26 +54,26 @@ public class CartFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
-        recyclerView=view.findViewById(R.id.recyclerCart);
-        btn_ShopNOw=view.findViewById(R.id.btn_ShopNOw);
-        viewCart=view.findViewById(R.id.viewCartItems);
-        tv_total=view.findViewById(R.id.txt_totalamount);
-        totalItems=view.findViewById(R.id.txt_totalQuan);
-        noData=view.findViewById(R.id.noData);
+        recyclerView = view.findViewById(R.id.recyclerCart);
+        btn_ShopNOw = view.findViewById(R.id.btn_ShopNOw);
+        viewCart = view.findViewById(R.id.viewCartItems);
+        tv_total = view.findViewById(R.id.txt_totalamount);
+        totalItems = view.findViewById(R.id.txt_totalQuan);
+        noData = view.findViewById(R.id.noData);
         sessionManagement = new Session_management(getActivity());
         sessionManagement.cleardatetime();
         db = new DatabaseHandler(getActivity());
 
-        ll_Checkout=view.findViewById(R.id.ll_Checkout);
+        ll_Checkout = view.findViewById(R.id.ll_Checkout);
         btn_ShopNOw.setOnClickListener(v -> {
-            Intent intent=new Intent(getActivity(), MainActivity.class);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
         });
         ll_Checkout.setOnClickListener(v -> {
             if (isOnline()) {
                 if (sessionManagement.isLoggedIn()) {
 
-                    if (sessionManagement.userBlockStatus().equalsIgnoreCase("2")){
+                    if (sessionManagement.userBlockStatus().equalsIgnoreCase("2")) {
                         if (db.getCartCount() == 0) {
                             noData.setVisibility(View.VISIBLE);
                             viewCart.setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class CartFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), OrderSummary.class);
                             startActivity(intent);
                         }
-                    }else {
+                    } else {
                         showBloackDialog();
                     }
                 } else {
@@ -95,10 +95,10 @@ public class CartFragment extends Fragment {
 
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
+                }
             }
-        }
-    });
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
 
         db = new DatabaseHandler(getActivity());
 
@@ -108,7 +108,7 @@ public class CartFragment extends Fragment {
                 noData.setVisibility(View.VISIBLE);
                 viewCart.setVisibility(View.GONE);
             }
-        }else {
+        } else {
             if (db.getCartCount() == 0) {
                 noData.setVisibility(View.VISIBLE);
                 viewCart.setVisibility(View.GONE);
@@ -130,15 +130,14 @@ public class CartFragment extends Fragment {
         return view;
 
 
-        }
-
+    }
 
 
     public void updateData() {
-        tv_total.setText(sessionManagement.getCurrency()+ " " + db.getTotalAmount());
-        totalItems.setText("" + db.getCartCount()+"  Total Items:");
+        tv_total.setText(sessionManagement.getCurrency() + " " + db.getTotalAmount());
+        totalItems.setText("" + db.getCartCount() + "  Total Items:");
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-           // ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
+        // ((MainActivity) getActivity()).setCartCounter("" + db.getCartCount());
 //        }
 
     }
@@ -146,7 +145,8 @@ public class CartFragment extends Fragment {
     private void showBloackDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
         alertDialog.setCancelable(true);
-        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+//        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+        alertDialog.setMessage(sessionManagement.getUserBlockStatusMsg());
 //        alertDialog.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialogInterface, int i) {
@@ -164,9 +164,8 @@ public class CartFragment extends Fragment {
     }
 
 
-
     private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }

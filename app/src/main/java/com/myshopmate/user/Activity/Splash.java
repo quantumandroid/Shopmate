@@ -219,7 +219,8 @@ public class Splash extends AppCompatActivity {
                         session_management.setUserBlockStatus("2");
                     } else {
                         session_management.setUserBlockStatus("1");
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        session_management.setUserBlockStatusMsg(msg);
+//                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                   //  Toast.makeText(Splash.this, "" + msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {

@@ -43,18 +43,12 @@ import com.myshopmate.user.util.AppController;
 import com.myshopmate.user.util.CustomVolleyJsonRequest;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
-import com.paypal.android.sdk.payments.PayPalConfiguration;
-import com.paypal.android.sdk.payments.PayPalPayment;
-import com.paypal.android.sdk.payments.PayPalService;
-import com.paypal.android.sdk.payments.PaymentActivity;
-import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +56,12 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.android.volley.VolleyLog.TAG;
+
+/*import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;*/
 
 public class PaymentDetails extends AppCompatActivity implements PaymentResultListener {
 
@@ -898,7 +898,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         tvUPI.setTextColor(getResources().getColor(R.color.black));
     }
 
-    private void startPaypal(String name, String total_amount, String email, String mobile) {
+    /*private void startPaypal(String name, String total_amount, String email, String mobile) {
         PayPalConfiguration config = new PayPalConfiguration()
                 .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
                 .acceptCreditCards(true)
@@ -917,7 +917,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
         startActivityForResult(intent, PAYPAL_REQUEST_CODE);
-    }
+    }*/
 
 
     private void rewardliness() {
@@ -1571,7 +1571,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
                     getRefresrh();
                 }
             }
-        } else if (requestCode == PAYPAL_REQUEST_CODE) {
+        } /*else if (requestCode == PAYPAL_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirm != null) {
@@ -1596,7 +1596,7 @@ public class PaymentDetails extends AppCompatActivity implements PaymentResultLi
                 progressDialog.dismiss();
                 Log.i("paymentExample", PaymentActivity.RESULT_EXTRAS_INVALID + "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
             }
-        }
+        }*/
     }
 
     //UPIPay callbacks

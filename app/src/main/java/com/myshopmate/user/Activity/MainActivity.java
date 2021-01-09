@@ -544,7 +544,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showBlockDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setCancelable(true);
-        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+//        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+        alertDialog.setMessage(sessionManagement.getUserBlockStatusMsg());
         alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -580,6 +581,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                            JSONObject jsonArray = jsonObject.getJSONObject("data");
 //                            String userStatusValue = jsonArray.getString("block");
                             sessionManagement.setUserBlockStatus("1");
+                            sessionManagement.setUserBlockStatusMsg(msg);
 //                            Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
                         }
 //                        Toast.makeText(MainActivity.this,""+msg,Toast.LENGTH_SHORT).show();
