@@ -171,6 +171,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getWindow().setStatusBarColor(Color.BLACK);
         }*/
 
+        fragmentClickListner = new FragmentClickListner() {
+            @Override
+            public void onFragmentClick(boolean open) {
+                if (open) {
+                    navigation.setSelectedItemId(R.id.navigation_notifications123);
+                    loadFragment(new CartFragment());
+                }
+            }
+
+            @Override
+            public void onChangeHome(boolean open) {
+                DecimalFormat dFormat = new DecimalFormat("##.#######");
+                LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
+                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
+                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
+                location.setLatitude(latitude);
+                location.setLongitude(longitude);
+                getAddress();
+                navigation.setSelectedItemId(R.id.navigation_home);
+                //loadFragment(new HomeeeFragment(fragmentClickListner));
+                loadFragment(homeFragment);
+            }
+
+            @Override
+            public void onChangeLocationCommand() {
+                showPlacePicker();
+            }
+        };
         homeFragment = new HomeFragment(fragmentClickListner, navigation);
         sessionManagement = new Session_management(MainActivity.this);
         dbcart = new DatabaseHandler(this);
@@ -221,31 +249,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 overridePendingTransition(0, 0);
             }
         });
-
-
-        fragmentClickListner = new FragmentClickListner() {
-            @Override
-            public void onFragmentClick(boolean open) {
-                if (open) {
-                    navigation.setSelectedItemId(R.id.navigation_notifications123);
-                    loadFragment(new CartFragment());
-                }
-            }
-
-            @Override
-            public void onChangeHome(boolean open) {
-                DecimalFormat dFormat = new DecimalFormat("##.#######");
-                LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
-                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
-                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
-                location.setLatitude(latitude);
-                location.setLongitude(longitude);
-                getAddress();
-                navigation.setSelectedItemId(R.id.navigation_home);
-                //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(homeFragment);
-            }
-        };
 
 //        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
 //        addres.setOnClickListener(v -> onAddressSearchCalled());

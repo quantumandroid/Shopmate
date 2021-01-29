@@ -18,7 +18,8 @@
             android:id="@+id/iv_photo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:scaleType="centerInside"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
             android:src="@mipmap/ic_launcher"
             tools:ignore="ContentDescription" />
 
@@ -34,6 +35,6 @@
         android:textColor="@color/black"
         android:textSize="10sp"
         android:layout_marginTop="8dp"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText,SmallSp" />
 
 </LinearLayout>

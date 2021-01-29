@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -134,7 +135,6 @@ import static com.myshopmate.user.Config.BaseURL.whatsnew;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private static final String TAG1 = "MainActivity";
-    private SwipeRefreshLayout swipe_to;
     ViewPager viewPager;
     TabLayout tabLayout;
     PageAdapter pageAdapter;
@@ -159,6 +159,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     LocationManager locationManager;
     SharedPreferences sharedPreferences;
     ArrayList<String> imageString = new ArrayList<>();
+    List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
+    CategoryGridAdapter categoryGridAdapter;
+    List<NewCategoryVarientList> varientProducts = new ArrayList<>();
+    DatabaseHandler dbcart;
+    ImageView iv_search_clear, iv_search;
+    private SwipeRefreshLayout swipe_to;
     private RecyclerView recyclerImages;
     private List<HomeCate> cateList = new ArrayList<>();
     //    private List<CategoryGrid> dealList = new ArrayList<>();
@@ -178,7 +184,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private FragmentClickListner fragmentClickListner;
     private ViewPager2 viewPager2;
     private ProgressDialog progressDialog;
-
     private List<MainScreenList> screenLists = new ArrayList<>();
     private List<NewCartModel> topSelling = new ArrayList<>();
     private List<NewCartModel> whatsNew = new ArrayList<>();
@@ -187,20 +192,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private MainScreenAdapter screenAdapter;
     private Context context;
     private int tabCounter = 0;
-
     private ViewPager viewPagerStoresProducts;
     private StoreProductsPagerAdapter storeProductsPagerAdapter;
     private RecyclerView rvProducts;
     private EditText etSearch;
     private TabLayout stores_products_tab_layout;
     private BottomNavigationView bottomNavigationView;
-
-    List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
-    CategoryGridAdapter categoryGridAdapter;
-    List<NewCategoryVarientList> varientProducts = new ArrayList<>();
-    DatabaseHandler dbcart;
-
-    ImageView iv_search_clear, iv_search;
     private RecyclerView rv_home_cat_products;
     private ArrayList<PopularCategoryModel> popularCategoryModels;
     private PopularCatsAdapter popularCatsAdapter;
@@ -210,7 +207,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private boolean isSearchOpen = false;
 
-    private TextView tv_all_categories,tv_all_stores;
+    private TextView tv_all_categories, tv_all_stores;
 
     public HomeFragment(FragmentClickListner fragmentClickListner, BottomNavigationView bottomNavigationView) {
         this.fragmentClickListner = fragmentClickListner;
@@ -337,8 +334,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("sub_title", store_modelList.get(position).getAddress());
                 intent.putExtra("store_id", store_modelList.get(position).getStore_id());
                 intent.putExtra("is_from_category", false);
-               // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
-               // intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
+                // intent.putExtra("store_id", adapter1.getModelList().get(position).getStore_id());
+                // intent.putExtra("title", adapter1.getModelList().get(position).getStore_name());
 //                  intent.putExtra("image", store_modelList.get(position).getStore_image_url());
                 startActivityForResult(intent, 24);
 
@@ -351,7 +348,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }));
 
         store_modelList = new ArrayList<>();
-        adapter1 = new HomeAdapter(store_modelList, getActivity(),R.layout.row_home_rv1);
+        adapter1 = new HomeAdapter(store_modelList, getActivity(), R.layout.row_home_rv1);
         rv_items.setAdapter(adapter1);
 
         LinearLayoutManager layoutManagerProducts = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -593,8 +590,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
         popularCategoryModels = new ArrayList<>();
-        popularCatsAdapter = new PopularCatsAdapter(context,popularCategoryModels);
-        rv_home_cat_products.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
+        popularCatsAdapter = new PopularCatsAdapter(context, popularCategoryModels);
+        rv_home_cat_products.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         rv_home_cat_products.setAdapter(popularCatsAdapter);
 
         swipe_to.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -697,11 +694,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void showChangeLocationPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Out of Delivery Range");
+        builder.setMessage("Delivery is not available for your location.\nPlease reselect your pickup place.");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Change Location", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (fragmentClickListner != null) {
+                    fragmentClickListner.onChangeLocationCommand();
+                }
+            }
+        });
+        builder.create().show();
+    }
+
     public void setUpPopularCategories() {
-        if (!isUserInDelRange()) {
-            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+        /*if (!isUserInDelRange()) {
+//            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            showChangeLocationPopup();
             return;
-        }
+        }*/
         Retrofit emailOtp = new Retrofit.Builder()
                 .baseUrl(BaseURL.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -727,7 +741,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (swipe_to.isRefreshing()) {
                     swipe_to.setRefreshing(false);
                 }
-                Log.e(TAG1,t.getMessage());
+                Log.e(TAG1, t.getMessage());
             }
         });
     }
@@ -735,10 +749,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void product(String store_id, String search) {
         newCategoryDataModel.clear();
         categoryGridAdapter.notifyDataSetChanged();
-        if (!isUserInDelRange()) {
-            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+        /*if (!isUserInDelRange()) {
+//            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            showChangeLocationPopup();
             return;
-        }
+        }*/
         try {
             progressDialog.show();
         } catch (Exception e) {
@@ -787,7 +802,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         List<NewCategoryDataModel> listorl = gson.fromJson(response.getString("data"), listType);
                         for (NewCategoryDataModel categoryDataModel : listorl) {
 
-                            if (categoryDataModel.getIn_stock().equals("1")){
+                            if (categoryDataModel.getIn_stock().equals("1")) {
 
                                 newCategoryDataModel.add(categoryDataModel);
                             }
@@ -856,17 +871,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void popularStores() {
         //store_modelList.clear();
         //adapter1.notifyDataSetChanged();
-        if (!isUserInDelRange()) {
-            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+        /*if (!isUserInDelRange()) {
+//            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            showChangeLocationPopup();
             return;
-        }
+        }*/
         try {
             progressDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
 //        String sql = "select * from store where is_popular='1'" ;
-        String sql = "select * from store" ;
+        String sql = "select * from store";
         //String sql = "select * from store";
         SimpleRequest simpleRequest = new SimpleRequest(context);
         simpleRequest.get(sql, new OnResponseListener() {
@@ -905,10 +921,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void selectStores(String search_key) {
         //store_modelList.clear();
         //adapter1.notifyDataSetChanged();
-        if (!isUserInDelRange()) {
-            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+        /*if (!isUserInDelRange()) {
+//            Toast.makeText(context, "Delivery is not available for your location", Toast.LENGTH_LONG).show();
+            showChangeLocationPopup();
             return;
-        }
+        }*/
         try {
             progressDialog.show();
         } catch (Exception e) {
@@ -934,7 +951,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     }
                    /*adapter1 = new HomeAdapter(store_modelList, getActivity());
                     rv_items.setAdapter(adapter1);*/
-                   // adapter1.setSearch(etSearch);
+                    // adapter1.setSearch(etSearch);
                     adapter1.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1820,6 +1837,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             //second_banner();
             //makeGetCategoryRequest();
             //topSelling();
+            if (!isUserInDelRange()) {
+                showChangeLocationPopup();
+                return;
+            }
             selectStores("");
             product("", "");
             popularStores();

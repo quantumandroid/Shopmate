@@ -76,7 +76,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/splashicon"
+                    android:src="@drawable/splashicon"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

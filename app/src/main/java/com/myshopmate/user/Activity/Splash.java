@@ -177,7 +177,7 @@ public class Splash extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (isMandatory) {
