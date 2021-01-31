@@ -13,6 +13,17 @@
         android:orientation="vertical"
         tools:context=".Activity.CategoryPage">
 
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No products available"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText" />
+
         <LinearLayout
             android:id="@+id/ll1"
             android:layout_width="match_parent"
@@ -91,7 +102,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_product"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp" />
         </RelativeLayout>
 
@@ -141,6 +152,13 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 
     <include layout="@layout/bottom_sheet" />

@@ -21,6 +21,8 @@ public class ConfigData {
     private String payeeName = "";
     private String upiTransactionDescription = "";
     private String upi_merchant_code = "";
+    private String delrange_popup_title;
+    private String delrange_popup_msg;
 
     public String getPhone_number() {
         return phone_number;
@@ -182,5 +184,21 @@ public class ConfigData {
 
     public void setUpi_merchant_code(String upi_merchant_code) {
         this.upi_merchant_code = upi_merchant_code;
+    }
+
+    public String getDelrange_popup_title() {
+        return delrange_popup_title;
+    }
+
+    public void setDelrange_popup_title(String delrange_popup_title) {
+        this.delrange_popup_title = delrange_popup_title;
+    }
+
+    public String getDelrange_popup_msg() {
+        return delrange_popup_msg;
+    }
+
+    public void setDelrange_popup_msg(String delrange_popup_msg) {
+        this.delrange_popup_msg = delrange_popup_msg;
     }
 }

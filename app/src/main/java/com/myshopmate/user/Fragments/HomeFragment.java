@@ -2,6 +2,7 @@ package com.myshopmate.user.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -696,9 +697,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void showChangeLocationPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Out of Delivery Range");
-        builder.setMessage("Delivery is not available for your location.\nPlease reselect your pickup place.");
+//        builder.setTitle("Out of Delivery Range");
+//        builder.setMessage("Delivery is not available for your location.\nPlease reselect your pickup place.");
+        builder.setTitle(Splash.configData.getDelrange_popup_title());
+        builder.setMessage(Splash.configData.getDelrange_popup_msg());
         builder.setCancelable(false);
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((Activity)context).finishAffinity();
+            }
+        });
         builder.setPositiveButton("Change Location", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -907,7 +916,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onFailure(String error) {
                 store_modelList.clear();
                 adapter1.notifyDataSetChanged();
-                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
@@ -965,7 +974,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onFailure(String error) {
                 store_modelList.clear();
                 adapter1.notifyDataSetChanged();
-                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
                 try {
                     progressDialog.dismiss();
                 } catch (Exception e) {
@@ -1011,7 +1020,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public ArrayList<Store> getStores(String JSON_STRING) {
 
-        ArrayList<Store> arrayList = new ArrayList();
+        ArrayList<Store> arrayList = new ArrayList<>();
 
         try {
             JSONObject main_object = new JSONObject(JSON_STRING);

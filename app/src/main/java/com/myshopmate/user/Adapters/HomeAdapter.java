@@ -1,5 +1,6 @@
 package com.myshopmate.user.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -21,6 +22,8 @@ import com.myshopmate.user.util.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -45,6 +48,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     //   private ValueFilter valueFilter;
     //   private String mSearchText;
     private int rowLayout;
+    private int currentDay;
 
     public HomeAdapter(List<Store> modelList, Context activity, int rowLayout) {
         this.modelList = modelList;
@@ -54,6 +58,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         distanceCalculator = new DistanceCalculator();
         decimalFormat = new DecimalFormat("0.00");
         this.rowLayout = rowLayout;
+        currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
     }
 
     @Override
@@ -70,6 +75,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         return new HomeAdapter.MyViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(HomeAdapter.MyViewHolder holder, int position) {
         Store store = modelList.get(position);
@@ -98,8 +104,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         holder.title.setText(store.getStore_name());
         holder.category.setText(store.getCategory());
         holder.tvTime.setText(getTimeStr(store.getOpening_time(), store.getClosing_time()));
-
-        if (isStoreOpen(store.getOpening_time(), store.getClosing_time())) {
+        ArrayList<String> offDays = new ArrayList<>();
+        if (store.getOff_day() != null && !store.getOff_day().isEmpty()) {
+            offDays.addAll(Arrays.asList(store.getOff_day().split(",")));
+        }
+        if (offDays.size() > 0 && offDays.contains(String.valueOf(currentDay))) {
+            holder.tv_home_status.setText("closed");
+            holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.quantum_error_light));
+            holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_red));
+        } else if (isStoreOpen(store.getOpening_time(), store.getClosing_time())) {
             holder.tv_home_status.setText("open");
             holder.tv_home_status.setTextColor(context.getResources().getColor(R.color.green_orl));
             holder.tv_home_status.setBackground(context.getResources().getDrawable(R.drawable.bg_rounded_corner_green));

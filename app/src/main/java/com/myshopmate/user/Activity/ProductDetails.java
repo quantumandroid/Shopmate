@@ -142,6 +142,7 @@ public class ProductDetails extends AppCompatActivity {
         rvPVariants.setHasFixedSize(true);
 
         back.setOnClickListener(v -> finish());
+
         prodDesc.setText(discription12);
 
         // if (Integer.parseInt(stock) > 0) {
@@ -265,9 +266,19 @@ public class ProductDetails extends AppCompatActivity {
         if (isOnline()) {
             prodName.setText(varientName);
             ProdPrice.setText(session_management.getCurrency() + "" + price12);
-            prodMrp.setPaintFlags(prodMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
             prodMrp.setText(mrp12);
+            try {
+                double mrp = Double.parseDouble(mrp12);
+                double price = Double.parseDouble(price12);
+                double discount = Math.round(mrp - price);
+                if (discount > 0) {
+                    prodMrp.setPaintFlags(prodMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    prodMrp.setVisibility(View.INVISIBLE);
+                }
+            } catch (NumberFormatException e) {
+                prodMrp.setVisibility(View.INVISIBLE);
+            }
             txt_unit.setText(unit12);
             txt_qty.setText(qty);
 //            varientUrl(varientId);
@@ -402,22 +413,16 @@ public class ProductDetails extends AppCompatActivity {
             ll_addQuan.setVisibility(View.GONE);
             btn_Add.setVisibility(View.VISIBLE);
         }
-
-//        if (minteger == 1) {
-//            minteger = 1;
-//
-//        } else {
-//
-//
-//        }
     }
 
+    @SuppressLint("SetTextI18n")
     private void display(Integer number) {
 
         txtQuan.setText("" + number);
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateMultiply() {
         HashMap<String, String> map = new HashMap<>();
         map.put("product_id", product_id);
@@ -434,11 +439,7 @@ public class ProductDetails extends AppCompatActivity {
         map.put("stock", "0");
         map.put("product_description", discription12);
         if (!txtQuan.getText().toString().equalsIgnoreCase("0")) {
-            if (dbcart.isInCart(map.get("varient_id"), map.get("store_id"))) {
-                dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
-            } else {
-                dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
-            }
+            dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
         } else {
             dbcart.removeItemFromCart(map.get("varient_id"), map.get("store_id"));
         }
@@ -449,10 +450,10 @@ public class ProductDetails extends AppCompatActivity {
             if (items == 0) {
                 ProdPrice.setText(session_management.getCurrency() + "" + price);
                 prodMrp.setText(session_management.getCurrency() + "" + mrp);
-            } else {
-                // ProdPrice.setText(session_management.getCurrency() + "" + price * items);
-                // prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
-            }
+            } /*else {
+                 ProdPrice.setText(session_management.getCurrency() + "" + price * items);
+                 prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
+            }*/
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,11 +69,15 @@ public class CategoryPage extends AppCompatActivity {
     private DatabaseHandler dbcart;
     private TextView tv_title_products;
     private TextView tv_sub_title;
+    private ProgressBar progressBar;
+    private TextView tvNoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_page);
+        progressBar = findViewById(R.id.progress_circular);
+        tvNoData = findViewById(R.id.tv_no_data);
         session_management = new Session_management(CategoryPage.this);
         recycler_product = findViewById(R.id.recycler_product);
         bottom_lay_total = findViewById(R.id.bottom_lay_total);
@@ -274,6 +279,7 @@ public class CategoryPage extends AppCompatActivity {
 //    }
 
     private void productAll(String search) {
+        progressBar.setVisibility(View.VISIBLE);
         newCategoryDataModel.clear();
 
         // Tag used to cancel the request
@@ -289,6 +295,7 @@ public class CategoryPage extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
                 Log.d("CheckApi", response.toString());
                 try {
                     String status = response.getString("status");
@@ -320,9 +327,22 @@ public class CategoryPage extends AppCompatActivity {
 
                         adapter.notifyDataSetChanged();
                     }
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 }
 
 
@@ -332,7 +352,14 @@ public class CategoryPage extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 newCategoryDataModel.clear();
                 adapter.notifyDataSetChanged();
-
+                if (newCategoryDataModel.size() > 0) {
+                    tvNoData.setVisibility(View.GONE);
+                    recycler_product.setVisibility(View.VISIBLE);
+                } else {
+                    recycler_product.setVisibility(View.GONE);
+                    tvNoData.setVisibility(View.VISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
                 error.printStackTrace();
                 VolleyLog.d("", "Error: " + error.getMessage());
 
@@ -361,6 +388,7 @@ public class CategoryPage extends AppCompatActivity {
     }
 
     private void product(String store_id) {
+        progressBar.setVisibility(View.VISIBLE);
         newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
@@ -379,7 +407,7 @@ public class CategoryPage extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("CheckApi", response.toString());
-
+                progressBar.setVisibility(View.GONE);
 
                 try {
                     String status = response.getString("status");
@@ -411,8 +439,22 @@ public class CategoryPage extends AppCompatActivity {
 
                         adapter.notifyDataSetChanged();
                     }
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 }
 
 
@@ -420,6 +462,15 @@ public class CategoryPage extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                adapter.notifyDataSetChanged();
+                if (newCategoryDataModel.size() > 0) {
+                    tvNoData.setVisibility(View.GONE);
+                    recycler_product.setVisibility(View.VISIBLE);
+                } else {
+                    recycler_product.setVisibility(View.GONE);
+                    tvNoData.setVisibility(View.VISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
                 error.printStackTrace();
                 VolleyLog.d("", "Error: " + error.getMessage());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -452,6 +503,13 @@ public class CategoryPage extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+        /*if (newCategoryDataModel.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+            recycler_product.setVisibility(View.VISIBLE);
+        } else {
+            recycler_product.setVisibility(View.GONE);
+            tvNoData.setVisibility(View.VISIBLE);
+        }*/
 
         if (dbcart.getCartCount() > 0) {
             bottom_lay_total.setVisibility(View.VISIBLE);
