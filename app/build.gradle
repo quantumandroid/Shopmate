@@ -6,8 +6,8 @@ android {
         applicationId "com.myshopmate.user"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.0.3"
+        versionCode 7
+        versionName "1.0.5"
         multiDexEnabled true
 //        flavorDimensions "default"
 

@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         session_management = new Session_management(SignUpActivity.this);
         init();
-       // getFirebaseOtpStatus();
+        // getFirebaseOtpStatus();
     }
 
     private void init() {
@@ -210,7 +210,7 @@ public class SignUpActivity extends AppCompatActivity {
                             String password = resultObj.getString("user_password");
                             String otp_value = resultObj.getString("otp_value");
                             String block = resultObj.getString("block");
-                            String is_verified = resultObj.getString("is_verified");
+//                            String is_verified = resultObj.getString("is_verified");
 
 //                            if (is_verified.equalsIgnoreCase("1")){
 //
@@ -220,18 +220,19 @@ public class SignUpActivity extends AppCompatActivity {
                             session_management.setOtpStatus("1");
                             session_management.setUserBlockStatus(block);
 
-                            //  Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+//                            Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
                             /*if (fireBaseOtpOn) {
                                 intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
                             } else {
                                 intent = new Intent(getApplicationContext(), OtpVerification.class);
                             }*/
-                            intent.putExtra("MobNo", etPhone.getText().toString());
+//                            intent.putExtra("MobNo", etPhone.getText().toString());
+//                            startActivity(intent);
+                            session_management.setLogin(true);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
-
-
                         } else if (status.equalsIgnoreCase("2")) {
                             JSONObject resultObj = jsonObject.getJSONObject("data");
 
@@ -246,16 +247,27 @@ public class SignUpActivity extends AppCompatActivity {
                             session_management.createLoginSession(id, user_email, user_name, user_phone, password);
                             session_management.setUserBlockStatus(block);
                             session_management.setOtpStatus("0");
+                            session_management.setIsVerified(is_verified);
+                            /*if (!is_verified.isEmpty() && is_verified.equals("0")) {
+                                Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+                                intent.putExtra("MobNo", etPhone.getText().toString());
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                            }*/
+                            session_management.setLogin(true);
                             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                             startActivity(intent);
-                            finish();
                             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(SignUpActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                     }
                     progressDialog.dismiss();
                 }

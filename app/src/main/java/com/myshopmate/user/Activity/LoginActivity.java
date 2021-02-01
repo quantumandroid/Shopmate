@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Login, response -> {
                 Log.d("Login", response);
-
+                progressDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
@@ -185,32 +185,35 @@ public class LoginActivity extends AppCompatActivity {
                             String user_phone = obj.getString("user_phone");
                             String password = obj.getString("user_password");
                             String block = obj.getString("block");
+                            String is_verified = obj.getString("is_verified");
 
-                            progressDialog.dismiss();
                             SharedPreferences.Editor editor = getSharedPreferences(BaseURL.MyPrefreance, MODE_PRIVATE).edit();
                             editor.putString(BaseURL.KEY_MOBILE, user_phone);
                             editor.putString(BaseURL.KEY_PASSWORD, password);
                             editor.apply();
                             sessionManagement.createLoginSession(user_id, user_email, user_fullname, user_phone, password);
                             sessionManagement.setUserBlockStatus(block);
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                            sessionManagement.setIsVerified(is_verified);
+                            if (!is_verified.isEmpty() && is_verified.equals("0")) {
+                                Intent intent = new Intent(getApplicationContext(), FireOtpPageAuthentication.class);
+                                intent.putExtra("MobNo", user_phone);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                            }
                             finish();
 
                         }
                     } else {
-                        progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-
                     }
 
                 } catch (JSONException e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
-                    progressDialog.dismiss();
                 }
-                progressDialog.dismiss();
             }, error -> {
                 progressDialog.dismiss();
                 Toast.makeText(LoginActivity.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();

@@ -16,6 +16,7 @@ import static com.myshopmate.user.Config.BaseURL.KEY_EMAIL;
 import static com.myshopmate.user.Config.BaseURL.KEY_HOUSE;
 import static com.myshopmate.user.Config.BaseURL.KEY_ID;
 import static com.myshopmate.user.Config.BaseURL.KEY_IMAGE;
+import static com.myshopmate.user.Config.BaseURL.KEY_IS_VERIFIED;
 import static com.myshopmate.user.Config.BaseURL.KEY_MOBILE;
 import static com.myshopmate.user.Config.BaseURL.KEY_NAME;
 import static com.myshopmate.user.Config.BaseURL.KEY_PASSWORD;
@@ -328,6 +329,14 @@ public class Session_management {
 
     public void setUserBlockStatus(String value) {
         pref.setString(USER_STATUS, value);
+    }
+
+    public void setIsVerified(String verified) {
+        pref.setString(KEY_IS_VERIFIED, verified);
+    }
+
+    public String isVerified() {
+        return pref.getString(KEY_IS_VERIFIED, "0");
     }
 
     public void setUserBlockStatusMsg(String msg) {
