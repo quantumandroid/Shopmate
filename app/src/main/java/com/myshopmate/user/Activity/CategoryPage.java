@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -54,7 +55,8 @@ public class CategoryPage extends AppCompatActivity {
     //    List<CategoryGrid> model = new ArrayList<>();
     List<NewCategoryShowList> newModelList = new ArrayList<>();
     List<NewCategoryDataModel> newCategoryDataModel = new ArrayList<>();
-    String cat_id, image, title,store_id;
+    String cat_id, image, title, subTitle, store_id;
+    boolean isFromCategory = false;
     BottomSheetBehavior behavior;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
     private LinearLayout bottom_sheet;
@@ -66,11 +68,16 @@ public class CategoryPage extends AppCompatActivity {
     private Session_management session_management;
     private DatabaseHandler dbcart;
     private TextView tv_title_products;
+    private TextView tv_sub_title;
+    private ProgressBar progressBar;
+    private TextView tvNoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_page);
+        progressBar = findViewById(R.id.progress_circular);
+        tvNoData = findViewById(R.id.tv_no_data);
         session_management = new Session_management(CategoryPage.this);
         recycler_product = findViewById(R.id.recycler_product);
         bottom_lay_total = findViewById(R.id.bottom_lay_total);
@@ -80,13 +87,22 @@ public class CategoryPage extends AppCompatActivity {
         image = Recent_Details_Fragment.product_image;
         bottom_sheet = findViewById(R.id.bottom_sheet);
         tv_title_products = findViewById(R.id.tv_title_products);
+        tv_sub_title = findViewById(R.id.tv_sub_title);
         back = findViewById(R.id.back);
         behavior = BottomSheetBehavior.from(bottom_sheet);
         cat_id = getIntent().getStringExtra("cat_id");
         store_id = getIntent().getStringExtra("store_id");
         image = getIntent().getStringExtra("image");
         title = getIntent().getStringExtra("title");
+        subTitle = getIntent().getStringExtra("sub_title");
+        isFromCategory = getIntent().getBooleanExtra("is_from_category", false);
+
         tv_title_products.setText(title);
+        if (subTitle == null || subTitle.isEmpty()) {
+            tv_sub_title.setVisibility(View.GONE);
+        } else {
+            tv_sub_title.setText(subTitle);
+        }
         dbcart = new DatabaseHandler(CategoryPage.this);
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -169,7 +185,11 @@ public class CategoryPage extends AppCompatActivity {
             bottom_lay_total.setVisibility(View.GONE);
         }
 
-        product(store_id);
+        if (isFromCategory) {
+            productAll("");
+        } else {
+            product(store_id);
+        }
 
 
     }
@@ -258,7 +278,117 @@ public class CategoryPage extends AppCompatActivity {
 //        requestQueue.add(stringRequest);
 //    }
 
+    private void productAll(String search) {
+        progressBar.setVisibility(View.VISIBLE);
+        newCategoryDataModel.clear();
+
+        // Tag used to cancel the request
+        String tag_json_obj = "json_order_detail_req";
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("search_key", search);
+        params.put("is_from_category", "true");
+        params.put("cat_id", cat_id);
+
+        CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
+                BaseURL.cat_product_all, params, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
+                Log.d("CheckApi", response.toString());
+                try {
+                    String status = response.getString("status");
+
+//                    String message = response.getString("message");
+
+                    if (status.contains("1")) {
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<List<NewCategoryDataModel>>() {
+                        }.getType();
+                        List<NewCategoryDataModel> listorl = gson.fromJson(response.getString("data"), listType);
+                        for (NewCategoryDataModel categoryDataModel : listorl) {
+
+                            if (categoryDataModel.getIn_stock().equals("1")){
+
+                                newCategoryDataModel.add(categoryDataModel);
+                            }
+                        }
+//                        newCategoryDataModel.addAll(listorl);
+
+//                        for (int i = 0; i < listorl.size(); i++) {
+//                            List<NewCategoryVarientList> listddd = listorl.get(i).getVarients();
+//                            for (int j = 0; j < listddd.size(); j++) {
+//                                NewCategoryShowList newCategoryShowList = new NewCategoryShowList(listorl.get(i).getProduct_id(), listorl.get(i).getProduct_name(), listorl.get(i).getProduct_image(), listddd.get(j));
+//                                newModelList.add(newCategoryShowList);
+//                            }
+//                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                newCategoryDataModel.clear();
+                adapter.notifyDataSetChanged();
+                if (newCategoryDataModel.size() > 0) {
+                    tvNoData.setVisibility(View.GONE);
+                    recycler_product.setVisibility(View.VISIBLE);
+                } else {
+                    recycler_product.setVisibility(View.GONE);
+                    tvNoData.setVisibility(View.VISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
+                error.printStackTrace();
+                VolleyLog.d("", "Error: " + error.getMessage());
+
+            }
+        });
+
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 60000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 0;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+
+    }
+
     private void product(String store_id) {
+        progressBar.setVisibility(View.VISIBLE);
         newCategoryDataModel.clear();
         // Tag used to cancel the request
         String tag_json_obj = "json_order_detail_req";
@@ -269,6 +399,7 @@ public class CategoryPage extends AppCompatActivity {
         params.put("lat", session_management.getLatPref());
         params.put("lng", session_management.getLangPref());
         params.put("city", session_management.getLocationCity());
+        params.put("is_from_category", String.valueOf(isFromCategory));
 
         CustomVolleyJsonRequest jsonObjReq = new CustomVolleyJsonRequest(Request.Method.POST,
                 BaseURL.cat_product, params, new Response.Listener<JSONObject>() {
@@ -276,7 +407,7 @@ public class CategoryPage extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("CheckApi", response.toString());
-
+                progressBar.setVisibility(View.GONE);
 
                 try {
                     String status = response.getString("status");
@@ -308,8 +439,22 @@ public class CategoryPage extends AppCompatActivity {
 
                         adapter.notifyDataSetChanged();
                     }
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (newCategoryDataModel.size() > 0) {
+                        tvNoData.setVisibility(View.GONE);
+                        recycler_product.setVisibility(View.VISIBLE);
+                    } else {
+                        recycler_product.setVisibility(View.GONE);
+                        tvNoData.setVisibility(View.VISIBLE);
+                    }
                 }
 
 
@@ -317,6 +462,15 @@ public class CategoryPage extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                adapter.notifyDataSetChanged();
+                if (newCategoryDataModel.size() > 0) {
+                    tvNoData.setVisibility(View.GONE);
+                    recycler_product.setVisibility(View.VISIBLE);
+                } else {
+                    recycler_product.setVisibility(View.GONE);
+                    tvNoData.setVisibility(View.VISIBLE);
+                }
+                progressBar.setVisibility(View.GONE);
                 error.printStackTrace();
                 VolleyLog.d("", "Error: " + error.getMessage());
                 if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -349,6 +503,13 @@ public class CategoryPage extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+        /*if (newCategoryDataModel.size() > 0) {
+            tvNoData.setVisibility(View.GONE);
+            recycler_product.setVisibility(View.VISIBLE);
+        } else {
+            recycler_product.setVisibility(View.GONE);
+            tvNoData.setVisibility(View.VISIBLE);
+        }*/
 
         if (dbcart.getCartCount() > 0) {
             bottom_lay_total.setVisibility(View.VISIBLE);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -104,6 +105,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -112,7 +114,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
                             android:background="@drawable/ic_smartphone"
-                            android:backgroundTint="@color/orange"></ImageView>
+                            android:backgroundTint="@color/orange" />
 
                         <EditText
                             android:id="@+id/et_pro_phone"
@@ -131,7 +133,27 @@
                             android:paddingLeft="5dp"
                             android:textColor="@color/black"
                             android:textColorHint="@color/hintColor"
-                            android:textSize="15sp"></EditText>
+                            android:textSize="15sp"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:id="@+id/btnVerifyNo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="15dp"
+                            android:background="@drawable/rounded_shape"
+                            android:backgroundTint="@color/orange"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="5dp"
+                            android:text="Verify"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:visibility="invisible"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText,ObsoleteLayoutParam" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

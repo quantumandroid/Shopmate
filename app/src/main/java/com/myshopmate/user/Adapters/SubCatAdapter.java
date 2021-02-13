@@ -11,8 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.myshopmate.user.ModelClass.SubCatModel;
-import com.myshopmate.user.ModelClass.SubChildCatModel;
+import com.myshopmate.user.ModelClass.HomeCate;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.CategoryFragmentClick;
 
@@ -26,11 +25,11 @@ import java.util.List;
 public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHolder> {
 
     Context context;
-    private List<SubChildCatModel> subChildCatModels = new ArrayList<>();
-    private List<SubCatModel> homeCateList;
+    private List<HomeCate> subChildCatModels = new ArrayList<>();
+    private List<HomeCate> homeCateList;
     private CategoryFragmentClick categoryFragmentClick;
 
-    public SubCatAdapter(List<SubCatModel> homeCateList, Context context, CategoryFragmentClick categoryFragmentClick) {
+    public SubCatAdapter(List<HomeCate> homeCateList, Context context, CategoryFragmentClick categoryFragmentClick) {
         this.homeCateList = homeCateList;
         this.context = context;
         this.categoryFragmentClick = categoryFragmentClick;
@@ -46,7 +45,7 @@ public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SubCatModel cc = homeCateList.get(position);
+        HomeCate cc = homeCateList.get(position);
         holder.prodNAme.setText(cc.getName());
         holder.pdetails.setText(cc.getDetail());
 //        holder.image.setImageResource(R.drawable.splashicon);
@@ -54,7 +53,8 @@ public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHold
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc.getId());
+//                get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc.getId());
+                get_subcateory(cc.getSub_array(), holder.recyclerSubCate, cc);
             }
 
         });
@@ -65,7 +65,7 @@ public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHold
         return homeCateList.size();
     }
 
-    private void get_subcateory(JSONArray response, RecyclerView recyclerView, String cat_id) {
+    private void get_subcateory(JSONArray response, RecyclerView recyclerView, HomeCate category) {
 
 
         JSONArray array = response;
@@ -75,7 +75,7 @@ public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHold
 //            intent.putExtra("cat_id", cat_id);
 //            context.startActivity(intent);
             if (categoryFragmentClick!=null){
-                categoryFragmentClick.onClick(cat_id);
+                categoryFragmentClick.onClick(category);
             }
 
         } else {
@@ -88,7 +88,7 @@ public class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.MyViewHold
 
                     object = array.getJSONObject(i);
 
-                    SubChildCatModel model = new SubChildCatModel();
+                    HomeCate model = new HomeCate();
 
 
                     model.setDetail(object.getString("description"));

@@ -35,6 +35,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.myshopmate.user.Activity.FireOtpPageAuthentication;
 import com.myshopmate.user.Activity.MainActivity;
 import com.myshopmate.user.Config.BaseURL;
 import com.myshopmate.user.ModelClass.ForgotEmailModel;
@@ -60,6 +61,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.myshopmate.user.Config.BaseURL.EDIT_PROFILE_URL;
+import static com.myshopmate.user.Config.BaseURL.KEY_MOBILE;
 import static com.myshopmate.user.Config.BaseURL.updatenotifyby;
 
 
@@ -95,6 +97,7 @@ public class Edit_profile_fragment extends Fragment implements View.OnClickListe
     private SwitchCompat sms_toggle;
     private SwitchCompat inapp_toggle;
     private LinearLayout sms_lay;
+    private TextView btnVerifyNo;
 
     public Edit_profile_fragment() {
         // Required empty public constructor
@@ -149,7 +152,15 @@ public class Edit_profile_fragment extends Fragment implements View.OnClickListe
         email_toggle = view.findViewById(R.id.email_toggle);
         sms_toggle = view.findViewById(R.id.sms_toggle);
         inapp_toggle = view.findViewById(R.id.inapp_toggle);
-
+        btnVerifyNo = view.findViewById(R.id.btnVerifyNo);
+        btnVerifyNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FireOtpPageAuthentication.class);
+                intent.putExtra("MobNo", sessionManagement.getUserDetails().get(KEY_MOBILE));
+                startActivity(intent);
+            }
+        });
         getemail = sessionManagement.getUserDetails().get(BaseURL.KEY_EMAIL);
         getpassword = sessionManagement.getUserDetails().get(BaseURL.KEY_PASSWORD);
         String getimage = sessionManagement.getUserDetails().get(BaseURL.KEY_IMAGE);
@@ -502,6 +513,12 @@ public class Edit_profile_fragment extends Fragment implements View.OnClickListe
 //        iv_profile.setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (sessionManagement.isVerified().equals("0")) btnVerifyNo.setVisibility(View.VISIBLE);
     }
 
     private void Notif(String user_id, String email1, String app, String sms) {

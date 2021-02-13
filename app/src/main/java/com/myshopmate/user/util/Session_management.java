@@ -16,6 +16,7 @@ import static com.myshopmate.user.Config.BaseURL.KEY_EMAIL;
 import static com.myshopmate.user.Config.BaseURL.KEY_HOUSE;
 import static com.myshopmate.user.Config.BaseURL.KEY_ID;
 import static com.myshopmate.user.Config.BaseURL.KEY_IMAGE;
+import static com.myshopmate.user.Config.BaseURL.KEY_IS_VERIFIED;
 import static com.myshopmate.user.Config.BaseURL.KEY_MOBILE;
 import static com.myshopmate.user.Config.BaseURL.KEY_NAME;
 import static com.myshopmate.user.Config.BaseURL.KEY_PASSWORD;
@@ -39,6 +40,7 @@ import static com.myshopmate.user.Config.BaseURL.USER_OTP;
 import static com.myshopmate.user.Config.BaseURL.USER_SKIP;
 import static com.myshopmate.user.Config.BaseURL.USER_SMS_SERVICE;
 import static com.myshopmate.user.Config.BaseURL.USER_STATUS;
+import static com.myshopmate.user.Config.BaseURL.USER_STATUS_MSG;
 import static com.myshopmate.user.Config.BaseURL.USER_STOREID;
 
 /**
@@ -327,6 +329,22 @@ public class Session_management {
 
     public void setUserBlockStatus(String value) {
         pref.setString(USER_STATUS, value);
+    }
+
+    public void setIsVerified(String verified) {
+        pref.setString(KEY_IS_VERIFIED, verified);
+    }
+
+    public String isVerified() {
+        return pref.getString(KEY_IS_VERIFIED, "0");
+    }
+
+    public void setUserBlockStatusMsg(String msg) {
+        pref.setString(USER_STATUS_MSG, msg);
+    }
+
+    public String getUserBlockStatusMsg() {
+        return pref.getString(USER_STATUS_MSG,"");
     }
 
     public void setEmailServer(String value) {

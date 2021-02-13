@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "564890787609-kcogd6ftd1nkoputc3t11j00mr05el9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myshopmate.user",
+            "certificate_hash": "25dfbb072e7fa5c05ba13d2ecb54c64198f09438"
+          }
+        },
+        {
           "client_id": "564890787609-tjl9qdbhsf8vful4lof9d5t4a3aicik0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

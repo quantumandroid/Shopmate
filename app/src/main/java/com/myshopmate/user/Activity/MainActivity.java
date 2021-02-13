@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
     private static final long MIN_TIME_BW_UPDATES = 3000;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 222;
+    public static boolean toCart = false;
     public BottomNavigationView navigation;
     int padding = 0;
     LinearLayout My_Order, My_Reward, My_Walllet, My_Cart;
@@ -159,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentClickListner fragmentClickListner;
     private Fragment homeFragment;
     private Geocoder geocoder;
-    public static boolean toCart = false;
     private PlacesClient placesClient;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -171,7 +171,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getWindow().setStatusBarColor(Color.BLACK);
         }*/
 
-        homeFragment = new HomeFragment(fragmentClickListner,navigation);
+        fragmentClickListner = new FragmentClickListner() {
+            @Override
+            public void onFragmentClick(boolean open) {
+                if (open) {
+                    navigation.setSelectedItemId(R.id.navigation_notifications123);
+                    loadFragment(new CartFragment());
+                }
+            }
+
+            @Override
+            public void onChangeHome(boolean open) {
+                DecimalFormat dFormat = new DecimalFormat("##.#######");
+                LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
+                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
+                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
+                location.setLatitude(latitude);
+                location.setLongitude(longitude);
+                getAddress();
+                navigation.setSelectedItemId(R.id.navigation_home);
+                //loadFragment(new HomeeeFragment(fragmentClickListner));
+                loadFragment(homeFragment);
+            }
+
+            @Override
+            public void onChangeLocationCommand() {
+                showPlacePicker();
+            }
+        };
+        homeFragment = new HomeFragment(fragmentClickListner, navigation);
         sessionManagement = new Session_management(MainActivity.this);
         dbcart = new DatabaseHandler(this);
         pref = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
@@ -198,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        itemView.addView(cart_badge);
 //        totalBudgetCount = (TextView) cart_badge.findViewById(R.id.totalBudgetCount);
 
-        int badgeCount = pref.getInt("cardqnty", 0);
+//        int badgeCount = pref.getInt("cardqnty", 0);
+        /*int badgeCount = dbcart.getCartCount();
         if (badgeCount > 0) {
             navigation.getOrCreateBadge(R.id.navigation_notifications123).setNumber(badgeCount);
 //            totalBudgetCount.setVisibility(View.VISIBLE);
@@ -206,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             navigation.removeBadge(R.id.navigation_notifications123);
 //            totalBudgetCount.setVisibility(View.GONE);
-        }
+        }*/
 
         profile.setOnClickListener(v -> {
             if (sessionManagement.isLoggedIn()) {
@@ -220,31 +249,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 overridePendingTransition(0, 0);
             }
         });
-
-
-        fragmentClickListner = new FragmentClickListner() {
-            @Override
-            public void onFragmentClick(boolean open) {
-                if (open) {
-                    navigation.setSelectedItemId(R.id.navigation_notifications123);
-                    loadFragment(new CartFragment());
-                }
-            }
-
-            @Override
-            public void onChangeHome(boolean open) {
-                DecimalFormat dFormat = new DecimalFormat("##.#######");
-                LatLng latLng = new LatLng(Double.parseDouble(sessionManagement.getLatPref()), Double.parseDouble(sessionManagement.getLangPref()));
-                double latitude = Double.parseDouble(dFormat.format(latLng.latitude));
-                double longitude = Double.parseDouble(dFormat.format(latLng.longitude));
-                location.setLatitude(latitude);
-                location.setLongitude(longitude);
-                getAddress();
-                navigation.setSelectedItemId(R.id.navigation_home);
-                //loadFragment(new HomeeeFragment(fragmentClickListner));
-                loadFragment(homeFragment);
-            }
-        };
 
 //        addres.setOnClickListener(v -> startActivityForResult(new Intent(MainActivity.this, AddressLocationActivity.class), 22));
 //        addres.setOnClickListener(v -> onAddressSearchCalled());
@@ -461,8 +465,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                               // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
-                               // HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
+                                // HomeeeFragment fm = new HomeeeFragment(fragmentClickListner);
+                                // HomeFragment fm = new HomeFragment(fragmentClickListner,navigation,false);
                                 FragmentManager fragmentManager = getSupportFragmentManager();
                                 fragmentManager.beginTransaction().replace(R.id.contentPanel, homeFragment)
                                         .addToBackStack(null).commit();
@@ -519,7 +523,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Start the autocomplete intent.
         Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                 .setCountry("IN")
-               // .setLocationBias(ratnagiri)
+                // .setLocationBias(ratnagiri)
                 .setLocationRestriction(ratnagiri)
 //                .setTypeFilter(TypeFilter.CITIES)
                 .build(this);
@@ -534,8 +538,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             Intent placeIntent = builder.build(this);
             startActivityForResult(placeIntent, AUTOCOMPLETE_REQUEST_CODE);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // Google Play services is not available...
         }
     }
@@ -544,7 +547,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showBlockDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setCancelable(true);
-        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+//        alertDialog.setMessage("You are blocked from backend.\n Please Contact with customer care!");
+        alertDialog.setMessage(sessionManagement.getUserBlockStatusMsg());
         alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -580,6 +584,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                            JSONObject jsonArray = jsonObject.getJSONObject("data");
 //                            String userStatusValue = jsonArray.getString("block");
                             sessionManagement.setUserBlockStatus("1");
+                            sessionManagement.setUserBlockStatusMsg(msg);
 //                            Toast.makeText(getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
                         }
 //                        Toast.makeText(MainActivity.this,""+msg,Toast.LENGTH_SHORT).show();
@@ -869,9 +874,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void loadFragment(Fragment fragment) {
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contentPanel, fragment)
-                .commitAllowingStateLoss();
+        try {
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contentPanel, fragment)
+                    .commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initComponent() {
@@ -879,8 +888,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                   // loadFragment(new HomeeeFragment(fragmentClickListner));
-                    loadFragment(homeFragment);
+                    // loadFragment(new HomeeeFragment(fragmentClickListner));
+                    if (homeFragment != null) {
+                        HomeFragment home = (HomeFragment) homeFragment;
+                        if (home.isSearchOpen()) {
+                            home.closeSearch();
+                        } else {
+                            loadFragment(homeFragment);
+                        }
+                    }
+//                    loadFragment(homeFragment);
 //                        HomeeeFragment appNewsHome1Fragment = new HomeeeFragment();
 //                        FragmentManager manager = getSupportFragmentManager();
 //                        FragmentTransaction transaction = manager.beginTransaction();
@@ -1018,6 +1035,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_share) {
             shareApp();
         } else if (id == R.id.nav_logout) {
+//            dbcart.clearCart();
             sessionManagement.logoutSession();
 //            login.setVisibility(View.VISIBLE);
             finish();
@@ -1195,7 +1213,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equalsIgnoreCase("cardqnty")) {
 //            totalBudgetCount.setText(pref.getInt("cardqnty",0));
-            int badgeCount = pref.getInt("cardqnty", 0);
+//            int badgeCount = pref.getInt("cardqnty", 0);
+            int badgeCount = dbcart.getCartCount();
             if (badgeCount > 0) {
 //                totalBudgetCount.setVisibility(View.VISIBLE);
 //                totalBudgetCount.setText(""+badgeCount);
@@ -1303,7 +1322,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (!odModel.getQty().equalsIgnoreCase("0")) {
                                 dbcart.setCart(map, Integer.parseInt(odModel.getQty()));
                             } else {
-                                dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
+                                dbcart.removeItemFromCart(map.get("varient_id"), map.get("store_id"));
                             }
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1446,6 +1465,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigation.setSelectedItemId(R.id.navigation_home);
         }
         toCart = false;
+        int badgeCount = dbcart.getCartCount();
+        if (badgeCount > 0) {
+//                totalBudgetCount.setVisibility(View.VISIBLE);
+//                totalBudgetCount.setText(""+badgeCount);
+            navigation.getOrCreateBadge(R.id.navigation_notifications123).setNumber(badgeCount);
+        } else {
+//                totalBudgetCount.setVisibility(View.GONE);
+            navigation.removeBadge(R.id.navigation_notifications123);
+        }
     }
 
     @Override
@@ -1454,12 +1482,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             Fragment fr = getSupportFragmentManager().findFragmentById(R.id.contentPanel);
             final String fm_name = fr.getClass().getSimpleName();
+            HomeFragment home = (HomeFragment) homeFragment;
             if (drawer.isDrawerOpen(navigationView)) {
                 drawer.closeDrawer(navigationView);
+            } else if (home != null && home.isSearchOpen()) {
+                home.closeSearch();
             } else if (!fm_name.contentEquals("HomeFragment")) {
                 navigation.setSelectedItemId(R.id.navigation_home);
             } else {
-                Utils.doubleBackExit(this,navigation);
+                Utils.doubleBackExit(this, navigation);
             }
         } catch (Exception e) {
             super.onBackPressed();

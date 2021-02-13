@@ -5,6 +5,7 @@ import com.myshopmate.user.ModelClass.FirebaseStatusModel;
 import com.myshopmate.user.ModelClass.ForgotEmailModel;
 import com.myshopmate.user.ModelClass.NotifyModelUser;
 import com.myshopmate.user.ModelClass.PaymentVia;
+import com.myshopmate.user.ModelClass.PopularCategoryResponse;
 import com.myshopmate.user.ModelClass.VerifyOtp;
 
 import retrofit2.Call;
@@ -43,4 +44,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<VerifyOtp> checkNumIsRegisterOrNot(@Field("user_phone") String userPhone);
 
+    @GET("popular_category_products")
+    Call<PopularCategoryResponse> getPopularCategoryProducts();
 }

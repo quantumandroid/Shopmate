@@ -68,11 +68,6 @@ public class TouchableWrapper extends FrameLayout {
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
-                if (mGoogleMap != null) {
-                    mGoogleMap.getUiSettings().setScrollGesturesEnabled(false);
-                }
-                break;
-
             case MotionEvent.ACTION_UP:
                 if (mGoogleMap != null) {
                     mGoogleMap.getUiSettings().setScrollGesturesEnabled(false);

@@ -17,18 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myshopmate.user.ModelClass.Store;
-import com.myshopmate.user.util.Utils;
-import com.squareup.picasso.Picasso;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.DatabaseHandler;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 import com.myshopmate.user.util.ViewNotifier;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.myshopmate.user.Config.BaseURL.IMG_URL;
-import static com.myshopmate.user.Fragments.CartFragment.tv_total;
 
 /**
  * Created by Rajesh Dabhi on 26/6/2017.
@@ -45,14 +44,18 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
     private ViewNotifier notifier;
     private Session_management session_management;
     private Context context;
+    private TextView tv_total, totalItems;
 
-    public Cart_adapter(Activity activity, ArrayList<HashMap<String, String>> list, ViewNotifier viewNotifier) {
+
+    public Cart_adapter(Activity activity, ArrayList<HashMap<String, String>> list, ViewNotifier viewNotifier, TextView tv_total, TextView totalItems) {
         this.list = list;
         this.activity = activity;
         notifier = viewNotifier;
         context = activity;
         dbHandler = new DatabaseHandler(activity);
         session_management = new Session_management(activity);
+        this.tv_total = tv_total;
+        this.totalItems = totalItems;
     }
 
     @NonNull
@@ -127,6 +130,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
             list.remove(position);
             notifyDataSetChanged();
             tv_total.setText(session_management.getCurrency() + " " + dbHandler.getTotalAmount());
+            totalItems.setText("" + dbHandler.getCartCount()+"  Total Items:");
             updateintent(dbHandler, view.getContext());
         });
 
@@ -202,6 +206,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 notifyDataSetChanged();
             }
             tv_total.setText(session_management.getCurrency() + " " + dbHandler.getTotalAmount());
+            totalItems.setText("" + dbHandler.getCartCount()+"  Total Items:");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 SharedPreferences preferences = context.getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
                 preferences.edit().putInt("cardqnty", dbHandler.getCartCount()).apply();
@@ -235,6 +240,7 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
 //            holder.pPrice.setText("" + holder.price * items);
         }
         tv_total.setText(session_management.getCurrency() + " " + dbHandler.getTotalAmount());
+        totalItems.setText("" + dbHandler.getCartCount()+"  Total Items:");
 
         //   holder.tv_total.setText(activity.getResources().getString(R.string.tv_cart_total) + price * items + " " + activity.getResources().getString(R.string.currency));
         updateintent(dbHandler, activity.getApplicationContext());
@@ -274,9 +280,9 @@ public class Cart_adapter extends RecyclerView.Adapter<Cart_adapter.ProductHolde
                 SharedPreferences preferences = context.getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
                 preferences.edit().putInt("cardqnty", dbHandler.getCartCount()).apply();
 
-                if (dbHandler.getCartCount() == 0) {
+//                if (dbHandler.getCartCount() == 0) {
                     notifier.onViewNotify();
-                }
+//                }
             }
             Intent updates = new Intent("Grocery_cart");
             updates.putExtra("type", "update");

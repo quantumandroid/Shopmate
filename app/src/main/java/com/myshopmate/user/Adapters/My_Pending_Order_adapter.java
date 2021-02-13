@@ -128,7 +128,7 @@ public class My_Pending_Order_adapter extends RecyclerView.Adapter<My_Pending_Or
             holder.relativetextstatus.setText("Cancelled");
 //            holder.btn_lay.setVisibility(View.GONE);
             holder.canclebtn.setVisibility(View.GONE);
-            holder.reorder_btn.setVisibility(View.VISIBLE);
+            holder.reorder_btn.setVisibility(View.GONE);
             holder.order_details.setVisibility(View.VISIBLE);
             holder.l1.setVisibility(View.GONE);
         }

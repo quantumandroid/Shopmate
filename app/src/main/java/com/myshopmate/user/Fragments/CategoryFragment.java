@@ -60,6 +60,10 @@ public class CategoryFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public CategoryFragment() {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +102,7 @@ public class CategoryFragment extends Fragment {
                 Log.d("categdrytyguioj", response.toString());
 
                 try {
-                    if (response != null && response.length() > 0) {
+                    if (response.length() > 0) {
                         String status = response.getString("status");
                         if (status.equals("1")) {
                             JSONArray array = response.getJSONArray("data");
@@ -118,11 +122,16 @@ public class CategoryFragment extends Fragment {
                                 model.setSub_array(object.getJSONArray("subcategory"));
                                 cateList.add(model);
                             }
-                            cateAdapter = new HomeCategoryAdapter(cateList, getContext(), cat_id -> {
+                            cateAdapter = new HomeCategoryAdapter(cateList, getContext(), category -> {
                                 Intent intent = new Intent(requireActivity(), CategoryPage.class);
-                                intent.putExtra("cat_id", cat_id);
+                                intent.putExtra("cat_id", category.getId());
+                                intent.putExtra("store_id", "");
+                                intent.putExtra("is_from_category", true);
+                                intent.putExtra("title", category.getName());
+                                intent.putExtra("sub_title", "");
                                 startActivityForResult(intent, 24);
                             });
+
                             recyclerView.setAdapter(cateAdapter);
                             cateAdapter.notifyDataSetChanged();
 //

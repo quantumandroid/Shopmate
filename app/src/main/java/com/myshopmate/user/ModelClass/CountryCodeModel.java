@@ -1,13 +1,15 @@
 package com.myshopmate.user.ModelClass;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.squareup.moshi.Json;
 
 public class CountryCodeModel {
-    @Json(name = "status")
+    @Json(name = "status") @SerializedName("status") @Expose
     private String status;
-    @Json(name = "message")
+    @Json(name = "message") @SerializedName("message") @Expose
     private String message;
-    @Json(name = "data")
+    @Json(name = "data") @SerializedName("data") @Expose
     private CountryCodeDataModel data;
 
     public String getStatus() {

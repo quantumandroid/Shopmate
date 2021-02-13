@@ -77,7 +77,7 @@ public class FireOtpPageAuthentication extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-                Toast.makeText(FireOtpPageAuthentication.this, "your verification failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FireOtpPageAuthentication.this, "Verification failed!", Toast.LENGTH_SHORT).show();
                 if (progressBar.getVisibility() == View.VISIBLE) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -196,6 +196,7 @@ public class FireOtpPageAuthentication extends AppCompatActivity {
             public void onResponse(@NonNull Call<VerifyOtp> call, @NonNull retrofit2.Response<VerifyOtp> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getStatus().equalsIgnoreCase("1") && status.equalsIgnoreCase("success")) {
                     sessionManagement.setLogin(true);
+                    sessionManagement.setIsVerified("1");
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();

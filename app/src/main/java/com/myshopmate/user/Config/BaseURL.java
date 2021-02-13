@@ -55,7 +55,9 @@ public class BaseURL {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_IS_VERIFIED = "verify";
     public static final String USER_STATUS = "user_status";
+    public static final String USER_STATUS_MSG = "user_status_msg";
     public static final String USER_OTP = "user_otp";
     public static final String USER_EMAIL_SERVICE = "user_email_service";
     public static final String USER_SMS_SERVICE = "user_sms_service";

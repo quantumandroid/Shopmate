@@ -57,7 +57,7 @@ public class ProductDetails extends AppCompatActivity {
     String varientName, discription12, price12, mrp12, unit12, qty, varientimage;
     ProgressDialog progressDialog;
     String product_id, varient_id, store_id;
-    private  ArrayList<NewCategoryVarientList> newCategoryVarientLists;
+    private ArrayList<NewCategoryVarientList> newCategoryVarientLists;
     private DatabaseHandler dbcart;
     private SharedPreferences preferences;
     private List<NewCategoryVarientList> varientProducts = new ArrayList<>();
@@ -82,7 +82,7 @@ public class ProductDetails extends AppCompatActivity {
         setContentView(R.layout.activity_product_details);
         session_management = new Session_management(ProductDetails.this);
         dbcart = new DatabaseHandler(ProductDetails.this);
-        preferences = getSharedPreferences("GOGrocer", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("Shopmate", Context.MODE_PRIVATE);
         init();
 
     }
@@ -142,9 +142,10 @@ public class ProductDetails extends AppCompatActivity {
         rvPVariants.setHasFixedSize(true);
 
         back.setOnClickListener(v -> finish());
+
         prodDesc.setText(discription12);
 
-       // if (Integer.parseInt(stock) > 0) {
+        // if (Integer.parseInt(stock) > 0) {
         if (inStock.equals("1")) {
             outofs.setVisibility(View.GONE);
             outofs_in.setVisibility(View.VISIBLE);
@@ -153,7 +154,7 @@ public class ProductDetails extends AppCompatActivity {
             outofs.setVisibility(View.VISIBLE);
         }
 
-       // selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
+        // selectCityAdapter = new Adapter_popup(ProductDetails.this, varientProducts, varientName, position -> {
         ArrayList<NewCategoryVarientList> variants = new ArrayList<>();
         ArrayList<NewCategoryVarientList> variantsOther = new ArrayList<>();
         for (NewCategoryVarientList variant : newCategoryVarientLists) {
@@ -175,7 +176,7 @@ public class ProductDetails extends AppCompatActivity {
 
         selectCityAdapter = new Adapter_popup(ProductDetails.this, variants, varientName, position -> {
             if (varient_id.equalsIgnoreCase(varientProducts.get(position).getVarient_id())) {
-                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
+                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id, store_id));
                 if (qtyd > 0) {
                     btn_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
@@ -197,7 +198,7 @@ public class ProductDetails extends AppCompatActivity {
 
         pVariantsAdapter = new Adapter_popup(ProductDetails.this, variantsOther, varientName, position -> {
             if (varient_id.equalsIgnoreCase(varientProducts.get(position).getVarient_id())) {
-                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
+                int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id, store_id));
                 if (qtyd > 0) {
                     btn_Add.setVisibility(View.GONE);
                     ll_addQuan.setVisibility(View.VISIBLE);
@@ -219,7 +220,7 @@ public class ProductDetails extends AppCompatActivity {
 
         Varient_product(product_id);
 
-        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id,store_id));
+        int qtyd = Integer.parseInt(dbcart.getInCartItemQtys(varient_id, store_id));
         updateQty(qtyd);
         if (qtyd > 0) {
             btn_Add.setVisibility(View.GONE);
@@ -247,11 +248,14 @@ public class ProductDetails extends AppCompatActivity {
         });
 
         plus.setOnClickListener(v -> {
-           // if (Integer.parseInt(txt_qty.getText().toString()) < Integer.parseInt(stock)) {
-                increaseInteger();
-                updateMultiply();
-           // }
-
+            try {
+                if (qtyd < Integer.parseInt(stock)) {
+                    increaseInteger();
+                    updateMultiply();
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         });
 
         minus.setOnClickListener(v -> {
@@ -262,9 +266,19 @@ public class ProductDetails extends AppCompatActivity {
         if (isOnline()) {
             prodName.setText(varientName);
             ProdPrice.setText(session_management.getCurrency() + "" + price12);
-            prodMrp.setPaintFlags(prodMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
             prodMrp.setText(mrp12);
+            try {
+                double mrp = Double.parseDouble(mrp12);
+                double price = Double.parseDouble(price12);
+                double discount = Math.round(mrp - price);
+                if (discount > 0) {
+                    prodMrp.setPaintFlags(prodMrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    prodMrp.setVisibility(View.INVISIBLE);
+                }
+            } catch (NumberFormatException e) {
+                prodMrp.setVisibility(View.INVISIBLE);
+            }
             txt_unit.setText(unit12);
             txt_qty.setText(qty);
 //            varientUrl(varientId);
@@ -399,22 +413,16 @@ public class ProductDetails extends AppCompatActivity {
             ll_addQuan.setVisibility(View.GONE);
             btn_Add.setVisibility(View.VISIBLE);
         }
-
-//        if (minteger == 1) {
-//            minteger = 1;
-//
-//        } else {
-//
-//
-//        }
     }
 
+    @SuppressLint("SetTextI18n")
     private void display(Integer number) {
 
         txtQuan.setText("" + number);
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateMultiply() {
         HashMap<String, String> map = new HashMap<>();
         map.put("product_id", product_id);
@@ -431,25 +439,21 @@ public class ProductDetails extends AppCompatActivity {
         map.put("stock", "0");
         map.put("product_description", discription12);
         if (!txtQuan.getText().toString().equalsIgnoreCase("0")) {
-            if (dbcart.isInCart(map.get("varient_id"),map.get("store_id"))) {
-                dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
-            } else {
-                dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
-            }
+            dbcart.setCart(map, Integer.parseInt(txtQuan.getText().toString()));
         } else {
-            dbcart.removeItemFromCart(map.get("varient_id"),map.get("store_id"));
+            dbcart.removeItemFromCart(map.get("varient_id"), map.get("store_id"));
         }
         try {
-            int items = Integer.parseInt(dbcart.getInCartItemQtys(map.get("varient_id"),map.get("store_id")));
+            int items = Integer.parseInt(dbcart.getInCartItemQtys(map.get("varient_id"), map.get("store_id")));
             double price = Double.parseDouble(price12);
             double mrp = Double.parseDouble(mrp12);
             if (items == 0) {
                 ProdPrice.setText(session_management.getCurrency() + "" + price);
                 prodMrp.setText(session_management.getCurrency() + "" + mrp);
-            } else {
-               // ProdPrice.setText(session_management.getCurrency() + "" + price * items);
-               // prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
-            }
+            } /*else {
+                 ProdPrice.setText(session_management.getCurrency() + "" + price * items);
+                 prodMrp.setText(session_management.getCurrency() + "" + mrp * items);
+            }*/
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -503,7 +507,6 @@ public class ProductDetails extends AppCompatActivity {
                     }*/
 
 
-
                     //                        JSONArray jsonArray = jsonObject.getJSONArray("data");
 //                        for (int i = 0; i < jsonArray.length(); i++) {
 //
@@ -536,7 +539,7 @@ public class ProductDetails extends AppCompatActivity {
 
                 } else {
                     varientProducts.clear();
-                   // variantProductsOther.clear();
+                    // variantProductsOther.clear();
                     //JSONObject resultObj = jsonObject.getJSONObject("results");
 
                 }
@@ -554,9 +557,9 @@ public class ProductDetails extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("product_id", pId);
-                params.put("lat",session_management.getLatPref());
-                params.put("lng",session_management.getLangPref());
-                params.put("city",session_management.getLocationCity());
+                params.put("lat", session_management.getLatPref());
+                params.put("lng", session_management.getLangPref());
+                params.put("city", session_management.getLocationCity());
                 Log.d("kj", pId);
                 return params;
             }
@@ -583,7 +586,7 @@ public class ProductDetails extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void checkCart(){
+    private void checkCart() {
 
         if (dbcart.getCartCount() > 0) {
             bottom_lay_total.setVisibility(View.VISIBLE);

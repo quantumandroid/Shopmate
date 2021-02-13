@@ -1,9 +1,18 @@
 package com.myshopmate.user.ModelClass;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class NotifyModelUser {
 
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("message")
+    @Expose
     private String message;
+    @SerializedName("data")
+    @Expose
     private NotifyUserDatapart data;
 
     public String getStatus() {

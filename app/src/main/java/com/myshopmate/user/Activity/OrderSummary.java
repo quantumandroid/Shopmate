@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -94,6 +95,11 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     private String todaydate;
     private List<MyCalendarModel> calendarModelList = new ArrayList<>();
     private double totalDeliveryCharges;
+
+    public static String getCurrentTime(Date date, String format) {
+
+        return new SimpleDateFormat(format, Locale.US).format(date);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +204,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             userStoreDistance = deliveryCharges = totalAmt = 0;
             try {
                 userStoreDistance = Utils.calculateMapDistance(
-                        Double.parseDouble(session_management.getLangPref()),
+                        Double.parseDouble(session_management.getLatPref()),
                         Double.parseDouble(session_management.getLangPref()),
                         Double.parseDouble(store.getLat()),
                         Double.parseDouble(store.getLng())
@@ -223,7 +229,7 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
                     int qty = Integer.parseInt(object1.getString("qty"));
                     double price = Double.parseDouble(object1.getString("price"));
                     totalAmt += price * qty;
-                    product_object.put("total_price",price * qty);
+                    product_object.put("total_price", price * qty);
 
                     Log.d("sdf", product_object.toString());
                     products.put(product_object);
@@ -595,7 +601,6 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
 
     }
 
-
     private void goToPayment(ArrayList<OrderStatus> orderStatuses) {
         ArrayList<OrderStatus> failedStores = new ArrayList<>();
         for (OrderStatus orderStatus : orderStatuses) {
@@ -615,7 +620,6 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
         }
 
     }
-
 
     private void showPopup(String msg, boolean isCompleteFailed, ArrayList<OrderStatus> failedOrders, ArrayList<OrderStatus> orderStatuses) {
         View view = getLayoutInflater().inflate(getResources().getLayout(R.layout.layout_order_status_popup), null);
@@ -689,16 +693,28 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
     private HashMap<String, String> getDelTime(Store store) {
         HashMap<String, String> hashMap = new HashMap<>();
         final Calendar calendar = Calendar.getInstance();
-
+        ArrayList<String> offDays = new ArrayList<>();
+        if (store.getOff_day() != null && !store.getOff_day().isEmpty()) {
+            offDays.addAll(Arrays.asList(store.getOff_day().split(",")));
+        }
         //String storeOpenTime = Utils.formatDateTimeString(store.getOpening_time(),"hh:mm","HH");
         String storeCloseTime = Utils.formatDateTimeString(store.getClosing_time(), "hh:mm", "HH");
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         int cDay = calendar.get(Calendar.DAY_OF_WEEK);
         int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-        while (cDay == store.getOff_day()) {
+        /*while (cDay == store.getOff_day()) {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             cDay = calendar.get(Calendar.DAY_OF_WEEK);
-        }
+        }*/
+        if (offDays.size() > 0) {
+            while (offDays.contains(String.valueOf(cDay))) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                cDay = calendar.get(Calendar.DAY_OF_WEEK);
+            }
+        } /*else if (cDay == store.getOff_day()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            cDay = calendar.get(Calendar.DAY_OF_WEEK);
+        }*/
         if (cDay == currentDay) {
             if (currentHour < Splash.configData.getOrder_before_time() && currentHour < Integer.parseInt(storeCloseTime)) {
                 currentHour += 1;
@@ -931,10 +947,5 @@ public class OrderSummary extends AppCompatActivity implements ForClicktimings {
             showAdreesUrl();
         }
 
-    }
-
-    public static String getCurrentTime(Date date, String format) {
-
-        return new SimpleDateFormat(format, Locale.US).format(date);
     }
 }

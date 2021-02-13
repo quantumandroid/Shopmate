@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,6 +42,7 @@ import com.google.gson.Gson;
 import com.myshopmate.user.Config.ConfigData;
 import com.myshopmate.user.R;
 import com.myshopmate.user.util.Session_management;
+import com.myshopmate.user.util.Utils;
 import com.volley.config.Config;
 
 import org.json.JSONException;
@@ -55,12 +57,12 @@ import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
 //import static com.myshopmate.user.Config.BaseURL.USERBLOCKAPI;
 
 public class Splash extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 500;
-    private GoogleApiClient googleApiClient;
     final static int REQUEST_LOCATION = 199;
+    public static ConfigData configData = new ConfigData();
+    private final int SPLASH_DISPLAY_LENGTH = 500;
     SharedPreferences sharedPreferences;
     Session_management session_management;
-    public static ConfigData configData = new ConfigData();
+    private GoogleApiClient googleApiClient;
     private LocationManager manager;
     private ProgressBar progress_bar;
 
@@ -88,17 +90,66 @@ public class Splash extends AppCompatActivity {
                 enableLoc();
             }
         }*/
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    progress_bar.setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        /*if (Utils.isOnline(Splash.this)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        progress_bar.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+            }, 1500);
+            getConfigData();
+        } else {
+            enableData();
+        }*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startFlow();
+    }
+
+    private void startFlow() {
+        if (Utils.isOnline(Splash.this)) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        progress_bar.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, 1500);
+            getConfigData();
+        } else {
+            enableData();
+        }
+    }
+
+    private void enableData() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Disconnected");
+        builder.setMessage("Please connect to the internet.");
+        builder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
             }
-        },1500);
-        getConfigData();
+        });
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+            }
+        });
+        builder.setCancelable(false);
+        builder.create().show();
     }
 
     private void getConfigData() {
@@ -111,36 +162,36 @@ public class Splash extends AppCompatActivity {
             public void onResponse(String response) {
                 Gson gson = new Gson();
 
-                 configData = gson.fromJson(response, ConfigData.class);
-                 String version = null;
+                configData = gson.fromJson(response, ConfigData.class);
+                String version = null;
                 try {
-                     version = String.valueOf(getPackageManager().getPackageInfo(getPackageName(),0).versionCode);
+                    version = String.valueOf(getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
                 //if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
-                    if (version != null && Integer.parseInt(version) < configData.getApp_version()) {
-                        if ((configData.getApp_version() - Integer.parseInt(version)) > 1 || configData.getApp_update().equals("1")){
-                            showUpdateDialog("Please update the app to proceed further.",true);
-                        } else {
-                            showUpdateDialog("New update of this app is available.",false);
-                        }
+                if (version != null && Integer.parseInt(version) < configData.getApp_version()) {
+                    if ((configData.getApp_version() - Integer.parseInt(version)) > 1 || configData.getApp_update().equals("1")) {
+                        showUpdateDialog("Please update the app to proceed further.", true);
                     } else {
-                        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
-                            //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
-                            redirectionScreen();
-                        } else {
-                            if (!hasGPSDevice(Splash.this)) {
-                                Toast.makeText(getApplicationContext(), "Gps not Supported", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
-                                Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
-                                enableLoc();
-                            }
-                        }
-                        fetchBlockStatus();
+                        showUpdateDialog("New update of this app is available.", false);
                     }
+                } else {
+                    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                        //Toast.makeText(getApplicationContext(), "Gps already enabled", Toast.LENGTH_SHORT).show();
+                        redirectionScreen();
+                    } else {
+                        if (!hasGPSDevice(Splash.this)) {
+                            Toast.makeText(getApplicationContext(), "Gps not Supported", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(Splash.this)) {
+                            Toast.makeText(getApplicationContext(), "Gps not enabled", Toast.LENGTH_SHORT).show();
+                            enableLoc();
+                        }
+                    }
+                    fetchBlockStatus();
+                }
                 //}
 
 
@@ -148,11 +199,39 @@ public class Splash extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error",error.toString());
-                Toast.makeText(Splash.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
+                Log.d("error", error.toString());
+                try {
+                    progress_bar.setVisibility(View.GONE);
+                } catch (Exception ignore) {
+                }
+                if (Utils.isOnline(Splash.this)) {
+                    showErrorPopup("Something went wrong");
+                } else {
+                    enableData();
+                }
             }
         });
         queue.add(request);
+    }
+
+    private void showErrorPopup(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Splash.this);
+        builder.setTitle("Error Occurred");
+        builder.setMessage(msg);
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startFlow();
+            }
+        });
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finishAffinity();
+            }
+        });
+        builder.setCancelable(false);
+        builder.create().show();
     }
 
     private void showUpdateDialog(String msg, boolean isMandatory) {
@@ -172,13 +251,13 @@ public class Splash extends AppCompatActivity {
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
-                }finally {
+                } finally {
                     finishAffinity();
                 }
 
             }
         });
-        builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (isMandatory) {
@@ -220,14 +299,24 @@ public class Splash extends AppCompatActivity {
                         session_management.setUserBlockStatus("2");
                     } else {
                         session_management.setUserBlockStatus("1");
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                        session_management.setUserBlockStatusMsg(msg);
+//                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
-                  //  Toast.makeText(Splash.this, "" + msg, Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(Splash.this, "" + msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }, error -> {
-                Toast.makeText(Splash.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Splash.this, "Please check your internet connection!", Toast.LENGTH_SHORT).show();
+                try {
+                    progress_bar.setVisibility(View.GONE);
+                } catch (Exception ignore) {
+                }
+                if (Utils.isOnline(Splash.this)) {
+                    showErrorPopup("Something went wrong");
+                } else {
+                    enableData();
+                }
             }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
